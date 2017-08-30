@@ -1,0 +1,30 @@
+--------------------Log start--------------------
+Start Time:Fri May 08 10:45:22 2015
+*************************************************
+*************************************************
+*************************************************
+0  Fri May 08 10:45:22 2015  testing default, TRACE_NOTICE: lineNumberInFile:0  lineNumberInConsole:0
+1  Fri May 08 10:45:22 2015  testing default, TRACE_WARNING: lineNumberInFile:1  lineNumberInConsole:0
+2  Fri May 08 10:45:22 2015  testing default, TRACE_ERROR: lineNumberInFile:2  lineNumberInConsole:0
+3  Fri May 08 10:45:22 2015  testing: TRACE_WARNING: TRACE_LOG_BOTH, TRACE_LOG_DEBUG, lineNumberInFile:3  lineNumberInConsole:4
+4  Fri May 08 10:45:22 2015  testing: TRACE_ERROR: TRACE_LOG_BOTH, TRACE_LOG_DEBUG, lineNumberInFile:4  lineNumberInConsole:5
+--------------------Log Sop--------------------
+Stop Time:Fri May 08 10:45:22 2015
+*************************************************
+*************************************************
+*************************************************
+--------------------Log start--------------------
+Start Time:Fri Jan 22 13:45:40 2016
+*************************************************
+*************************************************
+*************************************************
+0  Fri Jan 22 13:45:40 2016  testing default, TRACE_NOTICE: lineNumberInFile:0  lineNumberInConsole:0
+1  Fri Jan 22 13:45:40 2016  testing default, TRACE_WARNING: lineNumberInFile:1  lineNumberInConsole:0
+2  Fri Jan 22 13:45:40 2016  testing default, TRACE_ERROR: lineNumberInFile:2  lineNumberInConsole:0
+3  Fri Jan 22 13:45:40 2016  testing: TRACE_WARNING: TRACE_LOG_BOTH, TRACE_LOG_DEBUG, lineNumberInFile:3  lineNumberInConsole:4
+4  Fri Jan 22 13:45:40 2016  testing: TRACE_ERROR: TRACE_LOG_BOTH, TRACE_LOG_DEBUG, lineNumberInFile:4  lineNumberInConsole:5
+--------------------Log Sop--------------------
+Stop Time:Fri Jan 22 13:45:40 2016
+*************************************************
+*************************************************
+*************************************************

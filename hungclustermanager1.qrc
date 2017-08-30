@@ -1,0 +1,95 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resources/input.txt</file>
+        <file>Resources/up_arrow_24px.png</file>
+        <file>Resources/down_arrow_24px.net.png</file>
+        <file>Resources/save_32px.png</file>
+        <file>Resources/change_user_32px.png</file>
+        <file>Resources/setting_32px.png</file>
+        <file>Resources/exit_32px.png</file>
+        <file>Resources/Fullscreen_32px.png</file>
+        <file>Resources/gpu_graphics_card_24px.png</file>
+        <file>Resources/cpu.png</file>
+        <file>Resources/cpu_intel.png</file>
+        <file>Resources/wireless_router.png</file>
+        <file>Resources/node_32px.png</file>
+        <file>Resources/computer.png</file>
+        <file>Resources/icontexto_message_types_alert_green_24px.png</file>
+        <file>Resources/Green_3D_arrow_up.png</file>
+        <file>Resources/Yellow_3D_arrow_down.png</file>
+        <file>Resources/Green_3D_arrow_up_15.625.png</file>
+        <file>Resources/Yellow_3D_arrow_down_15.1875px.png</file>
+        <file>Resources/Green_3D_arrow_up_15.625px_1063384_easyicon.net.png</file>
+        <file>Resources/trafficlight_green_16px</file>
+        <file>Resources/trafficlight_green_24px</file>
+        <file>Resources/trafficlight_green_32px</file>
+        <file>Resources/trafficlight_green_72px</file>
+        <file>Resources/trafficlight_green_48px</file>
+        <file>Resources/trafficlight_green_64px</file>
+        <file>Resources/trafficlight_red_24px</file>
+        <file>Resources/trafficlight_red_32px</file>
+        <file>Resources/trafficlight_red_48px</file>
+        <file>Resources/trafficlight_red_64px</file>
+        <file>Resources/trafficlight_red_72px</file>
+        <file>Resources/greenbutton.png</file>
+        <file>Resources/redbutton.png</file>
+        <file>Resources/dir.png</file>
+        <file>Resources/file.png</file>
+        <file>Resources/loading.jpg</file>
+        <file>Resources/temp/computer24.png</file>
+        <file>Resources/temp/computer32.png</file>
+        <file>Resources/temp/computer48.png</file>
+        <file>Resources/temp/console24.png</file>
+        <file>Resources/temp/console32.png</file>
+        <file>Resources/temp/console48.png</file>
+        <file>Resources/temp/dashboard30.png</file>
+        <file>Resources/temp/dashboard40.png</file>
+        <file>Resources/temp/dashboard60.png</file>
+        <file>Resources/temp/device25.png</file>
+        <file>Resources/temp/ftp21.png</file>
+        <file>Resources/temp/ftp28.png</file>
+        <file>Resources/temp/ftp56.png</file>
+        <file>Resources/temp/homepage24.png</file>
+        <file>Resources/temp/homepage32.png</file>
+        <file>Resources/temp/job33.png</file>
+        <file>Resources/temp/job49.png</file>
+        <file>Resources/temp/job128.ico</file>
+        <file>Resources/temp/manage16.png</file>
+        <file>Resources/temp/manage25.png</file>
+        <file>Resources/temp/manage33.png</file>
+        <file>Resources/temp/manage1102.png</file>
+        <file>Resources/temp/message27.png</file>
+        <file>Resources/temp/message36.png</file>
+        <file>Resources/temp/message54.png</file>
+        <file>Resources/temp/monitor32.png</file>
+        <file>Resources/temp/monitor40.png</file>
+        <file>Resources/temp/monitor60.png</file>
+        <file>Resources/temp/loginmask.png</file>
+        <file>Resources/temp/bg.png</file>
+        <file>Resources/temp/bg2.png</file>
+        <file>Resources/Red_3d_arrow_down.png</file>
+        <file>Resources/red 15px.png</file>
+        <file>Resources/Yellow_3D_arrow_top_31.25 (1).png</file>
+        <file>Resources/Yellow_3D_arrow_top_31.25 (2).png</file>
+        <file>Resources/Yellow_3D_arrow_top_31.25 (3).png</file>
+        <file>Resources/管 理.png</file>
+        <file>Resources/home1.png</file>
+        <file>Resources/HPC_130.jpg</file>
+        <file>Resources/job.png</file>
+        <file>Resources/home.png</file>
+        <file>Resources/monitor.png</file>
+        <file>Resources/control.png</file>
+        <file>Resources/FTP.png</file>
+        <file>Resources/terminal.png</file>
+        <file>Resources/hardware.png</file>
+        <file>Resources/temp/消息 .png</file>
+        <file>Resources/temp/作业 .png</file>
+        <file>Resources/temp/zhongduan.png</file>
+        <file>Resources/temp/jiankong.png</file>
+        <file>Resources/loadbg.png</file>
+        <file>Resources/0001-01.png</file>
+        <file>Resources/0002-01.png</file>
+        <file>Resources/ico.png</file>
+        <file>Resources/ico.ico</file>
+    </qresource>
+</RCC>
