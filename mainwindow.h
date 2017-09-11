@@ -24,6 +24,7 @@
 #include <QInputDialog>
 #include <SftpDirAttribute.h>
 #include "manageworker.h"
+#include "highlighter.h"
 
 
 using namespace SshWrapper;
@@ -156,6 +157,7 @@ private:
     Ui::MainWindow ui;
     void createCircleBar();
 
+    Highlighter *highLighter;
     QTimer *timer;
     int temp=0;
     int status_increment_indicator=0;

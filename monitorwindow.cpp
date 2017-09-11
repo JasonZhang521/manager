@@ -56,6 +56,7 @@ void MonitorWindow::updateGUI(DataContainer data)
 
         m_barChart->updateDisplay(cpuData_);
     }
+//    ui->label->setText(data.processUsage());
 
 }
 

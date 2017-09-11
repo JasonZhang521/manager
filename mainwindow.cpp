@@ -59,6 +59,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui.toolBar->addAction(ui.action_disconnect);
     this->move(QApplication::desktop()->screen()->rect().center()-this->rect().center());
 
+
+    highLighter = new Highlighter(ui.textBrowser_job_submit_show->document());
+
 }
 
 void MainWindow::setupStyleSheet()
@@ -2263,9 +2266,9 @@ void MainWindow::updateJOBSGUI1(QStringList jobList,QStringList nodeList){
         }
         else
         {
-            static QMessageBox msg;
-            msg.setText("网络错误");
-            msg.exec();
+//            static QMessageBox msg;
+//            msg.setText("网络错误");
+//            msg.exec();
         }
 
     }
@@ -2312,9 +2315,9 @@ void MainWindow::updateJOBSGUI2(QStringList jobList,QStringList nodeList){
         }
         else
         {
-            static QMessageBox msg;
-            msg.setText("网络错误");
-            msg.exec();
+//            static QMessageBox msg;
+//            msg.setText("网络错误");
+//            msg.exec();
         }
 
     }

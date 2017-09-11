@@ -55,7 +55,8 @@ SOURCES += \
     dataVisualPack/dynamicsplinechart.cpp \
     dataVisualPack/cpuusageinfo.cpp \
     dataVisualPack/datacontainer.cpp \
-    dataVisualPack/mybarchart.cpp
+    dataVisualPack/mybarchart.cpp \
+    highlighter.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -126,7 +127,8 @@ HEADERS += \
     dataVisualPack/dynamicsplinechart.h \
     dataVisualPack/cpuusageinfo.h \
     dataVisualPack/datacontainer.h \
-    dataVisualPack/mybarchart.h
+    dataVisualPack/mybarchart.h \
+    Highlighter.h
 
 
 
@@ -162,12 +164,20 @@ DISTFILES += \
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/thirdPartyLib/ -lSMTPEmail
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/thirdPartyLib/ -lSMTPEmaild
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/thirdPartyLib/ -lSMTPEmail
 
 INCLUDEPATH += $$PWD/thirdPartyLib
 DEPENDPATH += $$PWD/thirdPartyLib
 
 win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/thirdPartyLib/libSMTPEmail.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/thirdPartyLib/libSMTPEmaild.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/thirdPartyLib/libSMTPEmail.a
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/thirdPartyLib/SMTPEmail.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/thirdPartyLib/SMTPEmaild.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/thirdPartyLib/SMTPEmail.lib
+
+win32: LIBS += -L$$PWD/thirdPartyLib/ -lSMTPEmail
+
+INCLUDEPATH += $$PWD/thirdPartyLib
+DEPENDPATH += $$PWD/thirdPartyLib
+
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/thirdPartyLib/SMTPEmail.lib
+else:win32-g++: PRE_TARGETDEPS += $$PWD/thirdPartyLib/libSMTPEmail.a
