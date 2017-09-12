@@ -3291,7 +3291,7 @@ border:1.5px solid #008080;</string>
                    <number>0</number>
                   </property>
                   <property name="currentIndex">
-                   <number>1</number>
+                   <number>2</number>
                   </property>
                   <widget class="QWidget" name="node_2">
                    <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -5847,6 +5847,15 @@ QTabBar::tab:selected {
                               <height>16777215</height>
                              </size>
                             </property>
+                            <property name="contextMenuPolicy">
+                             <enum>Qt::CustomContextMenu</enum>
+                            </property>
+                            <property name="selectionMode">
+                             <enum>QAbstractItemView::SingleSelection</enum>
+                            </property>
+                            <property name="selectionRectVisible">
+                             <bool>true</bool>
+                            </property>
                             <item>
                              <property name="text">
                               <string>user1</string>
@@ -6473,7 +6482,7 @@ QTabBar::tab:selected {
 }</string>
                       </property>
                       <property name="currentIndex">
-                       <number>0</number>
+                       <number>1</number>
                       </property>
                       <widget class="QWidget" name="view">
                        <attribute name="title">
@@ -7373,7 +7382,7 @@ QTabBar::tab:selected {
                   <x>0</x>
                   <y>0</y>
                   <width>888</width>
-                  <height>577</height>
+                  <height>583</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_47">
@@ -7383,6 +7392,19 @@ QTabBar::tab:selected {
                     <string>Launch a Putty Session</string>
                    </property>
                   </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer_7">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
                  </item>
                  <item>
                   <widget class="QWidget" name="widget_putty" native="true">
@@ -7565,27 +7587,6 @@ border:0px solid #008080;
                <string>消息</string>
               </property>
              </column>
-             <item>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="hungclustermanager1.qrc">
-                <normaloff>:/Resources/icontexto_message_types_alert_green_24px.png</normaloff>:/Resources/icontexto_message_types_alert_green_24px.png</iconset>
-              </property>
-              <property name="text">
-               <string>2017/03/01 17：00：00</string>
-              </property>
-              <property name="text">
-               <string>CPU节点</string>
-              </property>
-              <property name="text">
-               <string>Node-01</string>
-              </property>
-              <property name="text">
-               <string>Job sfe starts on Node-01</string>
-              </property>
-             </item>
             </widget>
            </item>
           </layout>

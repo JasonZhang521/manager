@@ -139,6 +139,9 @@ private slots:
    void monitorSonNode();
    void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
 
+   void on_listWidget_manager_user_view1_customContextMenuRequested(const QPoint &pos);
+
+   void delSystemUser();
 public slots:
     void processFtpUploadFinishEvent();//process after upload finished signal
     void processFtpDownloadFinishEvent();//process after recieve download finished signal
@@ -157,7 +160,10 @@ private:
     Ui::MainWindow ui;
     void createCircleBar();
 
+    QTreeWidgetItem * temp_ptr;
+
     Highlighter *highLighter;
+    Highlighter *highLighter2;
     QTimer *timer;
     int temp=0;
     int status_increment_indicator=0;

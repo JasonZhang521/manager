@@ -21,13 +21,13 @@
 #include <QScrollBar>
 #include <QTreeWidget>
 
-#include"monitorworker.h"
+#include "monitorworker.h"
 #include "timeuserselectiondialog.h"
 #include <QDesktopWidget>
 
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+: QMainWindow(parent)
 {
     ui.setupUi(this);
 
@@ -61,92 +61,93 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     highLighter = new Highlighter(ui.textBrowser_job_submit_show->document());
+    highLighter2 = new Highlighter(ui.textBrowser_job_submit_show_2->document());
 
 }
 
 void MainWindow::setupStyleSheet()
 {
     qApp->setStyleSheet("QMenuBar {background-color: #f0fff0;}"
-                        "QTabBar::tab:selected {margin-left: -4px;margin-right: -4px;}"
-                        "QTabBar::tab:selected {background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb(236, 255, 172), stop:1 #f0fff0);}"
+        "QTabBar::tab:selected {margin-left: -4px;margin-right: -4px;}"
+        "QTabBar::tab:selected {background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb(236, 255, 172), stop:1 #f0fff0);}"
                         "QTabBar::tab:selected {border-top-left-radius: 0px;border-bottom-left-radius: 0px;/*background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f0fff0, stop: 0.4 #f0fff0,stop: 0.5 #f0fff0, stop: 1.0 #f0fff0);*/}"
-                        "QTabBar::tab {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);border: 2px solid #C4C4C3;border-bottom-color: #C2C7CB;border-top-left-radius: 10px;border-bottom-left-radius: 10px;min-width: 8ex;}"
-                        "QTabWidget::pane { border-top: 2px solid #C2C7CB;} "
+        "QTabBar::tab {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);border: 2px solid #C4C4C3;border-bottom-color: #C2C7CB;border-top-left-radius: 10px;border-bottom-left-radius: 10px;min-width: 8ex;}"
+        "QTabWidget::pane { border-top: 2px solid #C2C7CB;} "
                         "QTabBar::tab {padding-bottom: 10 px; background-color: #FFD39B/*rgba(211, 255, 211, 255)*/;} "
-                        "QTabBar::tab:hover {background-color: rgb(28, 67, 255);}"
-                        "QProgressBar {border: 0px solid grey; border-radius: 5px;}"
-                        "QProgressBar::chunk {background-color: #05B8CC;width: 20px;margin: 0.5px;}"
-                        "QScrollArea::verticalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
-                        "QScrollArea::horizontalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
-                        "QTreeWidget::verticalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
-                        "QTreeWidget::horizontalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
-                        );
+        "QTabBar::tab:hover {background-color: rgb(28, 67, 255);}"
+        "QProgressBar {border: 0px solid grey; border-radius: 5px;}"
+        "QProgressBar::chunk {background-color: #05B8CC;width: 20px;margin: 0.5px;}"
+        "QScrollArea::verticalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
+        "QScrollArea::horizontalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
+        "QTreeWidget::verticalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
+        "QTreeWidget::horizontalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
+        );
     //    QTreeWidget::verticalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
     //    QTreeWidget::horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
     //    QScrollArea::verticalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
     //    QScrollArea::horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
     ui.scrollArea->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                      "alternate-background-color: #D5EAFF;");
+      "alternate-background-color: #D5EAFF;");
     ui.scrollArea_2->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                        "alternate-background-color: #D5EAFF;");
+        "alternate-background-color: #D5EAFF;");
     ui.scrollArea_2->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                          "alternate-background-color: #D5EAFF;");
+      "alternate-background-color: #D5EAFF;");
     ui.scrollArea_3->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                        "alternate-background-color: #D5EAFF;");
+        "alternate-background-color: #D5EAFF;");
     ui.scrollArea_3->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                          "alternate-background-color: #D5EAFF;");
+      "alternate-background-color: #D5EAFF;");
     ui.treeView->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                    "alternate-background-color: #D5EAFF;");
+        "alternate-background-color: #D5EAFF;");
     ui.treeView->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                      "alternate-background-color: #D5EAFF;");
+      "alternate-background-color: #D5EAFF;");
     ui.treeWidget->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                      "alternate-background-color: #D5EAFF;");
+      "alternate-background-color: #D5EAFF;");
     ui.treeWidget->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                        "alternate-background-color: #D5EAFF;");
+        "alternate-background-color: #D5EAFF;");
     ui.treeWidget_bottomMessage->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                    "alternate-background-color: #D5EAFF;");
+        "alternate-background-color: #D5EAFF;");
     ui.treeWidget_bottomMessage->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                      "alternate-background-color: #D5EAFF;");
+      "alternate-background-color: #D5EAFF;");
     ui.treeWidget_control_nodes->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                    "alternate-background-color: #D5EAFF;");
+        "alternate-background-color: #D5EAFF;");
     ui.treeWidget_control_nodes->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                      "alternate-background-color: #D5EAFF;");
+      "alternate-background-color: #D5EAFF;");
     ui.treeWidget_control_queue_view->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                         "alternate-background-color: #D5EAFF;");
+       "alternate-background-color: #D5EAFF;");
     ui.treeWidget_control_queue_view->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                           "alternate-background-color: #D5EAFF;");
+     "alternate-background-color: #D5EAFF;");
     ui.treeWidget_control_time_statics->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                           "alternate-background-color: #D5EAFF;");
+     "alternate-background-color: #D5EAFF;");
     ui.treeWidget_control_time_statics->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                             "alternate-background-color: #D5EAFF;");
+       "alternate-background-color: #D5EAFF;");
     ui.treeWidget_jobsubmitfile->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                    "alternate-background-color: #D5EAFF;");
+        "alternate-background-color: #D5EAFF;");
     ui.treeWidget_jobsubmitfile->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                      "alternate-background-color: #D5EAFF;");
+      "alternate-background-color: #D5EAFF;");
     ui.treeWidget_job_file->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                               "alternate-background-color: #D5EAFF;");
+     "alternate-background-color: #D5EAFF;");
     ui.treeWidget_job_file->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                 "alternate-background-color: #D5EAFF;");
+       "alternate-background-color: #D5EAFF;");
     ui.treeWidget_job_kill->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                               "alternate-background-color: #D5EAFF;");
+     "alternate-background-color: #D5EAFF;");
     ui.treeWidget_job_kill->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                 "alternate-background-color: #D5EAFF;");
+       "alternate-background-color: #D5EAFF;");
     ui.treeWidget_manager_user_view2->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                         "alternate-background-color: #D5EAFF;");
+       "alternate-background-color: #D5EAFF;");
     ui.treeWidget_manager_user_view2->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                           "alternate-background-color: #D5EAFF;");
+     "alternate-background-color: #D5EAFF;");
     ui.treeWidget_monitor_jobs->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                   "alternate-background-color: #D5EAFF;");
+     "alternate-background-color: #D5EAFF;");
     ui.treeWidget_monitor_jobs->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                     "alternate-background-color: #D5EAFF;");
+       "alternate-background-color: #D5EAFF;");
     ui.treeWidget_monitor_nodes->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                    "alternate-background-color: #D5EAFF;");
+        "alternate-background-color: #D5EAFF;");
     ui.treeWidget_monitor_nodes->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                      "alternate-background-color: #D5EAFF;");
+      "alternate-background-color: #D5EAFF;");
     ui.treeWidget_nodeViewer->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                 "alternate-background-color: #D5EAFF;");
+       "alternate-background-color: #D5EAFF;");
     ui.treeWidget_nodeViewer->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
-                                                                   "alternate-background-color: #D5EAFF;");
+     "alternate-background-color: #D5EAFF;");
 
     //    ui.tabWidget->setTabPosition(QTabWidget::North);
 }
@@ -1249,38 +1250,38 @@ void MainWindow::processFtpUploadFinishEvent(){
 
 //process list dir finish event
 void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
-
+    temp_ptr = nullptr;
     QList<QStringList> m_list = qlist;
     clock_t begin,end;
     double seconds;
     switch(i){
-    case 1: {
-        ui.treeWidget_jobsubmitfile->clear();
-        if(m_list.size()>1){
+        case 1: {
+            ui.treeWidget_jobsubmitfile->clear();
+            if(m_list.size()>1){
             for(unsigned int i =1;i<m_list.size();i++){//iterate filelist
-                    QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget_jobsubmitfile);
-                    if(m_list[i][1].compare("1")==0)
-                    {
-                        file->setIcon(0,QIcon(":/Resources/file.png"));
-                    }
-                    else if (m_list[i][0].at(0)=="d")
-                    {
-                        file->setIcon(0,QIcon(":/Resources/dir.png"));
-                    }
-                    file->setText(0,m_list[i][8]);
+                QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget_jobsubmitfile);
+                if(m_list[i][1].compare("1")==0)
+                {
+                    file->setIcon(0,QIcon(":/Resources/file.png"));
+                }
+                else if (m_list[i][0].at(0)=="d")
+                {
+                    file->setIcon(0,QIcon(":/Resources/dir.png"));
+                }
+                file->setText(0,m_list[i][8]);
                     //            file->setText(1,QString::number(attr[i].size));
 
-                    file->setData(1,Qt::EditRole,m_list[i][4].toInt());
-                    file->setText(2,m_list[i][5]+" "+m_list[i][6]+" "+m_list[i][7]);
-                    file->setText(3,m_list[i][2]);
-                    file->setText(4,m_list[i][3]);
-                    file->setText(5,m_list[i][0]);
+                file->setData(1,Qt::EditRole,m_list[i][4].toInt());
+                file->setText(2,m_list[i][5]+" "+m_list[i][6]+" "+m_list[i][7]);
+                file->setText(3,m_list[i][2]);
+                file->setText(4,m_list[i][3]);
+                file->setText(5,m_list[i][0]);
 
-                    ui.treeWidget_jobsubmitfile->addTopLevelItem(file);
-                    if(!ui.treeWidget_jobsubmitfile->currentItem()){
-                        ui.treeWidget_jobsubmitfile->setCurrentItem(ui.treeWidget_jobsubmitfile->topLevelItem(0));
-                        ui.treeWidget_jobsubmitfile->setEnabled(true);
-                    }
+                ui.treeWidget_jobsubmitfile->addTopLevelItem(file);
+                if(!ui.treeWidget_jobsubmitfile->currentItem()){
+                    ui.treeWidget_jobsubmitfile->setCurrentItem(ui.treeWidget_jobsubmitfile->topLevelItem(0));
+                    ui.treeWidget_jobsubmitfile->setEnabled(true);
+                }
 
 
             }
@@ -1292,76 +1293,76 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
         ui.treeWidget_job_file->clear();
         if(m_list.size()>1){
         for(unsigned int i =1;i<m_list.size();i++){//iterate filelist
-                QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget_job_file);
-                if(m_list[i][1].compare("1")==0)
-                {
-                    file->setIcon(0,QIcon(":/Resources/file.png"));
-                }
-                else if (m_list[i][0].at(0)=="d")
-                {
-                    file->setIcon(0,QIcon(":/Resources/dir.png"));
-                }
-                file->setText(0,m_list[i][8]);
+            QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget_job_file);
+            if(m_list[i][1].compare("1")==0)
+            {
+                file->setIcon(0,QIcon(":/Resources/file.png"));
+            }
+            else if (m_list[i][0].at(0)=="d")
+            {
+                file->setIcon(0,QIcon(":/Resources/dir.png"));
+            }
+            file->setText(0,m_list[i][8]);
                 //            file->setText(1,QString::number(attr[i].size));
 
-                file->setData(1,Qt::EditRole,m_list[i][4].toInt());
-                file->setText(2,m_list[i][5]+" "+m_list[i][6]+" "+m_list[i][7]);
-                file->setText(3,m_list[i][2]);
-                file->setText(4,m_list[i][3]);
-                file->setText(5,m_list[i][0]);
+            file->setData(1,Qt::EditRole,m_list[i][4].toInt());
+            file->setText(2,m_list[i][5]+" "+m_list[i][6]+" "+m_list[i][7]);
+            file->setText(3,m_list[i][2]);
+            file->setText(4,m_list[i][3]);
+            file->setText(5,m_list[i][0]);
 
-                ui.treeWidget_job_file->addTopLevelItem(file);
-                if(!ui.treeWidget_job_file->currentItem()){
-                    ui.treeWidget_job_file->setCurrentItem(ui.treeWidget_job_file->topLevelItem(0));
-                    ui.treeWidget_job_file->setEnabled(true);
-                }
+            ui.treeWidget_job_file->addTopLevelItem(file);
+            if(!ui.treeWidget_job_file->currentItem()){
+                ui.treeWidget_job_file->setCurrentItem(ui.treeWidget_job_file->topLevelItem(0));
+                ui.treeWidget_job_file->setEnabled(true);
+            }
 
 
         }
-        }
-        break;
     }
-    case 3:{
-        begin = clock();
-        ui.treeWidget->clear();
-        if(m_list.size()>1){
+    break;
+}
+case 3:{
+    begin = clock();
+    ui.treeWidget->clear();
+    if(m_list.size()>1){
         for(unsigned int i =1;i<m_list.size();i++){//iterate filelist
-                QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget);
-                if(m_list[i][1].compare("1")==0)
-                {
-                    file->setIcon(0,QIcon(":/Resources/file.png"));
-                }
-                else if (m_list[i][0].at(0)=="d")
-                {
-                    file->setIcon(0,QIcon(":/Resources/dir.png"));
-                }
-                file->setText(0,m_list[i][8]);
+            QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget);
+            if(m_list[i][1].compare("1")==0)
+            {
+                file->setIcon(0,QIcon(":/Resources/file.png"));
+            }
+            else if (m_list[i][0].at(0)=="d")
+            {
+                file->setIcon(0,QIcon(":/Resources/dir.png"));
+            }
+            file->setText(0,m_list[i][8]);
                 //            file->setText(1,QString::number(attr[i].size));
 
-                file->setData(1,Qt::EditRole,m_list[i][4].toInt());
-                file->setText(2,m_list[i][5]+" "+m_list[i][6]+" "+m_list[i][7]);
-                file->setText(3,m_list[i][2]);
-                file->setText(4,m_list[i][3]);
-                file->setText(5,m_list[i][0]);
+            file->setData(1,Qt::EditRole,m_list[i][4].toInt());
+            file->setText(2,m_list[i][5]+" "+m_list[i][6]+" "+m_list[i][7]);
+            file->setText(3,m_list[i][2]);
+            file->setText(4,m_list[i][3]);
+            file->setText(5,m_list[i][0]);
 
-                ui.treeWidget->addTopLevelItem(file);
-                if(!ui.treeWidget->currentItem()){
-                    ui.treeWidget->setCurrentItem(ui.treeWidget->topLevelItem(0));
-                    ui.treeWidget->setEnabled(true);
-                }
+            ui.treeWidget->addTopLevelItem(file);
+            if(!ui.treeWidget->currentItem()){
+                ui.treeWidget->setCurrentItem(ui.treeWidget->topLevelItem(0));
+                ui.treeWidget->setEnabled(true);
+            }
 
 
         }
-        }
-        end = clock();
-        seconds = (end - begin) / (double)CLOCKS_PER_SEC;
-
-        break;
-
     }
+    end = clock();
+    seconds = (end - begin) / (double)CLOCKS_PER_SEC;
+
+    break;
+
+}
 
 
-    }
+}
 }
 //process rm file finish event
 void MainWindow::processFtpRemoveFileFinishEvent(){
@@ -1553,9 +1554,9 @@ void MainWindow::on_pushButton_3_clicked()
         client->executeShellCommand("cd "+currentPathRemote+" && ls -l | awk '/"+fileInfo.fileName().toStdString()+"$/'",outputString);
         if(outputString!=""){
             QMessageBox::StandardButton resBtn = QMessageBox::question( this, "HusterM",
-                                                                        tr("文件已存在,确认覆盖?\n"),
-                                                                        QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
-                                                                        QMessageBox::Yes);
+                tr("文件已存在,确认覆盖?\n"),
+                QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
+                QMessageBox::Yes);
             if (resBtn != QMessageBox::Yes) {
 
             } else {
@@ -1786,7 +1787,19 @@ void MainWindow::on_pushButton_job_submit_edit_clicked()
 //display selected script name on label
 void MainWindow::on_pushButton_job_submit_selectRemote_clicked()
 {
+    if(temp_ptr != nullptr)
+    {
+        temp_ptr->setBackground(0,Qt::white);
+    }
+
     ui.label_job_submit_selectedScript->setText("已选择脚本:"+ui.treeWidget_jobsubmitfile->currentItem()->text(0));
+    ui.label_job_submit_selectedScript->setStyleSheet("color:red;");
+    QList<QTreeWidgetItem*> items = ui.treeWidget_jobsubmitfile->selectedItems();
+    foreach(QTreeWidgetItem* each,items)
+    {
+        each->setBackground(0,Qt::red);
+        temp_ptr = each;
+    }
     cachePathRemote = currentPathRemote+"/"+ui.treeWidget_jobsubmitfile->currentItem()->text(0).toStdString();
 
 }
@@ -1810,8 +1823,8 @@ void MainWindow::on_treeWidget_customContextMenuRequested(const QPoint &pos)
 
 void MainWindow::mkRemoteDir(){
     QString dirName = QInputDialog::getText(this,
-                                            tr("新建文件夹"),
-                                            tr("文件夹名称"));
+        tr("新建文件夹"),
+        tr("文件夹名称"));
     if (!dirName.isEmpty()) {
 
         emit ftpMkDirStart(QString::fromStdString(currentPathRemote),dirName);
@@ -1920,7 +1933,7 @@ bool MainWindow::isDir(QString name){
             {
                 return false;
             }
-            else if (QString::number(attr[i].type).compare("2")==0)
+            else if (QString::number(attr[i].type).compare("1")!=0)
             {
                 return true;
             }
@@ -1967,9 +1980,9 @@ void MainWindow::on_pushButton_cdToParentDir_clicked()
 void MainWindow::closeEvent (QCloseEvent *event)
 {
     QMessageBox::StandardButton resBtn = QMessageBox::question( this, "HusterM",
-                                                                tr("确定退出吗?\n"),
-                                                                QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
-                                                                QMessageBox::Yes);
+        tr("确定退出吗?\n"),
+        QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
+        QMessageBox::Yes);
     if (resBtn != QMessageBox::Yes) {
         event->ignore();
     } else {
@@ -2328,8 +2341,8 @@ void MainWindow::updateJOBSGUI2(QStringList jobList,QStringList nodeList){
 void MainWindow::on_pushButton_job_submit_selectLocal_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
-                                                    ".",
-                                                    tr("Scripts (*.pbs)"));
+        ".",
+        tr("Scripts (*.pbs)"));
     if(!fileName.isEmpty()){
         client->putFile(fileName.toStdString(),".");
         outputString.clear();
@@ -2387,46 +2400,46 @@ void MainWindow::on_pushButton_job_submit_selectLocal_clicked()
 void MainWindow::on_tabWidget_tabBarClicked(int index)
 {
     switch(index){
-    case 0:
-    {
-        ui.label_title->setText("总览");
-        break;
-    }
-    case 1:
-    {
-        ui.label_title->setText("作业");
-        break;
-    }
-    case 2:
-    {
-        ui.label_title->setText("监控");
-        break;
-    }
-    case 3:
-    {
-        ui.label_title->setText("管理");
-        break;
-    }
-    case 4:
-    {
-        ui.label_title->setText("ftp");
-        break;
-    }
-    case 5:
-    {
-        ui.label_title->setText("终端");
-        break;
-    }
-    case 6:
-    {
-        ui.label_title->setText("消息");
-        break;
-    }
-    case 7:
-    {
-        ui.label_title->setText("设备");
-        break;
-    }
+        case 0:
+        {
+            ui.label_title->setText("总览");
+            break;
+        }
+        case 1:
+        {
+            ui.label_title->setText("作业");
+            break;
+        }
+        case 2:
+        {
+            ui.label_title->setText("监控");
+            break;
+        }
+        case 3:
+        {
+            ui.label_title->setText("管理");
+            break;
+        }
+        case 4:
+        {
+            ui.label_title->setText("ftp");
+            break;
+        }
+        case 5:
+        {
+            ui.label_title->setText("终端");
+            break;
+        }
+        case 6:
+        {
+            ui.label_title->setText("消息");
+            break;
+        }
+        case 7:
+        {
+            ui.label_title->setText("设备");
+            break;
+        }
     }
 }
 
@@ -2483,46 +2496,46 @@ bool MainWindow::event(QEvent *event)
             currentTabIndex=(ui.tabWidget->currentIndex()+1) % ui.tabWidget->count();
             ui.tabWidget->setCurrentIndex((ui.tabWidget->currentIndex()+1) % ui.tabWidget->count());
             switch(currentTabIndex){
-            case 0:
-            {
-                ui.label_title->setText("总览");
-                break;
-            }
-            case 1:
-            {
-                ui.label_title->setText("作业");
-                break;
-            }
-            case 2:
-            {
-                ui.label_title->setText("监控");
-                break;
-            }
-            case 3:
-            {
-                ui.label_title->setText("管理");
-                break;
-            }
-            case 4:
-            {
-                ui.label_title->setText("ftp");
-                break;
-            }
-            case 5:
-            {
-                ui.label_title->setText("终端");
-                break;
-            }
-            case 6:
-            {
-                ui.label_title->setText("消息");
-                break;
-            }
-            case 7:
-            {
-                ui.label_title->setText("设备");
-                break;
-            }
+                case 0:
+                {
+                    ui.label_title->setText("总览");
+                    break;
+                }
+                case 1:
+                {
+                    ui.label_title->setText("作业");
+                    break;
+                }
+                case 2:
+                {
+                    ui.label_title->setText("监控");
+                    break;
+                }
+                case 3:
+                {
+                    ui.label_title->setText("管理");
+                    break;
+                }
+                case 4:
+                {
+                    ui.label_title->setText("ftp");
+                    break;
+                }
+                case 5:
+                {
+                    ui.label_title->setText("终端");
+                    break;
+                }
+                case 6:
+                {
+                    ui.label_title->setText("消息");
+                    break;
+                }
+                case 7:
+                {
+                    ui.label_title->setText("设备");
+                    break;
+                }
             }
             return true;
 
@@ -2588,7 +2601,7 @@ void MainWindow::on_treeView_customContextMenuRequested(const QPoint &pos)
 void MainWindow::mkLocalFile(){
 
     QString fileName = QInputDialog::getText(this,
-                                             tr("新建文件"),
+       tr("新建文件"),
                                              tr("文件名称"));//get new file name
     QFile file(localDir.absolutePath()+"/"+fileName);//open or create file
     if(file.open(QIODevice::ReadWrite | QIODevice::Text))
@@ -2597,15 +2610,15 @@ void MainWindow::mkLocalFile(){
     }
     else{
         QMessageBox::information(this,
-                                 tr("新建文件"),
+           tr("新建文件"),
                                  tr("创建文件失败"));//show message
 
     }
 }
 void MainWindow::mkLocalDir(){
     QString dirName = QInputDialog::getText(this,
-                                            tr("新建文件夹"),
-                                            tr("文件夹名称"));
+        tr("新建文件夹"),
+        tr("文件夹名称"));
     if (!dirName.isEmpty()) {
 
         if(localDir.mkdir(dirName))
@@ -2616,7 +2629,7 @@ void MainWindow::mkLocalDir(){
         else
         {
             QMessageBox::information(this,
-                                     tr("新建文件夹"),
+               tr("新建文件夹"),
                                      tr("创建文件夹失败"));//show message
 
         }
@@ -2629,13 +2642,13 @@ void MainWindow::reNameLocalFile(){
 
     if(!indexList.isEmpty()){
         QString fileName = QInputDialog::getText(this,
-                                                 tr("重命名文件"),
+           tr("重命名文件"),
                                                  tr("新文件名称"));//get new file name
 
         if(!localDir.rename(indexList.at(0).data().toString(),fileName))
         {
             QMessageBox::information(this,
-                                     tr("重命名文件"),
+               tr("重命名文件"),
                                      tr("创建文件失败"));//show message
 
         }
@@ -3047,5 +3060,38 @@ void MainWindow::monitorSonNode()
 
 void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
+
+}
+
+void MainWindow::on_listWidget_manager_user_view1_customContextMenuRequested(const QPoint &pos)
+{
+    //create menu
+    QMenu* menu = new QMenu;
+    menu->addAction(QString(tr("删除")),this,SLOT(delSystemUser()));//add action user delete
+    menu->exec(QCursor::pos());//execute selected action
+}
+
+void MainWindow::delSystemUser()
+{
+  //get selected user name
+    std::string userName;
+    std::string cmd;
+    QList<QListWidgetItem *> items = ui.listWidget_manager_user_view1->selectedItems();
+    foreach(QListWidgetItem *each,items)
+    {
+        userName=each->text().toStdString();
+    }
+    cmd = "userdel "+userName;
+    for(int i =0;i<nodesList.size()-1;i++)
+    {
+        cmd.append(" && scp /etc/passwd root@"+nodesList[i][0].toStdString()+":/etc");
+        cmd.append(" && scp /etc/group root@"+nodesList[i][0].toStdString()+":/etc");
+        cmd.append(" && scp /etc/shadow root@"+nodesList[i][0].toStdString()+":/etc");
+
+    }
+    cmd.append(" && rm -r /home/"+userName);
+
+    client->executeShellCommand(cmd,outputString);
+    emit manageGetAllUserStart();
 
 }

@@ -116,8 +116,7 @@ void ShellWorker::getRAM(){
         }
       client->executeShellCommand("free | grep buffers/cache | awk '{print $4}'",outputString);
       usedRam =totalRam - QString::fromStdString(outputString).toFloat();
-      qDebug()<<usedRam;
-      qDebug()<<"=--=-=-=-=====usedram";
+      
 
         if(totalRam!=0)
             ramUsage = usedRam/totalRam;
