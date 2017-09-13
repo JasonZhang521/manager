@@ -1,3 +1,4 @@
+set(SSH_LIBs ssh ssh_threads)	
 set(SshOneTimeShellCmdMainTest_SRCS
     SshOneTimeShellCmdMainTest.cpp
 )

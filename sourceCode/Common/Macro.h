@@ -8,5 +8,4 @@
                                          std::string("::") +\
                                          std::string(#name);\
                            }
-
 #endif // MACRO_H

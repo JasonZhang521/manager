@@ -1,0 +1,50 @@
+#include "MauiConfig.h.bak"
+#include <ostream>
+namespace ConfigureManagement {
+
+const std::string RmCfg::RmCfgTag("RMCFG");
+const std::string RmCfg::ResouceTypeTag("RESOURCETYPE");
+const std::string RmCfg::ClusterQueryUrlTag("CLUSTERQUERYURL");
+
+RmCfg::RmCfg()
+{
+}
+
+RmCfg::RmCfg(const RmCfg& rmCfg)
+    : name_(rmCfg.name_)
+    , resourceType_(rmCfg.resourceType_)
+    , clusterQueryUrl_(rmCfg.clusterQueryUrl_)
+    , type_(rmCfg.type_)
+{
+
+}
+
+RmCfg& RmCfg::operator = (const RmCfg& rmCfg)
+{
+    name_ = rmCfg.name_;
+    resourceType_ = rmCfg.resourceType_;
+    clusterQueryUrl_ = rmCfg.clusterQueryUrl_;
+    type_ = rmCfg.type_;
+    return *this;
+}
+
+bool RmCfg::operator == (const RmCfg& rmCfg)
+{
+    return (name_ == rmCfg.name_ &&
+            resourceType_ == rmCfg.resourceType_ &&
+            clusterQueryUrl_ == rmCfg.clusterQueryUrl_ &&
+            type_ == rmCfg.type_);
+}
+
+std::ostream& RmCfg::operator << (std::ostream& os)
+{
+    os << "RMCFG[" << name_ << "]";
+    return os;
+}
+
+MauiConfig::MauiConfig()
+{
+
+}
+
+}

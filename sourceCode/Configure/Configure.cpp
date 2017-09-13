@@ -46,6 +46,11 @@ TraceLogLevel Configure::getTraceLogLevel() const
   return traceLogConfigure_->getTraceLogLevel();
 }
 
+std::string Configure::getTraceLogLevelString() const
+{
+  return traceLogConfigure_->getTraceLogLevelString();
+}
+
 void Configure::setTraceLogTarget(TraceLogTarget target)
 {
   traceLogConfigure_->setTraceLogTarget(target);

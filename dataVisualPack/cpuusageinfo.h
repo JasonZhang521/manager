@@ -4,6 +4,8 @@
 #include <QHash>
 #include <QObject>
 
+namespace DataVisualPack {
+
 class CpuUsageInfo
 {
 public:
@@ -26,5 +28,7 @@ private:
     QString cpuType;
     QString cpuFrequency;
 };
+
+}
 
 #endif // CPUUSAGEINFO_H

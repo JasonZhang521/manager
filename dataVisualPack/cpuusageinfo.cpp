@@ -1,4 +1,5 @@
 #include "cpuusageinfo.h"
+namespace DataVisualPack {
 
 CpuUsageInfo::CpuUsageInfo()
 {
@@ -43,4 +44,6 @@ QString CpuUsageInfo::getCpuFrequency() const
 void CpuUsageInfo::setCpuFrequency(const QString &value)
 {
     cpuFrequency = value;
+}
+
 }

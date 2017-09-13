@@ -7,6 +7,8 @@
 #include <iostream>
 #include <time.h>
 #include <stdio.h>
+#include <ratio>
+#include <chrono>
 #include "LocalTime.h"
 
 LocalTime::LocalTime() {
@@ -26,4 +28,36 @@ std::string LocalTime::getCurrentTime()
   timeinfo = localtime(&rawTime);
   std::string str = std::string(asctime(timeinfo));
   return str.substr(0, str.size() - 1);
+}
+
+std::string LocalTime::getTimeBeforeCurrent(uint32_t elapseSecond)
+{
+    using namespace std::chrono;
+    system_clock::time_point now = system_clock::now();
+    std::time_t last = system_clock::to_time_t(now - std::chrono::seconds(elapseSecond));
+    struct tm* timeinfo;
+    timeinfo = localtime(&last);
+    std::string str = std::string(asctime(timeinfo));
+    return str.substr(0, str.size() - 1);
+}
+
+std::string LocalTime::getTimeAfterCurrent(uint32_t elapseSecond)
+{
+    using namespace std::chrono;
+    system_clock::time_point now = system_clock::now();
+    std::time_t future = system_clock::to_time_t(now + std::chrono::seconds(elapseSecond));
+    struct tm* timeinfo;
+    timeinfo = localtime(&future);
+    std::string str = std::string(asctime(timeinfo));
+    return str.substr(0, str.size() - 1);
+}
+
+std::string LocalTime::getTimeBytimeStamp(uint64_t timeStamp)
+{
+    using namespace std::chrono;
+    std::time_t timePoint = system_clock::to_time_t(system_clock::from_time_t(timeStamp));
+    struct tm* timeinfo;
+    timeinfo = localtime(&timePoint);
+    std::string str = std::string(asctime(timeinfo));
+    return str.substr(0, str.size() - 1);
 }

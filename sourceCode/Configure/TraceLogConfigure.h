@@ -19,6 +19,7 @@ public:
   TraceLogLevel getTraceLogLevel() const;
   void setTraceLogTarget(TraceLogTarget target);
   TraceLogTarget getTraceLogTarget() const;
+  std::string getTraceLogLevelString() const;
   void setTraceLogFilePath(const std::string& filePath);
   std::string getTraceLogFilePath() const;
   void setTraceLogBufSize(unsigned int logBufSize);

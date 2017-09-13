@@ -30,6 +30,7 @@ public:
   /* Trace Log Configuration */
   void setTraceLogLevel(TraceLogLevel traceLogLevel);
   TraceLogLevel getTraceLogLevel() const;
+  std::string getTraceLogLevelString() const;
   void setTraceLogTarget(TraceLogTarget target);
   TraceLogTarget getTraceLogTarget() const;
   void setTraceLogFilePath(const std::string& filePath);

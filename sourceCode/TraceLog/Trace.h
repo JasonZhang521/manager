@@ -14,6 +14,12 @@
 #include "TraceFile.h"
 #include "TraceBuf.h"
 //General TRACE
+#define TRACE_ENTER()            TRACE_PRINT(TRACE_LOG_DEBUG3, "")
+
+#define TRACE_ENTER_DEBUG()      TRACE_PRINT(TRACE_LOG_DEBUG3, "")
+
+#define TRACE_DEBUG3(traceStr)   TRACE_PRINT(TRACE_LOG_DEBUG3, traceStr)
+
 #define TRACE_DEBUG(traceStr)    TRACE_PRINT(TRACE_LOG_DEBUG, traceStr)
 
 #define TRACE_NOTICE(traceStr)   TRACE_PRINT(TRACE_LOG_NOTICE, traceStr)
@@ -47,8 +53,9 @@
               {                                                                         \
                 (*TraceFile<level>::getInstance()) << ::Configure::getInstance().getLogLineNumberInFile() \
                                                    << "  " << LocalTime::getCurrentTime() << "  "       \
-                                                   <<": " << className() << "::" << __FUNCTION__ << ": " \
-                                                   << traceStr << std::endl;            \
+                                                   << ": " << className() << "::" << __FUNCTION__ \
+                                                   << "**" << ::Configure::getInstance().getTraceLogLevelString() \
+                                                   << "**" << ": " << traceStr << std::endl;            \
                 ::Configure::getInstance().increaseLogLineNumberInFile();                 \
               }                                                                         \
             }while(0)
@@ -60,8 +67,9 @@
               {                                                                \
                 (*TraceConsole<level>::getInstance()) << ::Configure::getInstance().getLogLineNumberInConsole() \
                                                    << "  " << LocalTime::getCurrentTime() << "  "             \
-                                                   <<": " << className() << "::" << __FUNCTION__ << ": " \
-                                                   << traceStr << std::endl;   \
+                                                   <<": " << className() << "::" << __FUNCTION__ \
+                                                   << "**" << ::Configure::getInstance().getTraceLogLevelString() \
+                                                   << "**" << ": " << traceStr << std::endl;            \
                 ::Configure::getInstance().increaseLogLineNumberInConsole();     \
               }                                                                \
             }while(0)
@@ -72,7 +80,11 @@
         do {                                                                   \
           if (TraceBuf<level>::getInstance())                                  \
           {                                                                    \
-            (*TraceBuf<level>::getInstance()) << traceStr << std::endl;        \
+            (*TraceBuf<level>::getInstance()) << ::Configure::getInstance().getLogLineNumberInConsole() \
+                                              << "  " << LocalTime::getCurrentTime() << "  "             \
+                                              <<": " << className() << "::" << __FUNCTION__ \
+                                              << "**" << ::Configure::getInstance().getTraceLogLevelString() \
+                                              << "**" << ": " << traceStr << std::endl;      \
           }                                                                    \
         } while(0)
 

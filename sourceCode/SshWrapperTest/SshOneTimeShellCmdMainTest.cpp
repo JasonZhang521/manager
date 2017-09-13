@@ -20,7 +20,7 @@ int main()
 	SshConfigure configure;
     configure.user = user;
     configure.password = password;
-    configure.host = "selnpcgwnx1000.seln.ete.ericsson.se";
+    configure.host = "192.168.5.138";
 	configure.port = 22;
 	configure.verbosity = SSH_LOG_PROTOCOL;
 	configure.unknownHostContinue = true;
