@@ -1,5 +1,5 @@
 QT += core gui
-QT += widgets
+QT += widgets printsupport
 QT += charts
 QT += network
 
@@ -28,6 +28,7 @@ INCLUDEPATH += sourceCode/Common/ \
                sourceCode/Environment \
                sourceCode/IpcMessage \
                sourceCode/SystemMonitorMessage \
+               thirdPartyLib/qcustomplot
 
 SOURCES += \
     sourceCode/Common/FilePathHandler.cpp \
@@ -160,7 +161,8 @@ SOURCES += \
     sourceCode/SystemMonitorMessage/ComputerNodeInfoRequest.cpp \
     sourceCode/SystemMonitorMessage/ControlNodeBrieflyInfoRequest.cpp \
     sourceCode/SystemMonitorMessage/ControlNodeBrieflyInfoResponse.cpp \
-    sourceCode/PlatformWrapper/NetworkHost.cpp
+    sourceCode/PlatformWrapper/NetworkHost.cpp \
+    thirdPartyLib/qcustomplot/qcustomplot.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -341,7 +343,8 @@ HEADERS += \
     sourceCode/SystemMonitorMessage/ComputerNodeInfoRequest.h \
     sourceCode/SystemMonitorMessage/ControlNodeBrieflyInfoRequest.h \
     sourceCode/SystemMonitorMessage/ControlNodeBrieflyInfoResponse.h \
-    sourceCode/PlatformWrapper/NetworkHost.h
+    sourceCode/PlatformWrapper/NetworkHost.h \
+    thirdPartyLib/qcustomplot/qcustomplot.h
 
 
 
@@ -394,11 +397,6 @@ DEPENDPATH += $$PWD/thirdPartyLib
 
 win32:!win32-g++: PRE_TARGETDEPS += $$PWD/thirdPartyLib/SMTPEmail.lib
 else:win32-g++: PRE_TARGETDEPS += $$PWD/thirdPartyLib/libSMTPEmail.a
-
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
 
 
 LIBS += -lWs2_32

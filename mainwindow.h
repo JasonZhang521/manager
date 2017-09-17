@@ -25,6 +25,7 @@
 #include <SftpDirAttribute.h>
 #include "manageworker.h"
 #include "highlighter.h"
+#include "thirdPartyLib/qcustomplot/qcustomplot.h"
 
 
 using namespace SshWrapper;
@@ -122,26 +123,26 @@ private slots:
 
 
     void on_pushButton_control_user_add_clicked();
-   void on_pushButton_control_queue_add_clicked();
+    void on_pushButton_control_queue_add_clicked();
 
-   void on_tabWidget_control_time_tabBarClicked(int index);
+    void on_tabWidget_control_time_tabBarClicked(int index);
 
-   void on_pushButton_restart_clicked();
+    void on_pushButton_restart_clicked();
 
-   void on_pushButton_control_queue_delete_clicked();
+    void on_pushButton_control_queue_delete_clicked();
 
-   void on_pushButton_shutdown_clicked();
+    void on_pushButton_shutdown_clicked();
 
-   void on_treeWidget_monitor_nodes_itemClicked(QTreeWidgetItem *item, int column);
+    void on_treeWidget_monitor_nodes_itemClicked(QTreeWidgetItem *item, int column);
 
-   void on_treeWidget_nodeViewer_customContextMenuRequested(const QPoint &pos);
+    void on_treeWidget_nodeViewer_customContextMenuRequested(const QPoint &pos);
 
-   void monitorSonNode();
-   void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
+    void monitorSonNode();
+    void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
 
-   void on_listWidget_manager_user_view1_customContextMenuRequested(const QPoint &pos);
+    void on_listWidget_manager_user_view1_customContextMenuRequested(const QPoint &pos);
 
-   void delSystemUser();
+    void delSystemUser();
 public slots:
     void processFtpUploadFinishEvent();//process after upload finished signal
     void processFtpDownloadFinishEvent();//process after recieve download finished signal
@@ -156,6 +157,7 @@ public slots:
     void processTimeGetDataFinishEvent(QStringList users, QString startTime, QString endTime);
     void processConnectionFailedEvent();
     void processConnectionSuccessEvent();
+    void updatePlotHeatBeat();
 private:
     Ui::MainWindow ui;
     void createCircleBar();
@@ -210,7 +212,7 @@ private:
     QStringList storageInfoList;
     QStringList nodesListForJobSubmition;
     QStringList queueList;
-  QList<QStringList> queueContentList;
+    QList<QStringList> queueContentList;
 
     QThread* ftpThread;//ftp thread
     FtpWorker* ftpWorker;//ftp worker
@@ -278,6 +280,7 @@ private:
     void  setupStyleSheet();
     void displaySonNodeInfo(QString hostname);
     QString getSelectedNode();
+    void setPlotStyle();
 public:
     void setupSessionConfigure(SshConfigure configure);
 signals:
