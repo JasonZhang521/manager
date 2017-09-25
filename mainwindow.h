@@ -26,6 +26,17 @@
 #include "manageworker.h"
 #include "highlighter.h"
 #include "thirdPartyLib/qcustomplot/qcustomplot.h"
+#include "ipcworker.h"
+
+//uiclient related headers
+#include "UiClientProcess.h"
+#include "ControlNodeBrieflyInfoRequest.h"
+#include "ControlNodeBrieflyInfoResponse.h"
+#include "ComputerNodeInfoReport.h"
+#include "IIpcMessage.h"
+#include "Sleep.h"
+#include "Trace.h"
+#include <memory>
 
 
 using namespace SshWrapper;
@@ -223,6 +234,14 @@ private:
     QThread* manageThread;
     ManageWorker* manageWorker;
 
+    //declare ipc thread and worker
+    QThread* ipcThread;
+    IPCWorker* ipcWorker;
+
+
+     UiClient::UiClientProcess process;
+    // static IPCWorker ipcWorker;
+
     QList<QStringList> userList;
 
     bool isFree = true;
@@ -281,6 +300,7 @@ private:
     void displaySonNodeInfo(QString hostname);
     QString getSelectedNode();
     void setPlotStyle();
+    void setupIPCClient(SshConfigure configure);
 public:
     void setupSessionConfigure(SshConfigure configure);
 signals:
@@ -301,6 +321,9 @@ signals:
     void getAllQueueInfosStart();
     void addQueueStartSignal(QueueAttributes attr);
     void refreshStartSignal();
+
+    void startIPCEngineSignal(QString);
+    void startGetIPCDataSignal();
 
 protected slots:
     void keyPressEvent(QKeyEvent *event);

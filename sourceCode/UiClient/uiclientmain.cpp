@@ -1,6 +1,7 @@
 #include "UiClientProcess.h"
 #include "ControlNodeBrieflyInfoRequest.h"
 #include "ControlNodeBrieflyInfoResponse.h"
+#include "ComputerNodeInfoReport.h"
 #include "IIpcMessage.h"
 #include "Sleep.h"
 #include "Trace.h"
@@ -16,15 +17,25 @@ int main(int argc, char**argv)
         while (process.messageReceived())
         {
             std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
-            std::cout << "-----------------------" << std::endl;
-            std::cout << *msg << std::endl;
-            std::cout << "-----------------------" << std::endl;
+//            IpcMessage::IIpcMessage* pMsg = msg.get(); //获取指针
+            SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
+                        dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
+
+
+            SystemMonitorMessage::ComputerNodeInfoReport* resp =
+                    dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
+
+             std::cout << "-----------------------" << std::endl;
+//             std::cout << *msg << std::endl;
+            std::cout << resp->getCpuUsageInfo()<<std::endl;
+             std::cout << "-----------------------" << std::endl;
+
         }
-        System::Sleep(50000);
-        std::unique_ptr<IpcMessage::IIpcMessage>
-                controlNodeBrieflyInfoRequest(new SystemMonitorMessage::ControlNodeBrieflyInfoRequest);
-        process.sendMessage(std::move(controlNodeBrieflyInfoRequest));
-        System::Sleep(1000);
+//         System::Sleep(5000);
+//         std::unique_ptr<IpcMessage::IIpcMessage>
+//                 controlNodeBrieflyInfoRequest(new SystemMonitorMessage::ControlNodeBrieflyInfoRequest);
+//         process.sendMessage(std::move(controlNodeBrieflyInfoRequest));
+//         System::Sleep(1000);
     }
     return 0;
 }

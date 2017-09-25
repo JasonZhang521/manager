@@ -67,8 +67,8 @@ void UiClientProcess::process()
     // Local and remote endpoint.
     Network::IpSocketEndpoint localEndpoint("0.0.0.0:0");
     //Network::IpSocketEndpoint remoteEndpoint(std::string("127.0.0.1:23833"));
-//    Network::IpSocketEndpoint remoteEndpoint(std::string("116.236.169.100:23833"));
-    Network::IpSocketEndpoint remoteEndpoint(getRemoteHost()+std::string(":23833"));
+    Network::IpSocketEndpoint remoteEndpoint(std::string("116.236.169.100:23833"));
+//    Network::IpSocketEndpoint remoteEndpoint(getRemoteHost()+std::string(":23833"));
     // SystemMonitorHandler
     UiClientHandler* uiClientHandlerPtr = new UiClientHandler();
     std::shared_ptr<IUiClientHandler> uiClientHandler(uiClientHandlerPtr);

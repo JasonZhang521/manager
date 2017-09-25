@@ -28,6 +28,7 @@ INCLUDEPATH += sourceCode/Common/ \
                sourceCode/Environment \
                sourceCode/IpcMessage \
                sourceCode/SystemMonitorMessage \
+               sourceCode/UiClient \
                thirdPartyLib/qcustomplot
 
 SOURCES += \
@@ -162,7 +163,10 @@ SOURCES += \
     sourceCode/SystemMonitorMessage/ControlNodeBrieflyInfoRequest.cpp \
     sourceCode/SystemMonitorMessage/ControlNodeBrieflyInfoResponse.cpp \
     sourceCode/PlatformWrapper/NetworkHost.cpp \
-    thirdPartyLib/qcustomplot/qcustomplot.cpp
+    thirdPartyLib/qcustomplot/qcustomplot.cpp \
+    ipcworker.cpp \
+    ipcworkerii.cpp \
+    m.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -344,7 +348,10 @@ HEADERS += \
     sourceCode/SystemMonitorMessage/ControlNodeBrieflyInfoRequest.h \
     sourceCode/SystemMonitorMessage/ControlNodeBrieflyInfoResponse.h \
     sourceCode/PlatformWrapper/NetworkHost.h \
-    thirdPartyLib/qcustomplot/qcustomplot.h
+    thirdPartyLib/qcustomplot/qcustomplot.h \
+    ipcworker.h \
+    ipcworkerii.h \
+    m.h
 
 
 
@@ -365,7 +372,8 @@ FORMS += \
     contactinfoform.ui \
     productpage.ui \
     loginpageii.ui \
-    monitorwindow.ui
+    monitorwindow.ui \
+    m.ui
 
 RESOURCES += \
     hungclustermanager1.qrc

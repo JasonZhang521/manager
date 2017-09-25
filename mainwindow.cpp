@@ -25,6 +25,16 @@
 #include "timeuserselectiondialog.h"
 #include <QDesktopWidget>
 
+//
+#include "UiClientProcess.h"
+#include "ControlNodeBrieflyInfoRequest.h"
+#include "ControlNodeBrieflyInfoResponse.h"
+#include "ComputerNodeInfoReport.h"
+#include "IIpcMessage.h"
+#include "Sleep.h"
+#include "Trace.h"
+#include <memory>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -111,7 +121,7 @@ void MainWindow::setPlotStyle()
     //set data
     QCPBars *regen = new QCPBars(ui.plot_cpuUsage->xAxis, ui.plot_cpuUsage->yAxis);
     regen->setAntialiased(false);
-//    regen->setName("CPU total usage");
+    // regen->setName("CPU total usage");
     regen->setPen(QPen(QColor(0, 168, 140).lighter(130)));
     regen->setBrush(QColor(0, 168, 140));
 
@@ -156,7 +166,7 @@ void MainWindow::setPlotStyle()
     //set data
     QCPBars *rengen2 = new QCPBars(ui.plot_ramUsage->xAxis, ui.plot_ramUsage->yAxis);
     rengen2->setAntialiased(false);
-//    rengen2->setName("CPU total usage");
+    //rengen2->setName("CPU total usage");
     rengen2->setPen(QPen(QColor(0, 168, 140).lighter(130)));
     rengen2->setBrush(QColor(0, 168, 140));
 
@@ -189,7 +199,7 @@ void MainWindow::setupStyleSheet()
                         "QTreeWidget::verticalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
                         "QTreeWidget::horizontalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
                         );
-    //    QTreeWidget::verticalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
+    //QTreeWidget::verticalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
     //    QTreeWidget::horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
     //    QScrollArea::verticalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
     //    QScrollArea::horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
@@ -274,10 +284,10 @@ MainWindow::~MainWindow()
 
 //create cpu ram indicator
 /*variables:
- * gradientPoints
- * p1
- * p2
- *
+* gradientPoints
+* p1
+* p2
+*
 */
 void MainWindow::createCircleBar(){
     QGradientStops gradientPoints;
@@ -303,10 +313,14 @@ void MainWindow::setupThreads(SshConfigure configure){
     shellWorker = new ShellWorker(0,configure);
     manageThread = new QThread;
     manageWorker = new ManageWorker(0,configure);
+//    ipcThread = new QThread;
+//    ipcWorker = new IPCWorker(0,configure.host);
 
     ftpWorker->moveToThread(ftpThread);//move worker to thread
     shellWorker->moveToThread(updatorThread);
     manageWorker->moveToThread(manageThread);
+//    ipcWorker->moveToThread(ipcThread);
+//    ipcThread->start();
 
     /*************************************ftp***************************************/
     //connect sigal and slots
@@ -375,6 +389,10 @@ void MainWindow::setupThreads(SshConfigure configure){
     connect(manageThread,SIGNAL(finished()),manageThread,SLOT(deleteLater()));
     manageThread->start();
     /**************************************************************************/
+
+    //!connect ipcworker and mainwindow
+//    connect(this,SIGNAL(startIPCEngineSignal(QString)),ipcWorker,SLOT(setup(QString)));
+//    connect(this,SIGNAL(startGetIPCDataSignal()),ipcWorker,SLOT(update()));
 }
 
 void MainWindow::setupMenuAction()
@@ -848,7 +866,8 @@ void MainWindow::updateStatusTracer()
 
 }
 //setup ssh client session and initilizations
-void MainWindow::setupSessionConfigure(SshConfigure configure){
+void MainWindow::setupSessionConfigure(SshConfigure configure)
+{
 
     setupThreads(configure);
     setupMenuAction();
@@ -864,13 +883,49 @@ void MainWindow::setupSessionConfigure(SshConfigure configure){
     setupCPUInfo();
     setupRamInfo();
     setupStatusTracer();
-    //display control tab node list
-    updatorThread->start();//start shellTHread
-    emit manageGetAllUserStart();
-    emit getLimitedQueuesStart();
-    emit getAllQueueInfosStart();
+    // //display control tab node list
+    // updatorThread->start();//start shellTHread
+    // emit manageGetAllUserStart();
+    // emit getLimitedQueuesStart();
+    // emit getAllQueueInfosStart();
+
+    //setup ipc client
+     setupIPCClient(configure);
 }
 
+void MainWindow::setupIPCClient(SshConfigure configure)
+{
+    // qDebug()<<QString::fromStdString(configure.host);
+    // qDebug()<<"look here***";
+    //  process.setRemoteHost(configure.host);
+    //  process.process();
+    // // ipcWorker.setup(configure.host);
+    // IPCWorker* worker = new IPCWorker;
+    // worker->setup(configure.host);
+            // UiClient::UiClientProcess process;
+            process.start();
+// while(1)
+// {
+//
+//                      while (process.messageReceived())
+//                      {
+//                          std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
+//                          IpcMessage::IIpcMessage* pMsg = msg.get(); //获取指针
+//                          SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
+//                                  dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
+//
+//
+//                          SystemMonitorMessage::ComputerNodeInfoReport* resp =
+//                                  dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
+//
+//                          std::cout << "-----------------------" << std::endl;
+//                          //             std::cout << *msg << std::endl;
+//                          std::cout << resp->getCpuUsageInfo()<<std::endl;
+//                          std::cout << "-----------------------" << std::endl;
+//
+//                      }
+// }
+}
 
 //navigation button event handler
 void MainWindow::on_pushButton_job_kill_clicked(){
@@ -1476,7 +1531,8 @@ void MainWindow::processFtpRemoveFileFinishEvent(){
 
 }
 
-void MainWindow::processFtpMkDirFinishEvent(){
+void MainWindow::processFtpMkDirFinishEvent()
+{
     updateFileList(ui.treeWidget_jobsubmitfile,3);
     updateFileList(ui.treeWidget_job_file,2);
     updateFileList(ui.treeWidget,1);

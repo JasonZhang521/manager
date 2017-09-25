@@ -26,7 +26,7 @@ public:
     bool messageReceived();
     std::unique_ptr<IpcMessage::IIpcMessage> getOneMessage();
     void sendMessage(std::unique_ptr<IpcMessage::IIpcMessage> msg);
-private:
+public:
     void process();
     std::string remoteHost="0.0.0.0";
 public:

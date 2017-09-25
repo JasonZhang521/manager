@@ -59,9 +59,8 @@ LoginPageII::LoginPageII(QWidget *parent) :
 
 
 
-    w = new MainWindow;
+    w = new MainWindow();
     w->show();
-
 }
 
 LoginPageII::~LoginPageII()

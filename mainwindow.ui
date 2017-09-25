@@ -4435,7 +4435,7 @@ p, li { white-space: pre-wrap; }
                   <item>
                    <widget class="QPushButton" name="pushButton_monitor_GPU">
                     <property name="text">
-                     <string>GPU</string>
+                     <string>GPU节点</string>
                     </property>
                     <property name="checkable">
                      <bool>true</bool>
@@ -4475,7 +4475,7 @@ p, li { white-space: pre-wrap; }
                    <number>0</number>
                   </property>
                   <property name="currentIndex">
-                   <number>1</number>
+                   <number>0</number>
                   </property>
                   <widget class="QWidget" name="node">
                    <layout class="QVBoxLayout" name="verticalLayout_32">
@@ -5562,38 +5562,185 @@ p, li { white-space: pre-wrap; }
                   <widget class="QWidget" name="GPU">
                    <layout class="QVBoxLayout" name="verticalLayout_2">
                     <item>
-                     <widget class="QListWidget" name="listWidget_monitor_GPU">
-                      <property name="enabled">
-                       <bool>false</bool>
+                     <widget class="QScrollArea" name="scrollArea_8">
+                      <property name="widgetResizable">
+                       <bool>true</bool>
                       </property>
-                      <property name="styleSheet">
-                       <string notr="true">background-color: rgb(255, 255, 255);</string>
-                      </property>
-                      <item>
-                       <property name="text">
-                        <string>GPU1          Node1          Type1</string>
+                      <widget class="QWidget" name="scrollAreaWidgetContents_8">
+                       <property name="geometry">
+                        <rect>
+                         <x>0</x>
+                         <y>0</y>
+                         <width>187</width>
+                         <height>191</height>
+                        </rect>
                        </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>GPU2          Nodw2         Type2</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>GPU3</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>GPU4</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>GPU5</string>
-                       </property>
-                      </item>
+                       <layout class="QVBoxLayout" name="verticalLayout_58">
+                        <item>
+                         <layout class="QHBoxLayout" name="horizontalLayout_56">
+                          <item>
+                           <widget class="QListWidget" name="listWidget">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                             <size>
+                              <width>90</width>
+                              <height>0</height>
+                             </size>
+                            </property>
+                            <property name="maximumSize">
+                             <size>
+                              <width>90</width>
+                              <height>16777215</height>
+                             </size>
+                            </property>
+                            <property name="flow">
+                             <enum>QListView::TopToBottom</enum>
+                            </property>
+                            <property name="viewMode">
+                             <enum>QListView::IconMode</enum>
+                            </property>
+                            <item>
+                             <property name="text">
+                              <string>comput-g01</string>
+                             </property>
+                            </item>
+                            <item>
+                             <property name="text">
+                              <string>comput-g02</string>
+                             </property>
+                            </item>
+                            <item>
+                             <property name="text">
+                              <string>comput-g03</string>
+                             </property>
+                            </item>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QTreeWidget" name="treeWidget_2">
+                            <column>
+                             <property name="text">
+                              <string>GPUID</string>
+                             </property>
+                            </column>
+                            <column>
+                             <property name="text">
+                              <string>风扇转速</string>
+                             </property>
+                            </column>
+                            <column>
+                             <property name="text">
+                              <string>GPU型号</string>
+                             </property>
+                            </column>
+                            <column>
+                             <property name="text">
+                              <string>温度</string>
+                             </property>
+                            </column>
+                            <column>
+                             <property name="text">
+                              <string>power：usage/capacity</string>
+                             </property>
+                            </column>
+                            <column>
+                             <property name="text">
+                              <string>内存使用</string>
+                             </property>
+                            </column>
+                            <item>
+                             <property name="text">
+                              <string>0</string>
+                             </property>
+                             <property name="text">
+                              <string>38%</string>
+                             </property>
+                             <property name="text">
+                              <string>GP100</string>
+                             </property>
+                             <property name="text">
+                              <string>55</string>
+                             </property>
+                             <property name="text">
+                              <string>23/235</string>
+                             </property>
+                             <property name="text">
+                              <string/>
+                             </property>
+                            </item>
+                            <item>
+                             <property name="text">
+                              <string>1</string>
+                             </property>
+                             <property name="text">
+                              <string>44%</string>
+                             </property>
+                             <property name="text">
+                              <string>GP100</string>
+                             </property>
+                             <property name="text">
+                              <string>55</string>
+                             </property>
+                             <property name="text">
+                              <string>23/235</string>
+                             </property>
+                            </item>
+                           </widget>
+                          </item>
+                         </layout>
+                        </item>
+                        <item>
+                         <layout class="QVBoxLayout" name="verticalLayout_57">
+                          <item>
+                           <widget class="QLabel" name="label_28">
+                            <property name="text">
+                             <string>GPU进程：</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QTreeWidget" name="treeWidget_3">
+                            <column>
+                             <property name="text">
+                              <string>GPU</string>
+                             </property>
+                            </column>
+                            <column>
+                             <property name="text">
+                              <string>PID</string>
+                             </property>
+                            </column>
+                            <column>
+                             <property name="text">
+                              <string>Type</string>
+                             </property>
+                            </column>
+                            <column>
+                             <property name="text">
+                              <string>Process</string>
+                             </property>
+                            </column>
+                            <column>
+                             <property name="text">
+                              <string>Name</string>
+                             </property>
+                            </column>
+                            <column>
+                             <property name="text">
+                              <string>Memory_Usage</string>
+                             </property>
+                            </column>
+                           </widget>
+                          </item>
+                         </layout>
+                        </item>
+                       </layout>
+                      </widget>
                      </widget>
                     </item>
                    </layout>
@@ -5716,7 +5863,7 @@ p, li { white-space: pre-wrap; }
                    <number>1</number>
                   </property>
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>1</number>
                   </property>
                   <widget class="QWidget" name="shutdownpage_stack">
                    <layout class="QVBoxLayout" name="verticalLayout_22">
@@ -5818,7 +5965,7 @@ QTabBar::tab:selected {
 }</string>
                       </property>
                       <property name="currentIndex">
-                       <number>1</number>
+                       <number>0</number>
                       </property>
                       <widget class="QWidget" name="tab_control_user_1">
                        <attribute name="title">
@@ -8141,7 +8288,6 @@ border:0px solid #008080;
   <tabstop>treeWidget_monitor_jobs</tabstop>
   <tabstop>pushButton_monitor_job_refresh</tabstop>
   <tabstop>pushButton_monitor_job_del</tabstop>
-  <tabstop>listWidget_monitor_GPU</tabstop>
   <tabstop>pushButton_control_shutdownpage</tabstop>
   <tabstop>pushButton_control_userpage</tabstop>
   <tabstop>pushButton_control_queuepage</tabstop>

@@ -7,28 +7,42 @@
 #include "main.h"
 #include "loginpageii.h"
 
+//
+#include "UiClientProcess.h"
+#include "ControlNodeBrieflyInfoRequest.h"
+#include "ControlNodeBrieflyInfoResponse.h"
+#include "ComputerNodeInfoReport.h"
+#include "IIpcMessage.h"
+#include "Sleep.h"
+#include "Trace.h"
+#include <memory>
+
+//test
+#include "ipcworkerii.h"
+
+//
+#include "m.h"
 int main(int argc, char *argv[])
 {
     MyApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     MyApplication a(argc, argv);
     LoginPageII l;
     l.show();
+//    M* m;
+//    m = new M();
+//    m->show();
+//    MainWindow* m;
+//    m = new MainWindow();
+//    m->show();
 
+//    UiClient::UiClientProcess process;
+//    process.start();
+    return a.exec();
+//    return 0;
 
-    try
-    {
-        a.exec();
-    }
-    catch (const std::bad_alloc &) {
-        // clean up here, e.g. save the session
-        // and close all config files.
-        QMessageBox msg;
-        msg.setText("Something goes wrong, contact developer for more help.");
-
-        return 0; // exit the application
-    }
 
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // #include <libssh/libssh.h>
@@ -77,5 +91,40 @@ int main(int argc, char *argv[])
 
 //}
 
+//#include <QApplication>
+//#include "UiClientProcess.h"
+//#include "ControlNodeBrieflyInfoRequest.h"
+//#include "ControlNodeBrieflyInfoResponse.h"
+//#include "ComputerNodeInfoReport.h"
+//#include "IIpcMessage.h"
+//#include "Sleep.h"
+//#include "Trace.h"
+//#include <memory>
+//int main(int argc, char *argv[])
+//{
+//    QCoreApplication a(argc,argv);
+//    UiClient::UiClientProcess process;
+//    process.setRemoteHost(std::string("116.236.169.100"));
+//    process.start();
+
+//        while (process.messageReceived())
+//        {
+//            std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
+//            IpcMessage::IIpcMessage* pMsg = msg.get(); //获取指针
+//            SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
+//                    dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
 
 
+//            SystemMonitorMessage::ComputerNodeInfoReport* resp =
+//                    dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
+
+//            std::cout << "-----------------------" << std::endl;
+//            //             std::cout << *msg << std::endl;
+//            std::cout << resp->getCpuUsageInfo()<<std::endl;
+//            std::cout << "-----------------------" << std::endl;
+
+//        }
+
+
+//    return a.exec();
+//}
