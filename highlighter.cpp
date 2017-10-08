@@ -69,7 +69,7 @@ Highlighter::Highlighter(QTextDocument *parent)
                     << "\\btemplate\\b" << "\\btypedef\\b" << "\\btypename\\b"
                     << "\\bunion\\b" << "\\bunsigned\\b" << "\\bvirtual\\b"
                     << "\\bvoid\\b" << "\\bvolatile\\b" <<"\\bmpirun\\b" << "\\bvasp\\b" <<"\\bnanodcal\\b"
-                    << "\\bcd\\b";
+                    << "\\bcd\\b" << "\\b[\\d]+\\b";
     foreach (const QString &pattern, keywordPatterns) {
         rule.pattern = QRegExp(pattern);
         rule.format = keywordFormat;

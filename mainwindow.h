@@ -154,6 +154,9 @@ private slots:
     void on_listWidget_manager_user_view1_customContextMenuRequested(const QPoint &pos);
 
     void delSystemUser();
+    void updateGetHardwareInfo();
+    void on_listWidget_nodes_hardware_itemClicked(QListWidgetItem *item);
+
 public slots:
     void processFtpUploadFinishEvent();//process after upload finished signal
     void processFtpDownloadFinishEvent();//process after recieve download finished signal
@@ -174,6 +177,7 @@ private:
     void createCircleBar();
 
     QTreeWidgetItem * temp_ptr;
+    QTreeWidgetItem * temp_ptr2=nullptr;
 
     Highlighter *highLighter;
     Highlighter *highLighter2;
@@ -217,6 +221,9 @@ private:
     QFileInfo fileInfo;
     QString filePathLocal;
 
+    QVector<double> ticks;
+    QVector<double> regenData;
+
     QString nodesinfos;
     QStringList nodesinfoList;
     QList<QStringList> nodesList;
@@ -241,6 +248,12 @@ private:
 
      UiClient::UiClientProcess process;
     // static IPCWorker ipcWorker;
+    QString activated_node;//node name for hardware display.
+    QTimer * timer_hardware_getInfo;
+    QStringList hardware_hostname_list;
+
+    QCPBars *regen;
+    QCPBars *rengen2;
 
     QList<QStringList> userList;
 
@@ -259,6 +272,10 @@ private:
     qint64 fileSize;
 
     QStringList u_queues;//store selected user queueslist
+
+    QVector<double> x,y;
+    QVector<double> x1,y1;
+    double increamter=1;
 
     bool isOnline=true;
 
@@ -301,6 +318,23 @@ private:
     QString getSelectedNode();
     void setPlotStyle();
     void setupIPCClient(SshConfigure configure);
+    void makeHardwareNodesButtons(QStringList list);
+    void updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport *resp);
+    void updateCPUTotal(int input);
+    void setPlotBackground();
+    void setCPUPlotCustomizeStyle();
+    void setCpuPlotData(int input);
+    void setRamPlotData(int input);
+    void setRamPlotCustomizeStyle();
+
+    inline int rangedRand(unsigned int min, unsigned int max){
+        return (qrand() % (max-min)+1) + min;
+    }
+    void setCPUHistoryPlotStyle();
+    void updateRamTotal(int input);
+    void plotHistoryRangeReset();
+    void setRAMHistoryPlotStyle();
+    void setupCurrentUser(QString input);
 public:
     void setupSessionConfigure(SshConfigure configure);
 signals:

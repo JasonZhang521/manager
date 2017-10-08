@@ -290,6 +290,13 @@ font: 20pt &quot;黑体&quot;;</string>
                </spacer>
               </item>
               <item>
+               <widget class="QLabel" name="label_current_user">
+                <property name="text">
+                 <string>当前用户：</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QLabel" name="label_connection_indicator">
                 <property name="font">
                  <font>
@@ -351,7 +358,7 @@ font: 75 italic 11pt &quot;Arial&quot;;</string>
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>4</number>
            </property>
            <property name="iconSize">
             <size>
@@ -397,7 +404,7 @@ font: 75 italic 11pt &quot;Arial&quot;;</string>
                   <x>0</x>
                   <y>0</y>
                   <width>905</width>
-                  <height>483</height>
+                  <height>490</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_53">
@@ -3291,7 +3298,7 @@ border:1.5px solid #008080;</string>
                    <number>0</number>
                   </property>
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>1</number>
                   </property>
                   <widget class="QWidget" name="node_2">
                    <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -3441,7 +3448,7 @@ border:1.5px solid #008080;</string>
                          </column>
                          <column>
                           <property name="text">
-                           <string>Size(Bytes)</string>
+                           <string>Size</string>
                           </property>
                          </column>
                          <column>
@@ -4270,7 +4277,7 @@ background-color: rgb(255, 255, 255);</string>
                           </column>
                           <column>
                            <property name="text">
-                            <string>SIZE(Bytes)</string>
+                            <string>SIZE</string>
                            </property>
                           </column>
                           <column>
@@ -4475,7 +4482,7 @@ p, li { white-space: pre-wrap; }
                    <number>0</number>
                   </property>
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>2</number>
                   </property>
                   <widget class="QWidget" name="node">
                    <layout class="QVBoxLayout" name="verticalLayout_32">
@@ -5571,8 +5578,8 @@ p, li { white-space: pre-wrap; }
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>187</width>
-                         <height>191</height>
+                         <width>881</width>
+                         <height>441</height>
                         </rect>
                        </property>
                        <layout class="QVBoxLayout" name="verticalLayout_58">
@@ -7269,6 +7276,21 @@ QTabBar::tab:selected {
                    <property name="editTriggers">
                     <set>QAbstractItemView::DoubleClicked|QAbstractItemView::SelectedClicked</set>
                    </property>
+                   <property name="tabKeyNavigation">
+                    <bool>true</bool>
+                   </property>
+                   <property name="dragEnabled">
+                    <bool>true</bool>
+                   </property>
+                   <property name="dragDropMode">
+                    <enum>QAbstractItemView::DragDrop</enum>
+                   </property>
+                   <property name="alternatingRowColors">
+                    <bool>true</bool>
+                   </property>
+                   <property name="selectionMode">
+                    <enum>QAbstractItemView::ExtendedSelection</enum>
+                   </property>
                    <property name="rootIsDecorated">
                     <bool>false</bool>
                    </property>
@@ -7435,13 +7457,16 @@ QTabBar::tab:selected {
                     <bool>true</bool>
                    </property>
                    <property name="dragDropMode">
-                    <enum>QAbstractItemView::DragOnly</enum>
+                    <enum>QAbstractItemView::DragDrop</enum>
+                   </property>
+                   <property name="defaultDropAction">
+                    <enum>Qt::CopyAction</enum>
                    </property>
                    <property name="alternatingRowColors">
                     <bool>true</bool>
                    </property>
                    <property name="selectionMode">
-                    <enum>QAbstractItemView::SingleSelection</enum>
+                    <enum>QAbstractItemView::ExtendedSelection</enum>
                    </property>
                    <property name="selectionBehavior">
                     <enum>QAbstractItemView::SelectRows</enum>
@@ -7462,7 +7487,7 @@ QTabBar::tab:selected {
                    </column>
                    <column>
                     <property name="text">
-                     <string>Size(Bytes)</string>
+                     <string>Size</string>
                     </property>
                     <property name="textAlignment">
                      <set>AlignLeading|AlignVCenter</set>
@@ -7594,90 +7619,40 @@ QTabBar::tab:selected {
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_28">
              <item>
-              <widget class="QScrollArea" name="scrollArea_7">
+              <widget class="QListWidget" name="listWidget_nodes_hardware">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="widgetResizable">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>90</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>90</height>
+                </size>
+               </property>
+               <property name="movement">
+                <enum>QListView::Free</enum>
+               </property>
+               <property name="flow">
+                <enum>QListView::LeftToRight</enum>
+               </property>
+               <property name="viewMode">
+                <enum>QListView::IconMode</enum>
+               </property>
+               <property name="selectionRectVisible">
                 <bool>true</bool>
                </property>
-               <widget class="QWidget" name="scrollAreaWidgetContents_7">
-                <property name="geometry">
-                 <rect>
-                  <x>0</x>
-                  <y>0</y>
-                  <width>905</width>
-                  <height>69</height>
-                 </rect>
-                </property>
-                <widget class="QPushButton" name="pushButton_2">
-                 <property name="geometry">
-                  <rect>
-                   <x>20</x>
-                   <y>10</y>
-                   <width>75</width>
-                   <height>23</height>
-                  </rect>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: rgb(0, 255, 127);</string>
-                 </property>
-                 <property name="text">
-                  <string>comput1</string>
-                 </property>
-                </widget>
-                <widget class="QPushButton" name="pushButton_5">
-                 <property name="geometry">
-                  <rect>
-                   <x>110</x>
-                   <y>10</y>
-                   <width>75</width>
-                   <height>23</height>
-                  </rect>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: rgb(0, 255, 127);</string>
-                 </property>
-                 <property name="text">
-                  <string>comput2</string>
-                 </property>
-                </widget>
-                <widget class="QPushButton" name="pushButton_6">
-                 <property name="geometry">
-                  <rect>
-                   <x>190</x>
-                   <y>10</y>
-                   <width>75</width>
-                   <height>23</height>
-                  </rect>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: rgb(0, 255, 127);</string>
-                 </property>
-                 <property name="text">
-                  <string>comput3</string>
-                 </property>
-                </widget>
-                <widget class="QPushButton" name="pushButton_7">
-                 <property name="geometry">
-                  <rect>
-                   <x>280</x>
-                   <y>10</y>
-                   <width>75</width>
-                   <height>23</height>
-                  </rect>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: red;</string>
-                 </property>
-                 <property name="text">
-                  <string>comput4</string>
-                 </property>
-                </widget>
-               </widget>
+               <property name="sortingEnabled">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item>
@@ -7691,12 +7666,29 @@ QTabBar::tab:selected {
                   <x>0</x>
                   <y>0</y>
                   <width>905</width>
-                  <height>406</height>
+                  <height>394</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_51">
                  <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_54">
+                   <item>
+                    <widget class="QLabel" name="label_selectedNodes_hardware">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>节点：
+comput23</string>
+                     </property>
+                     <property name="textFormat">
+                      <enum>Qt::PlainText</enum>
+                     </property>
+                    </widget>
+                   </item>
                    <item>
                     <widget class="QGroupBox" name="groupBox_4">
                      <property name="sizePolicy">
@@ -7830,6 +7822,9 @@ QTabBar::tab:selected {
                      <layout class="QVBoxLayout" name="verticalLayout_42">
                       <item>
                        <widget class="QTreeWidget" name="cpu_process">
+                        <property name="sortingEnabled">
+                         <bool>true</bool>
+                        </property>
                         <column>
                          <property name="text">
                           <string notr="true">USER</string>
@@ -7842,12 +7837,12 @@ QTabBar::tab:selected {
                         </column>
                         <column>
                          <property name="text">
-                          <string>新建列</string>
+                          <string>COMMAND</string>
                          </property>
                         </column>
                         <column>
                          <property name="text">
-                          <string>COMMAND</string>
+                          <string>PID</string>
                          </property>
                         </column>
                         <column>
@@ -7868,11 +7863,9 @@ QTabBar::tab:selected {
                      <layout class="QVBoxLayout" name="verticalLayout_50">
                       <item>
                        <widget class="QTreeWidget" name="ram_process">
-                        <column>
-                         <property name="text">
-                          <string notr="true">1</string>
-                         </property>
-                        </column>
+                        <property name="sortingEnabled">
+                         <bool>true</bool>
+                        </property>
                         <column>
                          <property name="text">
                           <string notr="true">USER</string>
@@ -7886,6 +7879,11 @@ QTabBar::tab:selected {
                         <column>
                          <property name="text">
                           <string>COMMAND</string>
+                         </property>
+                        </column>
+                        <column>
+                         <property name="text">
+                          <string notr="true">PID</string>
                          </property>
                         </column>
                         <column>

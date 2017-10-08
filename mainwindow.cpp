@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
-
+    qsrand(112233);
 
     model=new QDirModel;
     model->setReadOnly(false);
@@ -76,7 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
-void MainWindow::setPlotStyle()
+void MainWindow::setPlotBackground()
 {
     QBrush backRole;
     backRole.setColor("black");
@@ -85,7 +85,65 @@ void MainWindow::setPlotStyle()
     ui.plot_cpuHistory->setBackground(backRole);
     ui.plot_ramUsage->setBackground(backRole);
     ui.plot_ramUsageHistory->setBackground(backRole);
+}
 
+void MainWindow::setCPUHistoryPlotStyle()
+{
+
+    x.append(0);
+    y.append(0);
+
+
+    ui.plot_cpuHistory->addGraph();
+    ui.plot_cpuHistory->graph(0)->setData(x,y);
+    ui.plot_cpuHistory->xAxis->setLabel("");
+    ui.plot_cpuHistory->yAxis->setLabel("");
+    ui.plot_cpuHistory->xAxis->setRange(-50,0);
+    ui.plot_cpuHistory->yAxis->setRange(0,100);
+    ui.plot_cpuHistory->replot();
+
+
+}
+
+void MainWindow::setRAMHistoryPlotStyle()
+{
+    x1.append(0);
+    y1.append(0);
+
+
+    ui.plot_ramUsageHistory->addGraph();
+    ui.plot_ramUsageHistory->graph(0)->setData(x,y);
+    ui.plot_ramUsageHistory->xAxis->setLabel("");
+    ui.plot_ramUsageHistory->yAxis->setLabel("");
+    ui.plot_ramUsageHistory->xAxis->setRange(-50,0);
+    ui.plot_ramUsageHistory->yAxis->setRange(0,100);
+    ui.plot_ramUsageHistory->replot();
+}
+
+void MainWindow::setCpuPlotData(int input)
+{
+    //    QVector<double> ticks;
+    QVector<QString> labels;
+    ticks << 1;
+    labels << "%";
+    QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
+    textTicker->addTicks(ticks, labels);
+    ui.plot_cpuUsage->xAxis->setTicker(textTicker);
+    //set data
+    regen = new QCPBars(ui.plot_cpuUsage->xAxis, ui.plot_cpuUsage->yAxis);
+    regen->setAntialiased(false);
+    // regen->setName("CPU total usage");
+    regen->setPen(QPen(QColor(0, 168, 140).lighter(130)));
+    regen->setBrush(QColor(0, 168, 140));
+
+    //set data
+    //    QVector<double> regenData;
+    regenData   << input;
+    regen->setData(ticks, regenData);
+}
+
+void MainWindow::setCPUPlotCustomizeStyle()
+{
     //custimize cpuusage plot
     ui.plot_cpuUsage->yAxis->setRange(0,100);
     ui.plot_cpuUsage->yAxis->setPadding(1); // a bit more space to the left border
@@ -99,14 +157,9 @@ void MainWindow::setPlotStyle()
     ui.plot_cpuUsage->yAxis->setVisible(false);
     ui.plot_cpuUsage->yAxis->grid()->setPen(QPen(QColor(130, 130, 130), 0, Qt::SolidLine));
     ui.plot_cpuUsage->yAxis->grid()->setSubGridPen(QPen(QColor(130, 130, 130), 0, Qt::DotLine));
+
     // prepare x axis with  labels:
-    QVector<double> ticks;
-    QVector<QString> labels;
-    ticks << 1;
-    labels << "%";
-    QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
-    textTicker->addTicks(ticks, labels);
-    ui.plot_cpuUsage->xAxis->setTicker(textTicker);
+
     ui.plot_cpuUsage->xAxis->setTickLabelRotation(60);
     ui.plot_cpuUsage->xAxis->setSubTicks(false);
     ui.plot_cpuUsage->xAxis->setTickLength(0,1);
@@ -117,19 +170,10 @@ void MainWindow::setPlotStyle()
     ui.plot_cpuUsage->xAxis->grid()->setPen(QPen(QColor(130, 130, 130), 0, Qt::DotLine));
     ui.plot_cpuUsage->xAxis->setTickLabelColor(Qt::white);
     ui.plot_cpuUsage->xAxis->setLabelColor(Qt::white);
+}
 
-    //set data
-    QCPBars *regen = new QCPBars(ui.plot_cpuUsage->xAxis, ui.plot_cpuUsage->yAxis);
-    regen->setAntialiased(false);
-    // regen->setName("CPU total usage");
-    regen->setPen(QPen(QColor(0, 168, 140).lighter(130)));
-    regen->setBrush(QColor(0, 168, 140));
-
-    //set data
-    QVector<double> regenData;
-    regenData   << 50;
-    regen->setData(ticks, regenData);
-
+void MainWindow::setRamPlotCustomizeStyle()
+{
     //custimize ram usage plot
     ui.plot_ramUsage->yAxis->setRange(0,100);
     ui.plot_ramUsage->yAxis->setPadding(1); // a bit more space to the left border
@@ -143,14 +187,8 @@ void MainWindow::setPlotStyle()
     ui.plot_ramUsage->yAxis->setVisible(false);
     ui.plot_ramUsage->yAxis->grid()->setPen(QPen(QColor(130, 130, 130), 0, Qt::SolidLine));
     ui.plot_ramUsage->yAxis->grid()->setSubGridPen(QPen(QColor(130, 130, 130), 0, Qt::DotLine));
-    // prepare x axis with  labels:
-    // QVector<double> ticks;
-    // QVector<QString> labels;
-    // ticks << 1;
-    // labels << "%";
-    // QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
-    // textTicker->addTicks(ticks, labels);
-    ui.plot_ramUsage->xAxis->setTicker(textTicker);
+
+
     ui.plot_ramUsage->xAxis->setTickLabelRotation(60);
     ui.plot_ramUsage->xAxis->setSubTicks(false);
     ui.plot_ramUsage->xAxis->setTickLength(0,1);
@@ -161,10 +199,20 @@ void MainWindow::setPlotStyle()
     ui.plot_ramUsage->xAxis->grid()->setPen(QPen(QColor(130, 130, 130), 0, Qt::DotLine));
     ui.plot_ramUsage->xAxis->setTickLabelColor(Qt::white);
     ui.plot_ramUsage->xAxis->setLabelColor(Qt::white);
+}
 
-    //set data2
-    //set data
-    QCPBars *rengen2 = new QCPBars(ui.plot_ramUsage->xAxis, ui.plot_ramUsage->yAxis);
+void MainWindow::setRamPlotData(int input)
+{
+    // prepare x axis with  labels:
+    QVector<double> ticks;
+    QVector<QString> labels;
+    ticks << 1;
+    labels << "%";
+    QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
+    textTicker->addTicks(ticks, labels);
+    ui.plot_ramUsage->xAxis->setTicker(textTicker);
+
+    rengen2 = new QCPBars(ui.plot_ramUsage->xAxis, ui.plot_ramUsage->yAxis);
     rengen2->setAntialiased(false);
     //rengen2->setName("CPU total usage");
     rengen2->setPen(QPen(QColor(0, 168, 140).lighter(130)));
@@ -174,6 +222,65 @@ void MainWindow::setPlotStyle()
     QVector<double> regen2Data;
     regen2Data   << 66;
     rengen2->setData(ticks, regen2Data);
+}
+void MainWindow::setPlotStyle()
+{
+    setPlotBackground();
+
+    setCPUHistoryPlotStyle();
+
+    setCPUPlotCustomizeStyle();
+    setCpuPlotData(22);
+
+    setRAMHistoryPlotStyle();
+    setRamPlotCustomizeStyle();
+    setRamPlotData(30);
+
+}
+
+void MainWindow::updateCPUTotal(int input)
+{
+
+    qDebug()<<"@123123";
+    // prepare x axis with  labels:
+    //    QVector<double> ticks;
+    ticks.clear();
+    QVector<QString> labels;
+    ticks << 1;
+    labels << "%";
+    QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
+    textTicker->addTicks(ticks, labels);
+    ui.plot_cpuUsage->xAxis->setTicker(textTicker);
+
+    //set data
+    //    QVector<double> regenData;
+    regenData.clear();
+    regenData   << rangedRand(1,100);
+    regen->setData(ticks, regenData);
+    ui.plot_cpuUsage->replot();
+
+}
+
+void MainWindow::updateRamTotal(int input)
+{
+    // prepare x axis with  labels:
+    QVector<double> ticks;
+    QVector<QString> labels;
+    ticks << 1;
+    labels << "%";
+    QSharedPointer<QCPAxisTickerText> textTicker(new QCPAxisTickerText);
+    textTicker->addTicks(ticks, labels);
+    ui.plot_ramUsage->xAxis->setTicker(textTicker);
+
+
+    //set data
+
+    QVector<double> regen2Data;
+//    regen2Data   << rangedRand(1,100);
+    regen2Data << input;
+    rengen2->setData(ticks, regen2Data);
+    ui.plot_ramUsage->replot();
+
 }
 
 void MainWindow::updatePlotHeatBeat()
@@ -313,14 +420,14 @@ void MainWindow::setupThreads(SshConfigure configure){
     shellWorker = new ShellWorker(0,configure);
     manageThread = new QThread;
     manageWorker = new ManageWorker(0,configure);
-//    ipcThread = new QThread;
-//    ipcWorker = new IPCWorker(0,configure.host);
+    //    ipcThread = new QThread;
+    //    ipcWorker = new IPCWorker(0,configure.host);
 
     ftpWorker->moveToThread(ftpThread);//move worker to thread
     shellWorker->moveToThread(updatorThread);
     manageWorker->moveToThread(manageThread);
-//    ipcWorker->moveToThread(ipcThread);
-//    ipcThread->start();
+    //    ipcWorker->moveToThread(ipcThread);
+    //    ipcThread->start();
 
     /*************************************ftp***************************************/
     //connect sigal and slots
@@ -391,8 +498,8 @@ void MainWindow::setupThreads(SshConfigure configure){
     /**************************************************************************/
 
     //!connect ipcworker and mainwindow
-//    connect(this,SIGNAL(startIPCEngineSignal(QString)),ipcWorker,SLOT(setup(QString)));
-//    connect(this,SIGNAL(startGetIPCDataSignal()),ipcWorker,SLOT(update()));
+    //    connect(this,SIGNAL(startIPCEngineSignal(QString)),ipcWorker,SLOT(setup(QString)));
+    //    connect(this,SIGNAL(startGetIPCDataSignal()),ipcWorker,SLOT(update()));
 }
 
 void MainWindow::setupMenuAction()
@@ -865,10 +972,15 @@ void MainWindow::updateStatusTracer()
     }
 
 }
+void MainWindow::setupCurrentUser(QString input)
+{
+    ui.label_current_user->setText("当前用户: "+input);
+}
 //setup ssh client session and initilizations
 void MainWindow::setupSessionConfigure(SshConfigure configure)
 {
 
+    setupCurrentUser(QString::fromStdString(configure.user));
     setupThreads(configure);
     setupMenuAction();
     setupClient(configure);
@@ -884,47 +996,225 @@ void MainWindow::setupSessionConfigure(SshConfigure configure)
     setupRamInfo();
     setupStatusTracer();
     // //display control tab node list
-    // updatorThread->start();//start shellTHread
-    // emit manageGetAllUserStart();
-    // emit getLimitedQueuesStart();
-    // emit getAllQueueInfosStart();
+    updatorThread->start();//start shellTHread
+    emit manageGetAllUserStart();
+    emit getLimitedQueuesStart();
+    emit getAllQueueInfosStart();
 
     //setup ipc client
-     setupIPCClient(configure);
+    setupIPCClient(configure);
+}
+
+void MainWindow::updateGetHardwareInfo()
+{
+//    qDebug()<<"hardware get info updated";
+//    QString temp_str;
+//    while (process.messageReceived())
+//    {
+//        std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
+//        //                              IpcMessage::IIpcMessage* pMsg = msg.get(); //获取指针
+//        SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
+//                dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
+//        SystemMonitorMessage::ComputerNodeInfoReport* resp =
+//                dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
+
+//        std::cout << "-----------------------" << std::endl;
+//        //             std::cout << *msg << std::endl;
+//        std::cout << resp->getHostName()<<std::endl;
+//        temp_str = QString::fromStdString(resp->getHostName());
+//        if(!hardware_hostname_list.contains(temp_str))
+//        {
+//            hardware_hostname_list.append(temp_str);
+//        }
+//        std::cout << "-----------------------" << std::endl;
+//        if(resp->getHostName().compare(activated_node.toStdString())==0)
+//        {
+//            updateHardwareGUI(resp);
+//        }
+//    }
+//    qDebug()<<"check node list";
+//    qDebug()<<hardware_hostname_list;
+//    makeHardwareNodesButtons(hardware_hostname_list);
+
+
+}
+
+void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport* resp)
+{
+    int cpu_usage;
+    int ram_usage;
+    std::stringstream str_cpuUsageInfo;
+
+    std::stringstream str_stream;
+    str_stream<< resp->getSystemInfoBriefly();
+    qDebug()<<QString::fromStdString(str_stream.str());
+
+    std::stringstream str_process;
+    str_process << resp->getSystemInfoBriefly();
+    QString temp_sys = QString::fromStdString(str_process.str());
+
+    //----------------get total cpu usage and make a display--------------------//
+    str_cpuUsageInfo << resp->getCpuUsageInfo();
+    qDebug()<<"cpu usage info show";
+    QString temp_str = QString::fromStdString(str_cpuUsageInfo.str());
+    qDebug()<<temp_str;
+    QRegularExpression re("(?<=total=)[\\d]+");
+    QRegularExpressionMatch match = re.match(temp_str);
+    if(match.hasMatch()){
+        cpu_usage = match.captured(0).toInt();
+    }
+    updateCPUTotal(cpu_usage);
+    //---------------------------------------------------------------------------------//
+
+    //-----------------calculate ram usage and make a display-----------------------//
+    //(?<=memTotal=)[\d]+
+    int memTotal;
+    QRegularExpression re3("(?<=memTotal=)[\\d]+(?= )");
+    QRegularExpressionMatch match3 = re3.match(temp_sys);
+    if(match3.hasMatch())
+    {
+        memTotal = match3.captured(0).toInt();
+    }
+    int memFree;
+    QRegularExpression re4("(?<=memFree=)[\\d]+(?= )");
+    QRegularExpressionMatch match4 = re4.match(temp_sys);
+    if(match4.hasMatch())
+    {
+        memFree = match4.captured(0).toInt();
+    }
+    ram_usage = ((double)memTotal - (double)memFree)/(double)memTotal * 100;qDebug()<<"@123321";
+    qDebug()<<memTotal;
+    qDebug()<<memFree;
+    qDebug()<<ram_usage;
+    updateRamTotal(ram_usage);
+
+    //----------------------------------------------------------------------------------//
+
+    //----------------------process cpu-----------------------------------//
+    //(?<=psTop10CpuUsage:\\n)[\w\W]+(?=,)
+    ui.cpu_process->clear();
+
+    QRegularExpression re2("(?<=psTop10CpuUsage:\\n)[\\w\\W]+(?=,)");
+    QRegularExpressionMatch match2 =re2.match(temp_sys);
+    QString temp_process_cpu;
+    if(match2.hasMatch()){
+
+        temp_process_cpu = match2.captured(0);
+
+    }
+    QStringList list_temp_process_cpu = temp_process_cpu.split("\n");
+    QStringList list_temp_process_cpu_item;
+    if(list_temp_process_cpu.size()>0)
+    {
+        for(int i =1;i<list_temp_process_cpu.size()-1;i++)
+        {
+            list_temp_process_cpu_item = list_temp_process_cpu[i].split(QRegExp("[\\s]+"));
+            if(list_temp_process_cpu_item.size()>=5)
+            {
+                QTreeWidgetItem* item = new QTreeWidgetItem(ui.cpu_process);
+                item->setText(0,list_temp_process_cpu_item[0]);
+                item->setData(1,Qt::EditRole,list_temp_process_cpu_item[1].toInt());
+                item->setText(2,list_temp_process_cpu_item[2]);
+                item->setData(3,Qt::EditRole,list_temp_process_cpu_item[3].toInt());
+                item->setData(4,Qt::EditRole,list_temp_process_cpu_item[4].toDouble());
+
+            }
+        }
+    }
+
+
+    //------------------------------------------------------------//
+
+    //--------------------process ram------------------------------//
+
+    ui.ram_process->clear();
+    QRegularExpression re5("(?<=psTop10MemoryUsage:\\n)[\\w\\W]+(?=\])");
+    QRegularExpressionMatch match5 =re5.match(temp_sys);
+    QString temp_process_mem;
+    if(match5.hasMatch()){
+
+        temp_process_mem = match5.captured(0);
+
+    }
+    QStringList list_temp_process_mem = temp_process_mem.split("\n");
+    QStringList list_temp_process_mem_item;
+    if(list_temp_process_mem.size()>0)
+    {
+        for(int i =1;i<list_temp_process_mem.size()-1;i++)
+        {
+            list_temp_process_mem_item = list_temp_process_mem[i].split(QRegExp("[\\s]+"));
+            if(list_temp_process_mem_item.size()>=5)
+            {
+                QTreeWidgetItem* item = new QTreeWidgetItem(ui.ram_process);
+                item->setText(0,list_temp_process_mem_item[0]);
+                item->setData(1,Qt::EditRole,list_temp_process_mem_item[1].toInt());
+                item->setText(2,list_temp_process_mem_item[2]);
+                item->setData(3,Qt::EditRole,list_temp_process_mem_item[3].toInt());
+                item->setData(4,Qt::EditRole,list_temp_process_mem_item[4].toInt());
+
+            }
+        }
+    }
+
+
+    //--------------------------------------------------------------//
+
+    //----------------------------cpu history------------------------//
+    //hei man
+    //i need you to plot our data on ui every time
+    x.append(increamter);
+    y.append(rangedRand(0,100));
+    ui.plot_cpuHistory->graph(0)->setData(x,y);
+
+    ui.plot_cpuHistory->xAxis->setRange(-50+increamter,0+increamter);
+    ui.plot_cpuHistory->replot();
+
+    //---------------------------------------------------------------//
+
+    //----------------------------ram history-------------------------//
+    x1.append(increamter);
+    y1.append(ram_usage);
+    ui.plot_ramUsageHistory->graph(0)->setData(x1,y1);
+
+    ui.plot_ramUsageHistory->xAxis->setRange(-50+increamter,0+increamter);
+    ui.plot_ramUsageHistory->replot();
+    increamter+=1;
+    //----------------------------------------------------------------//
+
+
+}
+
+void MainWindow::plotHistoryRangeReset()
+{
+    increamter =1 ;
+    x.clear();
+    y.clear();
+    x1.clear();
+    y1.clear();
+
+}
+
+void MainWindow::makeHardwareNodesButtons(QStringList list)
+{
+    ui.listWidget_nodes_hardware->clear();
+    foreach(QString each,list)
+    {
+        QListWidgetItem* item = new QListWidgetItem(ui.listWidget_nodes_hardware);
+        item->setText(each);
+        item->setBackground(Qt::green);
+
+    }
 }
 
 void MainWindow::setupIPCClient(SshConfigure configure)
 {
-    // qDebug()<<QString::fromStdString(configure.host);
-    // qDebug()<<"look here***";
-    //  process.setRemoteHost(configure.host);
-    //  process.process();
-    // // ipcWorker.setup(configure.host);
-    // IPCWorker* worker = new IPCWorker;
-    // worker->setup(configure.host);
-            // UiClient::UiClientProcess process;
-            process.start();
-// while(1)
-// {
-//
-//                      while (process.messageReceived())
-//                      {
-//                          std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
-//                          IpcMessage::IIpcMessage* pMsg = msg.get(); //获取指针
-//                          SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
-//                                  dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
-//
-//
-//                          SystemMonitorMessage::ComputerNodeInfoReport* resp =
-//                                  dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
-//
-//                          std::cout << "-----------------------" << std::endl;
-//                          //             std::cout << *msg << std::endl;
-//                          std::cout << resp->getCpuUsageInfo()<<std::endl;
-//                          std::cout << "-----------------------" << std::endl;
-//
-//                      }
-// }
+
+    process.start();
+    timer_hardware_getInfo = new QTimer;
+    timer_hardware_getInfo->setInterval(500);
+    connect(timer_hardware_getInfo,SIGNAL(timeout()),this,SLOT(updateGetHardwareInfo()));
+    timer_hardware_getInfo->start();
+
 }
 
 //navigation button event handler
@@ -1309,39 +1599,39 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
 //ftp download
 void MainWindow::on_pushButton_clicked()
 {
-    //clacify if an item is selected
-    if(!ui.treeWidget->currentItem()->text(0).toStdString().empty()&&!filePathLocal.isEmpty()){
-        if(!isDir(ui.treeWidget->currentItem()->text(0)))
-        {//identify if selected item is dir
-            speedCalculatorThread = new QThread;
-            speedWorker = new SpeedCalculator(0,configure);
-            speedWorker->moveToThread(speedCalculatorThread);
-            connect(ftpWorker, SIGNAL(finishDownload()), speedWorker, SLOT(process()));
-            //connect start signal to process slot
-            connect(this,SIGNAL(downloadSpeedMonitingStart(QString,QString,QString)),speedWorker,SLOT(processDownloadSpeed(QString,QString,QString)));
-            //connect worker  signal to main process slot
-            connect(speedWorker,SIGNAL(getDownloadSpeedSignal(int,qint64)),this,SLOT(displayDownloadSpeed(int,qint64)));
-            //deal with destroy signals
-            connect(speedCalculatorThread,SIGNAL(destroyed()),speedWorker,SLOT(process()));
-            connect(speedWorker,SIGNAL(finished()),speedCalculatorThread,SLOT(quit()));
-            connect(speedWorker,SIGNAL(finished()),speedWorker,SLOT(deleteLater()));
-            connect(speedCalculatorThread,SIGNAL(finished()),speedCalculatorThread,SLOT(deleteLater()));
-            speedCalculatorThread->start();
+//    //clacify if an item is selected
+//    if(!ui.treeWidget->currentItem()->text(0).toStdString().empty()&&!filePathLocal.isEmpty()){
+//        if(!isDir(ui.treeWidget->currentItem()->text(0)))
+//        {//identify if selected item is dir
+//            speedCalculatorThread = new QThread;
+//            speedWorker = new SpeedCalculator(0,configure);
+//            speedWorker->moveToThread(speedCalculatorThread);
+//            connect(ftpWorker, SIGNAL(finishDownload()), speedWorker, SLOT(process()));
+//            //connect start signal to process slot
+//            connect(this,SIGNAL(downloadSpeedMonitingStart(QString,QString,QString)),speedWorker,SLOT(processDownloadSpeed(QString,QString,QString)));
+//            //connect worker  signal to main process slot
+//            connect(speedWorker,SIGNAL(getDownloadSpeedSignal(int,qint64)),this,SLOT(displayDownloadSpeed(int,qint64)));
+//            //deal with destroy signals
+//            connect(speedCalculatorThread,SIGNAL(destroyed()),speedWorker,SLOT(process()));
+//            connect(speedWorker,SIGNAL(finished()),speedCalculatorThread,SLOT(quit()));
+//            connect(speedWorker,SIGNAL(finished()),speedWorker,SLOT(deleteLater()));
+//            connect(speedCalculatorThread,SIGNAL(finished()),speedCalculatorThread,SLOT(deleteLater()));
+//            speedCalculatorThread->start();
 
-            emit ftpDownloadStart(QString::fromStdString(currentPathRemote)+"/"+ui.treeWidget->currentItem()->text(0),filePathLocal);//fire download start signal
-            // emit downloadSpeedMonitingStart(QString::fromStdString(currentPathRemote),fileInfo.absoluteFilePath(),fileInfo.fileName());
-            emit downloadSpeedMonitingStart(QString::fromStdString(currentPathRemote),filePathLocal,ui.treeWidget->currentItem()->text(0));
-            ui.pushButton->setText("下载中...");//close button
-            ui.pushButton->setEnabled(false);//close button
-        }
-        else//show warning if selected file is directory
-        {
-            QMessageBox msg;
-            msg.setText("无法下载文件夹");
-            msg.exec();
-        }
+//            emit ftpDownloadStart(QString::fromStdString(currentPathRemote)+"/"+ui.treeWidget->currentItem()->text(0),filePathLocal);//fire download start signal
+//            // emit downloadSpeedMonitingStart(QString::fromStdString(currentPathRemote),fileInfo.absoluteFilePath(),fileInfo.fileName());
+//            emit downloadSpeedMonitingStart(QString::fromStdString(currentPathRemote),filePathLocal,ui.treeWidget->currentItem()->text(0));
+//            ui.pushButton->setText("下载中...");//close button
+//            ui.pushButton->setEnabled(false);//close button
+//        }
+//        else//show warning if selected file is directory
+//        {
+//            QMessageBox msg;
+//            msg.setText("无法下载文件夹");
+//            msg.exec();
+//        }
 
-    }
+//    }
 
 
 
@@ -1413,6 +1703,7 @@ void MainWindow::processFtpUploadFinishEvent(){
 //process list dir finish event
 void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
     temp_ptr = nullptr;
+    temp_ptr2 = nullptr;
     QList<QStringList> m_list = qlist;
     clock_t begin,end;
     double seconds;
@@ -1431,9 +1722,10 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
                     file->setIcon(0,QIcon(":/Resources/dir.png"));
                 }
                 file->setText(0,m_list[i][8]);
-                //            file->setText(1,QString::number(attr[i].size));
-
-                file->setData(1,Qt::EditRole,m_list[i][4].toInt());
+                if(m_list[i][4].toInt()>=1048576){file->setText(1,QString::number(m_list[i][4].toInt()/1048576)+QString(" MB"));}
+                else if(m_list[i][4].toInt()<1048576 && m_list[i][4].toInt()>=1024){file->setText(1,QString::number(m_list[i][4].toInt()/1024)+QString(" KB"));}
+                else if(m_list[i][4].toInt()<1024){file->setText(1,QString::number(m_list[i][4].toInt())+QString(" Bytes"));}
+//                file->setData(1,Qt::EditRole,m_list[i][4].toInt());
                 file->setText(2,m_list[i][5]+" "+m_list[i][6]+" "+m_list[i][7]);
                 file->setText(3,m_list[i][2]);
                 file->setText(4,m_list[i][3]);
@@ -1466,8 +1758,11 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
                 }
                 file->setText(0,m_list[i][8]);
                 //            file->setText(1,QString::number(attr[i].size));
-
-                file->setData(1,Qt::EditRole,m_list[i][4].toInt());
+                if(m_list[i][4].toInt()>=1048576){file->setText(1,QString::number(m_list[i][4].toInt()/1048576)+QString(" MB"));}
+                else if(m_list[i][4].toInt()<1048576 && m_list[i][4].toInt()>=1024){file->setText(1,QString::number(m_list[i][4].toInt()/1024)+QString(" KB"));}
+                else if(m_list[i][4].toInt()<1024){file->setText(1,QString::number(m_list[i][4].toInt())+QString(" Bytes"));}
+//
+//                file->setData(1,Qt::EditRole,m_list[i][4].toInt());
                 file->setText(2,m_list[i][5]+" "+m_list[i][6]+" "+m_list[i][7]);
                 file->setText(3,m_list[i][2]);
                 file->setText(4,m_list[i][3]);
@@ -1500,8 +1795,11 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
                 }
                 file->setText(0,m_list[i][8]);
                 //            file->setText(1,QString::number(attr[i].size));
-
-                file->setData(1,Qt::EditRole,m_list[i][4].toInt());
+                if(m_list[i][4].toInt()>=1048576){file->setText(1,QString::number(m_list[i][4].toInt()/1048576)+QString(" MB"));}
+                else if(m_list[i][4].toInt()<1048576 && m_list[i][4].toInt()>=1024){file->setText(1,QString::number(m_list[i][4].toInt()/1024)+QString(" KB"));}
+                else if(m_list[i][4].toInt()<1024){file->setText(1,QString::number(m_list[i][4].toInt())+QString(" Bytes"));}
+//
+//                file->setData(1,Qt::EditRole,m_list[i][4].toInt());
                 file->setText(2,m_list[i][5]+" "+m_list[i][6]+" "+m_list[i][7]);
                 file->setText(3,m_list[i][2]);
                 file->setText(4,m_list[i][3]);
@@ -2608,6 +2906,15 @@ void MainWindow::on_tabWidget_tabBarClicked(int index)
 
 void MainWindow::on_treeWidget_job_file_itemActivated(QTreeWidgetItem *item, int column)
 {
+    if(temp_ptr2 != nullptr)
+    {
+        temp_ptr2->setBackground(0,Qt::white);
+    }
+
+
+        item->setBackground(0,Qt::red);
+        temp_ptr2 = item;
+
     //get file name
     if(item->isDisabled())return;
     QString name = item->text(0);
@@ -3258,3 +3565,15 @@ void MainWindow::delSystemUser()
     emit manageGetAllUserStart();
 
 }
+
+void MainWindow::on_listWidget_nodes_hardware_itemClicked(QListWidgetItem *item)
+{
+    QList<QListWidgetItem*> items = ui.listWidget_nodes_hardware->selectedItems();
+    foreach(QListWidgetItem* each, items)
+    {
+        activated_node = each->text();
+    }
+    ui.label_selectedNodes_hardware->setText("节点：\n"+activated_node);
+    plotHistoryRangeReset();
+}
+

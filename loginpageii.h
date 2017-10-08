@@ -82,6 +82,8 @@ private:
      void processloggingIn();
 
 
+     void disableButtons();
+     void enableButtons();
 signals:
     void closedWindow();
 

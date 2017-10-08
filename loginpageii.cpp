@@ -144,7 +144,6 @@ void LoginPageII::runValidation(){
     QPixmap pixmap(":/Resources/loadbg.png");
     QSplashScreen splash(pixmap);
 
-
     splash.show();
     splash.showMessage("验证用户中... ");
     qApp->processEvents();
@@ -166,7 +165,7 @@ void LoginPageII::runValidation(){
         connect(w,SIGNAL(changeUserSignal()),this,SLOT(showLoginPage()));
         //show splash screen at right place
 
-        splash.showMessage("建立连接。正在初始化界面...");
+        splash.showMessage("建立连接。正在初始化界面,请稍候等待...");
 
         qApp->processEvents();
 
@@ -177,12 +176,13 @@ void LoginPageII::runValidation(){
     else{
         //show err message
         QMessageBox msgBox;
-        msgBox.setText("登录失败");
+        msgBox.setText("登录信息验证失败");
         msgBox.exec();
         this->show();//show loginpage
         //open button
         ui->pushButton_login_signin->setText("登录");
         ui->pushButton_login_signin->setEnabled(true);
+        enableButtons();
     }
 }
 void LoginPageII::changeUserSlot(){
@@ -247,14 +247,25 @@ void LoginPageII::processAddServerFinishEvent()
 
 }
 
+void LoginPageII::disableButtons()
+{
+    ui->scrollArea->setEnabled(false);
+}
+
+void LoginPageII::enableButtons()
+{
+    ui->scrollArea->setEnabled(true);
+
+}
+
 void LoginPageII::updateServerWidges()
 {
     clearWidgets(flowLayout);
     QPushButton* m_button = new QPushButton;//create button
     //    m_button->resize(80,80);
     m_button->setFixedSize(QSize(100,80));
-    m_button->setText("+");
-    m_button->setStyleSheet("background-color: blue;");//set button for add
+    m_button->setText("添加");
+    m_button->setStyleSheet("background-color: blue; color: white;");//set button for add
     connect(m_button,SIGNAL(clicked()),this,SLOT(addServer_buttonClicked()));//connect add button signal to slot
     flowLayout->addWidget(m_button);//add to layout
 
@@ -263,7 +274,7 @@ void LoginPageII::updateServerWidges()
         QPushButton* m_button = new QPushButton;
         m_button->setFixedSize(QSize(100,80));
         m_button->setStyleSheet("color: rgb(255, 255, 255);"
-                                "background-color: blue;");
+                                "background-color: rbg(163,255,232);");
         m_button->setText(each);
         connect(m_button,SIGNAL(clicked()),this,SLOT(processConnectEvent()));
 
@@ -283,16 +294,20 @@ void LoginPageII::clearWidgets(QLayout * layout) {
 
 void LoginPageII::processConnectEvent()
 {
+
+    //close button
+    ui->pushButton_login_signin->setText("验证用户中...");
+    ui->pushButton_login_signin->setEnabled(false);
+    disableButtons();
     QPushButton* pButton = qobject_cast<QPushButton*>(sender());
-    if (pButton) // this is the type we expect
+    if (pButton)
     {
         QString buttonText = pButton->text();
-        qDebug()<<buttonText;
+
         //fill login infos
         SimpleCrypt crypto(Q_UINT64_C(0x0c2ad4a4acb9f083)); //some random number
         crypto.setCompressionMode(SimpleCrypt::CompressionAlways); //always compress the data, see section below
         crypto.setIntegrityProtectionMode(SimpleCrypt::ProtectionHash); //properly protect the integrity of the data
-
 
         m_setting->beginGroup(buttonText);
 
@@ -327,7 +342,7 @@ void LoginPageII::processConnectEvent()
 void LoginPageII::processloggingIn()
 {
     //close button
-    ui->pushButton_login_signin->setText("登录中...");
+    ui->pushButton_login_signin->setText("验证用户中...");
     ui->pushButton_login_signin->setEnabled(false);
 
     user = ui->comboBox_username->currentText().toStdString();//get username

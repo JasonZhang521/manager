@@ -14,9 +14,39 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>1</number>
+   </property>
+   <property name="leftMargin">
+    <number>1</number>
+   </property>
+   <property name="topMargin">
+    <number>1</number>
+   </property>
+   <property name="rightMargin">
+    <number>1</number>
+   </property>
+   <property name="bottomMargin">
+    <number>1</number>
+   </property>
    <item>
     <widget class="QWidget" name="widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <property name="spacing">
+       <number>3</number>
+      </property>
+      <property name="leftMargin">
+       <number>1</number>
+      </property>
+      <property name="topMargin">
+       <number>1</number>
+      </property>
+      <property name="rightMargin">
+       <number>1</number>
+      </property>
+      <property name="bottomMargin">
+       <number>1</number>
+      </property>
       <item>
        <widget class="QFrame" name="frame_3">
         <property name="sizePolicy">
@@ -61,6 +91,66 @@ background: url(:/Resources/0001-01.png) no-repeat left center fixed color #f0ff
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_4">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>90</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 170, 255);
+background-image: url(:/Resources/temp/bg2.png);</string>
+           </property>
+           <property name="text">
+            <string>产品</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>90</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 170, 255);
+background-image: url(:/Resources/temp/bg2.png);</string>
+           </property>
+           <property name="text">
+            <string>运维</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="pushButton">
@@ -132,8 +222,8 @@ background-image: url(:/Resources/temp/bg2.png);</string>
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>602</width>
-           <height>100</height>
+           <width>634</width>
+           <height>138</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5"/>
@@ -217,7 +307,7 @@ border:1.5px solid #008080;</string>
                <property name="styleSheet">
                 <string notr="true">background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);
-border-color: rgb(255, 255, 127);</string>
+border-color: rgb(255, 255, 222);</string>
                </property>
                <property name="editable">
                 <bool>true</bool>
@@ -297,7 +387,7 @@ border-color: rgb(255, 255, 127);</string>
                <property name="styleSheet">
                 <string notr="true">background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);
-border-color: rgb(255, 255, 127);</string>
+border-color: rgb(255, 255, 222);</string>
                </property>
                <property name="editable">
                 <bool>true</bool>
@@ -333,7 +423,8 @@ border-color: rgb(255, 255, 127);</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">background-color: rgb(255, 255, 255);
-border-color: rgb(255, 255, 127);</string>
+color: rgb(0, 0, 0);
+border-color: rgb(255, 255, 222);</string>
                </property>
                <property name="inputMethodHints">
                 <set>Qt::ImhNone</set>
