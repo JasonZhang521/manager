@@ -3,6 +3,11 @@ QT += widgets printsupport
 QT += charts
 QT += network
 
+QMAKE_CXXFLAGS_RELEASE -= -O2
+QMAKE_CXXFLAGS_RELEASE += -O0
+
+#QMAKE_LFLAGS_RELEASE -= -O1
+
 CONFIG += c++11
 
 TARGET = HungClusterManager
@@ -29,7 +34,8 @@ INCLUDEPATH += sourceCode/Common/ \
                sourceCode/IpcMessage \
                sourceCode/SystemMonitorMessage \
                sourceCode/UiClient \
-               thirdPartyLib/qcustomplot
+               thirdPartyLib/qcustomplot \
+               sourceCode/ShellCommandMessage
 
 SOURCES += \
     sourceCode/Common/FilePathHandler.cpp \
@@ -164,9 +170,14 @@ SOURCES += \
     sourceCode/SystemMonitorMessage/ControlNodeBrieflyInfoResponse.cpp \
     sourceCode/PlatformWrapper/NetworkHost.cpp \
     thirdPartyLib/qcustomplot/qcustomplot.cpp \
-    ipcworker.cpp \
-    ipcworkerii.cpp \
-    m.cpp
+    m.cpp \
+    sourceCode/Environment/ShellCommandPsTopnCpuUsageOutput.cpp \
+    sourceCode/Environment/ShellCommandPsTopnMemoryUsageOutput.cpp \
+    sourceCode/ShellCommandMessage/IShellCommandMessage.cpp \
+    sourceCode/ShellCommandMessage/ShellCommandMessageFactory.cpp \
+    sourceCode/ShellCommandMessage/ShellCommandRequest.cpp \
+    sourceCode/ShellCommandMessage/ShellCommandResponse.cpp \
+    sourceCode/Environment/ShellCommandGenericOutput.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -349,9 +360,15 @@ HEADERS += \
     sourceCode/SystemMonitorMessage/ControlNodeBrieflyInfoResponse.h \
     sourceCode/PlatformWrapper/NetworkHost.h \
     thirdPartyLib/qcustomplot/qcustomplot.h \
-    ipcworker.h \
-    ipcworkerii.h \
-    m.h
+    m.h \
+    sourceCode/Environment/ShellCommandPsTopnCpuUsageOutput.h \
+    sourceCode/Environment/ShellCommandPsTopnMemoryUsageOutput.h \
+    sourceCode/ShellCommandMessage/Component.h \
+    sourceCode/ShellCommandMessage/IShellCommandMessage.h \
+    sourceCode/ShellCommandMessage/ShellCommandMessageFactory.h \
+    sourceCode/ShellCommandMessage/ShellCommandRequest.h \
+    sourceCode/ShellCommandMessage/ShellCommandResponse.h \
+    sourceCode/Environment/ShellCommandGenericOutput.h
 
 
 

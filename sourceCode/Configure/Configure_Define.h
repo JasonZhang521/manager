@@ -24,7 +24,7 @@ enum TraceLogTarget
   TRACE_LOG_BOTH
 };
 
-#define TraceLogFilePath  ("./Trace.log")
+#define TraceLogFilePath  ("/opt/HongClusterMgt/log/message.log")
 
 #define LogBufSize (1024 * 1024)
 

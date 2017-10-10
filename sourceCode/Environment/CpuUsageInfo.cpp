@@ -174,6 +174,7 @@ void CpuUsageInfo::serialize(Serialize::WriteBuffer& writeBuffer) const
         writeBuffer.write<uint8_t>(static_cast<uint8_t>(entry.getUserUsage()));
         writeBuffer.write<uint8_t>(static_cast<uint8_t>(entry.getNiceUsage()));
         writeBuffer.write<uint8_t>(static_cast<uint8_t>(entry.getSysUsage()));
+        writeBuffer.write<uint8_t>(static_cast<uint8_t>(entry.getIdleUsage()));
         writeBuffer.write<uint8_t>(static_cast<uint8_t>(entry.getIntrUsage()));
         writeBuffer.write<unsigned int>(entry.getTotalTime());
     }
@@ -214,6 +215,10 @@ void CpuUsageInfo::unserialize(Serialize::ReadBuffer& readBuffer)
         uint8_t sys = 0;
         readBuffer.read<uint8_t>(sys);
         cpuUsageEntrys_[i].setSysUsage(sys);
+
+        uint8_t idle = 0;
+        readBuffer.read<uint8_t>(idle);
+        cpuUsageEntrys_[i].setIdleUsage(idle);
 
         uint8_t intr = 0;
         readBuffer.read<uint8_t>(intr);

@@ -14,6 +14,8 @@ include_directories ("${PROJECT_SOURCE_DIR}/Environment"
                      "${PROJECT_SOURCE_DIR}/TraceLog"
                      "${PROJECT_SOURCE_DIR}/Serialize"
                      "${PROJECT_SOURCE_DIR}/Network"
+                     "${PROJECT_SOURCE_DIR}/ShellCommandMessage"
+                     "${PROJECT_SOURCE_DIR}/ConfigureManagement"
 )
 add_executable(ComputerNodeMonitor.elf ${ComputerNodeMonitor_SRCS})
 target_link_libraries (ComputerNodeMonitor.elf
@@ -30,5 +32,7 @@ target_link_libraries (ComputerNodeMonitor.elf
 					   eventhandler
 					   timerhandler
 					   serialize
+					   shellcommandmessage
+					   configuremanagement
 					   ${LIBs}
 					  )

@@ -91,5 +91,13 @@
         <file>Resources/0002-01.png</file>
         <file>Resources/ico.png</file>
         <file>Resources/ico.ico</file>
+        <file>Resources/temp/totalview.png</file>
+        <file>Resources/temp/jobview.png</file>
+        <file>Resources/temp/monitorview.png</file>
+        <file>Resources/temp/terminalview.png</file>
+        <file>Resources/temp/messageview.png</file>
+        <file>Resources/temp/hardwareview.png</file>
+        <file>Resources/temp/ftpview.png</file>
+        <file>Resources/temp/managerview.png</file>
     </qresource>
 </RCC>

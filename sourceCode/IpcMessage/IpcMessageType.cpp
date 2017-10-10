@@ -9,6 +9,8 @@ std::string IpcMessageTypeString(IpcMessageType type)
         return std::string("IpcMessage_SystemMonitor");
     case IpcMessage_ConfigureMgt:
         return std::string("IpcMessage_ConfigureMgt");
+    case IpcMessage_ShellCommand:
+        return std::string("IpcMessage_ShellCommand");
     default:
         return std::string("IpcMessage_Unknown");
     }
@@ -57,6 +59,19 @@ std::string IpcConfigureMgtTypeToString(IpcConfigureMgtMessageType type)
         return std::string("ManuiConfigureMgtUpdateResponseMessage");
     default:
         return std::string("ConfigureMgtUnknownMessage");
+        break;
+    }
+}
+
+std::string IpcShellCommandTypeToString(IpcShellCommandMessageType type)
+{
+    switch (type) {
+    case ShellCommandRequestMessage:
+        return std::string("ShellCommandRequestMessage");
+    case ShellCommandResponseMessage:
+        return std::string("ShellCommandResponseMessage");
+    default:
+        return std::string("ShellCommandUnknownMessage");
         break;
     }
 }

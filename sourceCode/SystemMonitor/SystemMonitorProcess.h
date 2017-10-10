@@ -1,5 +1,6 @@
 #ifndef _SYSTEMMONITOR_SYSTEMMONITORPROCESS_H_
 #define _SYSTEMMONITOR_SYSTEMMONITORPROCESS_H_
+#include <string>
 
 namespace SystemMonitor {
 

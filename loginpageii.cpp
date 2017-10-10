@@ -373,3 +373,15 @@ void LoginPageII::on_pushButton_clicked()
     ContactPage* c = new ContactPage;
     c->show();
 }
+
+void LoginPageII::on_scrollArea_customContextMenuRequested(const QPoint &pos)
+{
+    QMenu * menu = new QMenu;
+    menu->addAction(QString(tr("修改")),this,SLOT(editAccountInfo()));
+            menu->exec(QCursor::pos());
+}
+
+void LoginPageII::editAccountInfo()
+{
+
+}

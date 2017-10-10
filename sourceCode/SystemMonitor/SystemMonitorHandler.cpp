@@ -1,5 +1,7 @@
 #include "SystemMonitorHandler.h"
 #include "ComputerNodeInfoReport.h"
+#include "ShellCommandResponse.h"
+#include "ShellCommandProcess.h"
 #include "IIpcClient.h"
 #include "CpuUsage.h"
 #include "LoopMain.h"
@@ -50,7 +52,7 @@ void SystemMonitorHandler::setIpcClient(std::shared_ptr<Ipc::IIpcClient> ipcClie
     ipcClient_ = ipcClient;
 }
 
-void SystemMonitorHandler::reportSystemInfo()
+void SystemMonitorHandler::reportSystemInfo(const Network::IpSocketEndpoint& destnation)
 {
     if (isStartup_)
     {
@@ -58,7 +60,7 @@ void SystemMonitorHandler::reportSystemInfo()
         info.update();
         SystemMonitorMessage::ComputerNodeInfoReport
                 message(Environment::CpuUsageInfo(Environment::CpuUsage::instance().getCpuUsageEntrys()), info);
-        message.setDestnation(Network::IpSocketEndpoint::BroadCastAddress);
+        message.setDestnation(destnation);
         TRACE_DEBUG("report system information:" << message);
         ipcClient_->send(message);
     }
@@ -67,6 +69,18 @@ void SystemMonitorHandler::reportSystemInfo()
         TRACE_NOTICE("SystemMonitor is not start up!");
     }
 }
+
+void SystemMonitorHandler::executeShellCommand(const Network::IpSocketEndpoint& destnation, const Environment::ShellCommandType& commandType)
+{
+    Environment::ShellCommandProcess shellCommandProcess(Environment::ShellCommand::getCmdString(commandType), true);
+    Environment::IShellCommand& shellCommand = shellCommandProcess;
+    shellCommand.execute();
+    ShellCommandMessage::ShellCommandResponse response;
+    response.setDestnation(destnation);
+    TRACE_DEBUG("send shell command response:" << response);
+    ipcClient_->send(response);
+}
+
 
 void SystemMonitorHandler::startup()
 {

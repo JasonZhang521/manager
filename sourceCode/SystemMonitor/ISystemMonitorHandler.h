@@ -6,6 +6,14 @@ namespace Ipc {
 class IIpcClient;
 }
 
+namespace Network {
+class IpSocketEndpoint;
+}
+
+namespace Environment {
+enum class ShellCommandType;
+}
+
 namespace SystemMonitor {
 class ISystemMonitorHandler
 {
@@ -13,7 +21,8 @@ public:
     ISystemMonitorHandler();
     ~ISystemMonitorHandler();
     virtual void setIpcClient(std::shared_ptr<Ipc::IIpcClient> ipcClient) = 0;
-    virtual void reportSystemInfo() = 0;
+    virtual void reportSystemInfo(const Network::IpSocketEndpoint& destnation) = 0;
+    virtual void executeShellCommand(const Network::IpSocketEndpoint& destnation, const Environment::ShellCommandType& commandType) = 0;
     virtual void startup() = 0;
     virtual void shutdown() = 0;
     virtual void reStartup() = 0;

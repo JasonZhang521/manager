@@ -205,6 +205,9 @@ background-image: url(:/Resources/temp/bg2.png);</string>
           <height>16777215</height>
          </size>
         </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
         <property name="acceptDrops">
          <bool>false</bool>
         </property>

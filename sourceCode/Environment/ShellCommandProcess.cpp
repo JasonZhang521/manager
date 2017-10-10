@@ -13,9 +13,13 @@
 #endif
 
 namespace Environment {
-ShellCommandProcess::ShellCommandProcess(const std::string& cmd)
+
+std::string ShellCommandProcess::MagicString("EGHDVYHEJHDRRHSFRH");
+
+ShellCommandProcess::ShellCommandProcess(const std::string& cmd, bool oneTimeCommand)
     : TimerHandler::ITimer(100)
     , cmd_(cmd)
+    , oneTimeCommand_(oneTimeCommand)
     , pid_(-1)
 {
 
@@ -28,6 +32,18 @@ ShellCommandProcess::~ShellCommandProcess()
 
 void ShellCommandProcess::execute()
 {
+    if (outPutFile_.empty() && !oneTimeCommand_)
+    {
+        RemoveCharacter remover(' ', RemovePlace::LOCATION_FRONT | RemovePlace::LOCATION_MIDDLE | RemovePlace::LOCATION_END);
+        std::string filePrefix = remover.removeMultiCh(cmd_, "\t \\/-,|=");
+        filePrefix = MagicString + "." + filePrefix;
+        Random random;
+        outPutFile_ = "." + filePrefix + "." + random.generateUpLetterString(10);
+        // delete the previous files
+        std::string deletePreviousfiles = std::string("rm .") + filePrefix + std::string("*");
+        system(deletePreviousfiles.c_str());
+    }
+
 #ifndef WIN32
     if ((pid_ = fork()) < 0)
     {
@@ -36,19 +52,22 @@ void ShellCommandProcess::execute()
     // Child process
     else if (pid_ == 0)
     {
-        if (outPutFile_.empty())
+        if (oneTimeCommand_)
         {
-            RemoveCharacter remover(' ', RemovePlace::LOCATION_FRONT | RemovePlace::LOCATION_MIDDLE | RemovePlace::LOCATION_END);
-            const std::string filePrefix = remover(cmd_);
-			Random random;
-            outPutFile_ = "." + filePrefix + "." + random.generateUpLetterString(10);
+            system(cmd_.c_str());
         }
-        const std::string cmd = cmd_ + " > " + outPutFile_;
-        system(cmd.c_str());
+        else
+        {
+            const std::string cmd = cmd_ + " > " + outPutFile_;
+            system(cmd.c_str());
+        }
     }
     else
     {
-        Core::LoopMain::instance().registerTimer(this);
+        if (!oneTimeCommand_)
+        {
+            Core::LoopMain::instance().registerTimer(this);
+        }
     }
 #endif
 }
@@ -56,6 +75,11 @@ void ShellCommandProcess::execute()
 void ShellCommandProcess::stop()
 {
 
+}
+
+bool ShellCommandProcess::isInactive()
+{
+    return false;
 }
 
 void ShellCommandProcess::onTime()

@@ -25,6 +25,7 @@ protected:
 
 private:
     void handleSystemMonitorMessage(std::unique_ptr<IpcMessage::IIpcMessage> msg);
+    void handleShellCommandMessage(std::unique_ptr<IpcMessage::IIpcMessage> msg);
 
 public:
      GETCLASSNAME(SystemMonitorConnectionReceiver)

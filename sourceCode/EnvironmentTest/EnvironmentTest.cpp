@@ -3,6 +3,8 @@
 #include "Environment.h"
 #include "ShellCommandThread.h"
 #include "ShellCommandOutputParse.h"
+#include "ShellCommandPsTopnCpuUsageOutput.h"
+#include "ShellCommandPsTopnMemoryUsageOutput.h"
 #include "ShellCommandDfOutput.h"
 #include "LoopMain.h"
 #include <thread>
@@ -95,11 +97,11 @@ TEST_F(EnvironmentTest, CommandTestTop10CpuUsage)
 {
 	Environment::Environment env;
     IShellCommand* command = new ShellCommandThread(ShellCommand::getCmdString(ShellCommandType::PsTop10CpuUsage), 1000);
-	env.registerShellCmd(ShellCommandType::DiskUsageDuHome, command);
+	env.registerShellCmd(ShellCommandType::PsTop10CpuUsage, command);
 	std::thread th(loopControl);
 	while(1)
 	{
-		const CommandOutputString& strings = env.getShellCmdOutput(ShellCommandType::DiskUsageDuHome);
+		const CommandOutputString& strings = env.getShellCmdOutput(ShellCommandType::PsTop10CpuUsage);
 		if (strings.empty())
 		{
 			sleep(1);
@@ -108,6 +110,14 @@ TEST_F(EnvironmentTest, CommandTestTop10CpuUsage)
 		for (auto str : strings)
 		{
 			std::cout << str << std::endl;
+		}
+		ShellCommandPsTopnCpuUsageOutputs outputs;
+	    ShellCommandOutputParse::ParsePsTopnCpuUsageOutput(strings, outputs);
+		for (auto output : outputs)
+		{
+			std::cout << "-------------------------------------" << std::endl;
+			std::cout << output << std::endl;
+			std::cout << "-------------------------------------" << std::endl;
 		}
 		break;
 	}
@@ -121,11 +131,11 @@ TEST_F(EnvironmentTest, CommandTestTop10MemoryUsage)
 {
 	Environment::Environment env;
     IShellCommand* command = new ShellCommandThread(ShellCommand::getCmdString(ShellCommandType::PsTop10MemoryUsage), 1000);
-	env.registerShellCmd(ShellCommandType::DiskUsageDuHome, command);
+	env.registerShellCmd(ShellCommandType::PsTop10MemoryUsage, command);
 	std::thread th(loopControl);
 	while(1)
 	{
-		const CommandOutputString& strings = env.getShellCmdOutput(ShellCommandType::DiskUsageDuHome);
+		const CommandOutputString& strings = env.getShellCmdOutput(ShellCommandType::PsTop10MemoryUsage);
 		if (strings.empty())
 		{
 			sleep(1);
@@ -134,6 +144,14 @@ TEST_F(EnvironmentTest, CommandTestTop10MemoryUsage)
 		for (auto str : strings)
 		{
 			std::cout << str << std::endl;
+		}
+		ShellCommandPsTopnMemoryUsageOutputs outputs;
+	    ShellCommandOutputParse::ParsePsTopnMemoryUsageOutput(strings, outputs);
+		for (auto output : outputs)
+		{
+			std::cout << "-------------------------------------" << std::endl;
+			std::cout << output << std::endl;
+			std::cout << "-------------------------------------" << std::endl;
 		}
 		break;
 	}

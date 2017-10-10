@@ -35,7 +35,8 @@ public:
     ~SystemMonitorHandler();
     virtual void setIpcClient(std::shared_ptr<Ipc::IIpcClient> ipcClient);
 private:
-    virtual void reportSystemInfo();
+    virtual void reportSystemInfo(const Network::IpSocketEndpoint& destnation);
+    virtual void executeShellCommand(const Network::IpSocketEndpoint& destnation, const Environment::ShellCommandType& commandType);
     virtual void startup();
     virtual void shutdown();
     virtual void reStartup();

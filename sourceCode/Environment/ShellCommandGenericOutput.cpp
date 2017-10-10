@@ -1,17 +1,25 @@
 #include "ShellCommandGenericOutput.h"
 #include "WriteBuffer.h"
 #include "ReadBuffer.h"
+#include "Generic.h"
 
 namespace Environment {
-ShellCommandGenericOutput::ShellCommandGenericOutput(const std::string& cmd, const CommandOutputString& output)
-    : cmd_(cmd)
+
+ShellCommandGenericOutput::ShellCommandGenericOutput()
+    : cmdType_(ShellCommandType::InvalidType)
+{
+
+}
+
+ShellCommandGenericOutput::ShellCommandGenericOutput(const ShellCommandType& cmdType, const CommandOutputString& output)
+    : cmdType_(cmdType)
     , outputString_(output)
 {
 
 }
 
 ShellCommandGenericOutput::ShellCommandGenericOutput(const ShellCommandGenericOutput& output)
-    : cmd_(output.cmd_)
+    : cmdType_(output.cmdType_)
     , outputString_(output.outputString_)
 {
 
@@ -19,15 +27,14 @@ ShellCommandGenericOutput::ShellCommandGenericOutput(const ShellCommandGenericOu
 
 ShellCommandGenericOutput& ShellCommandGenericOutput::operator =(const ShellCommandGenericOutput& output)
 {
-    cmd_ = output.cmd_;
+    cmdType_ = output.cmdType_;
     outputString_ = output.outputString_;
     return *this;
 }
 
 void ShellCommandGenericOutput::serialize(Serialize::WriteBuffer& writeBuffer) const
 {
-    writeBuffer.write(static_cast<uint8_t>(cmd_.size()));
-    writeBuffer.write(cmd_.c_str(), cmd_.size());
+    writeBuffer.write(static_cast<uint8_t>(toIntegral(cmdType_)));
     writeBuffer.write(static_cast<uint16_t>(outputString_.size()));
     for (auto str : outputString_)
     {
@@ -37,13 +44,12 @@ void ShellCommandGenericOutput::serialize(Serialize::WriteBuffer& writeBuffer) c
 }
 void ShellCommandGenericOutput::unserialize(Serialize::ReadBuffer& readBuffer)
 {
-    uint8_t size8 = 0;
+    uint8_t type = 0;
+    readBuffer.read(type);
+    cmdType_ = ShellCommandType(type);
+
     char buffer[1024];
     std::fill(buffer, buffer + 1024, 0);
-    readBuffer.read(size8);
-    readBuffer.read(buffer, size8);
-    cmd_ = std::string(buffer, size8);
-
     uint16_t size16 = 0;
     readBuffer.read(size16);
     CommandOutputString tempStrings;
@@ -60,7 +66,7 @@ void ShellCommandGenericOutput::unserialize(Serialize::ReadBuffer& readBuffer)
 std::ostream& ShellCommandGenericOutput::operator <<(std::ostream& os) const
 {
     os << "["
-       << "cmd=" << cmd_ << std::endl;
+       << "cmd=" << ShellCommand::getCmdString(cmdType_) << std::endl;
     for (auto str : outputString_)
     {
         os << str << std::endl;
@@ -70,7 +76,7 @@ std::ostream& ShellCommandGenericOutput::operator <<(std::ostream& os) const
 }
 bool ShellCommandGenericOutput::operator ==(const ShellCommandGenericOutput& output) const
 {
-    return (cmd_ == output.cmd_) && (outputString_ == output.outputString_);
+    return (cmdType_ == output.cmdType_) && (outputString_ == output.outputString_);
 }
 
 const CommandOutputString& ShellCommandGenericOutput::getCommandOutputString() const
@@ -78,9 +84,19 @@ const CommandOutputString& ShellCommandGenericOutput::getCommandOutputString() c
     return outputString_;
 }
 
-const std::string& ShellCommandGenericOutput::getCommand() const
+void ShellCommandGenericOutput::setCommandOutputString(const CommandOutputString& outputs)
 {
-    return cmd_;
+    outputString_ = outputs;
+}
+
+const ShellCommandType& ShellCommandGenericOutput::getCommand() const
+{
+    return cmdType_;
+}
+
+void ShellCommandGenericOutput::setCommand(const ShellCommandType& cmdType)
+{
+    cmdType_ = cmdType;
 }
 
 }

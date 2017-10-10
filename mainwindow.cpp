@@ -1007,34 +1007,34 @@ void MainWindow::setupSessionConfigure(SshConfigure configure)
 
 void MainWindow::updateGetHardwareInfo()
 {
-//    qDebug()<<"hardware get info updated";
-//    QString temp_str;
-//    while (process.messageReceived())
-//    {
-//        std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
-//        //                              IpcMessage::IIpcMessage* pMsg = msg.get(); //获取指针
-//        SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
-//                dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
-//        SystemMonitorMessage::ComputerNodeInfoReport* resp =
-//                dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
+    qDebug()<<"hardware get info updated";
+    QString temp_str;
+    while (process.messageReceived())
+    {
+        std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
+        //                              IpcMessage::IIpcMessage* pMsg = msg.get(); //获取指针
+        SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
+                dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
+        SystemMonitorMessage::ComputerNodeInfoReport* resp =
+                dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
 
-//        std::cout << "-----------------------" << std::endl;
-//        //             std::cout << *msg << std::endl;
-//        std::cout << resp->getHostName()<<std::endl;
-//        temp_str = QString::fromStdString(resp->getHostName());
-//        if(!hardware_hostname_list.contains(temp_str))
-//        {
-//            hardware_hostname_list.append(temp_str);
-//        }
-//        std::cout << "-----------------------" << std::endl;
-//        if(resp->getHostName().compare(activated_node.toStdString())==0)
-//        {
-//            updateHardwareGUI(resp);
-//        }
-//    }
-//    qDebug()<<"check node list";
-//    qDebug()<<hardware_hostname_list;
-//    makeHardwareNodesButtons(hardware_hostname_list);
+        std::cout << "-----------------------" << std::endl;
+        //             std::cout << *msg << std::endl;
+        std::cout << resp->getHostName()<<std::endl;
+        temp_str = QString::fromStdString(resp->getHostName());
+        if(!hardware_hostname_list.contains(temp_str))
+        {
+            hardware_hostname_list.append(temp_str);
+        }
+        std::cout << "-----------------------" << std::endl;
+        if(resp->getHostName().compare(activated_node.toStdString())==0)
+        {
+            updateHardwareGUI(resp);
+        }
+    }
+    qDebug()<<"check node list";
+    qDebug()<<hardware_hostname_list;
+    makeHardwareNodesButtons(hardware_hostname_list);
 
 
 }
@@ -1599,39 +1599,39 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
 //ftp download
 void MainWindow::on_pushButton_clicked()
 {
-//    //clacify if an item is selected
-//    if(!ui.treeWidget->currentItem()->text(0).toStdString().empty()&&!filePathLocal.isEmpty()){
-//        if(!isDir(ui.treeWidget->currentItem()->text(0)))
-//        {//identify if selected item is dir
-//            speedCalculatorThread = new QThread;
-//            speedWorker = new SpeedCalculator(0,configure);
-//            speedWorker->moveToThread(speedCalculatorThread);
-//            connect(ftpWorker, SIGNAL(finishDownload()), speedWorker, SLOT(process()));
-//            //connect start signal to process slot
-//            connect(this,SIGNAL(downloadSpeedMonitingStart(QString,QString,QString)),speedWorker,SLOT(processDownloadSpeed(QString,QString,QString)));
-//            //connect worker  signal to main process slot
-//            connect(speedWorker,SIGNAL(getDownloadSpeedSignal(int,qint64)),this,SLOT(displayDownloadSpeed(int,qint64)));
-//            //deal with destroy signals
-//            connect(speedCalculatorThread,SIGNAL(destroyed()),speedWorker,SLOT(process()));
-//            connect(speedWorker,SIGNAL(finished()),speedCalculatorThread,SLOT(quit()));
-//            connect(speedWorker,SIGNAL(finished()),speedWorker,SLOT(deleteLater()));
-//            connect(speedCalculatorThread,SIGNAL(finished()),speedCalculatorThread,SLOT(deleteLater()));
-//            speedCalculatorThread->start();
+    //clacify if an item is selected
+    if(!ui.treeWidget->currentItem()->text(0).toStdString().empty()&&!filePathLocal.isEmpty()){
+        if(!isDir(ui.treeWidget->currentItem()->text(0)))
+        {//identify if selected item is dir
+            speedCalculatorThread = new QThread;
+            speedWorker = new SpeedCalculator(0,configure);
+            speedWorker->moveToThread(speedCalculatorThread);
+            connect(ftpWorker, SIGNAL(finishDownload()), speedWorker, SLOT(process()));
+            //connect start signal to process slot
+            connect(this,SIGNAL(downloadSpeedMonitingStart(QString,QString,QString)),speedWorker,SLOT(processDownloadSpeed(QString,QString,QString)));
+            //connect worker  signal to main process slot
+            connect(speedWorker,SIGNAL(getDownloadSpeedSignal(int,qint64)),this,SLOT(displayDownloadSpeed(int,qint64)));
+            //deal with destroy signals
+            connect(speedCalculatorThread,SIGNAL(destroyed()),speedWorker,SLOT(process()));
+            connect(speedWorker,SIGNAL(finished()),speedCalculatorThread,SLOT(quit()));
+            connect(speedWorker,SIGNAL(finished()),speedWorker,SLOT(deleteLater()));
+            connect(speedCalculatorThread,SIGNAL(finished()),speedCalculatorThread,SLOT(deleteLater()));
+            speedCalculatorThread->start();
 
-//            emit ftpDownloadStart(QString::fromStdString(currentPathRemote)+"/"+ui.treeWidget->currentItem()->text(0),filePathLocal);//fire download start signal
-//            // emit downloadSpeedMonitingStart(QString::fromStdString(currentPathRemote),fileInfo.absoluteFilePath(),fileInfo.fileName());
-//            emit downloadSpeedMonitingStart(QString::fromStdString(currentPathRemote),filePathLocal,ui.treeWidget->currentItem()->text(0));
-//            ui.pushButton->setText("下载中...");//close button
-//            ui.pushButton->setEnabled(false);//close button
-//        }
-//        else//show warning if selected file is directory
-//        {
-//            QMessageBox msg;
-//            msg.setText("无法下载文件夹");
-//            msg.exec();
-//        }
+            emit ftpDownloadStart(QString::fromStdString(currentPathRemote)+"/"+ui.treeWidget->currentItem()->text(0),filePathLocal);//fire download start signal
+            // emit downloadSpeedMonitingStart(QString::fromStdString(currentPathRemote),fileInfo.absoluteFilePath(),fileInfo.fileName());
+            emit downloadSpeedMonitingStart(QString::fromStdString(currentPathRemote),filePathLocal,ui.treeWidget->currentItem()->text(0));
+            ui.pushButton->setText("下载中...");//close button
+            ui.pushButton->setEnabled(false);//close button
+        }
+        else//show warning if selected file is directory
+        {
+            QMessageBox msg;
+            msg.setText("无法下载文件夹");
+            msg.exec();
+        }
 
-//    }
+    }
 
 
 
@@ -1665,37 +1665,40 @@ void MainWindow::processConnectionSuccessEvent()
 void MainWindow::processFtpUploadFinishEvent(){
 
     //get remote dir
-    SftpDirAttributes attr;
-    client->listDir(currentPathRemote,attr);
+//    SftpDirAttributes attr;
+//    client->listDir(currentPathRemote,attr);
 
     //renew display
-    ui.treeWidget->clear();
-    for(unsigned int i =0;i<attr.size();i++){
-        if(QString::fromStdString(attr[i].name).at(0)!='.'){
-            QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget);
-            if(QString::number(attr[i].type).compare("1")==0)
-            {
-                file->setIcon(0,QIcon(":/Resources/file.png"));
-            }
-            else if (QString::number(attr[i].type).compare("2")==0)
-            {
-                file->setIcon(0,QIcon(":/Resources/dir.png"));
-            }
-            file->setText(0,QString::fromStdString(attr[i].name));
-            //            file->setText(1,QString::number(attr[i].size));
-            file->setData(1,Qt::EditRole,float(attr[i].size/1024.0));
-            file->setText(3,QString::fromStdString(attr[i].owner));
-            file->setText(4,QString::fromStdString(attr[i].group));
-            file->setText(5,QString::number(attr[i].permissions));
+//    ui.treeWidget->clear();
+//    for(unsigned int i =0;i<attr.size();i++){
+//        if(QString::fromStdString(attr[i].name).at(0)!='.'){
+//            QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget);
+//            if(QString::number(attr[i].type).compare("1")==0)
+//            {
+//                file->setIcon(0,QIcon(":/Resources/file.png"));
+//            }
+//            else if (QString::number(attr[i].type).compare("2")==0)
+//            {
+//                file->setIcon(0,QIcon(":/Resources/dir.png"));
+//            }
+//            file->setText(0,QString::fromStdString(attr[i].name));
+//            //            file->setText(1,QString::number(attr[i].size));
+//            file->setData(1,Qt::EditRole,float(attr[i].size/1024.0));
+//            file->setText(3,QString::fromStdString(attr[i].owner));
+//            file->setText(4,QString::fromStdString(attr[i].group));
+//            file->setText(5,QString::number(attr[i].permissions));
 
-            ui.treeWidget->addTopLevelItem(file);
-            if(!ui.treeWidget->currentItem()){
-                ui.treeWidget->setCurrentItem(ui.treeWidget->topLevelItem(0));
-                ui.treeWidget->setEnabled(true);
-            }
-        }
+//            ui.treeWidget->addTopLevelItem(file);
+//            if(!ui.treeWidget->currentItem()){
+//                ui.treeWidget->setCurrentItem(ui.treeWidget->topLevelItem(0));
+//                ui.treeWidget->setEnabled(true);
+//            }
+//        }
 
-    } ui.pushButton_3->setText("上传");
+//    }
+
+    updateFileList(ui.treeWidget,1);
+    ui.pushButton_3->setText("上传");
     ui.pushButton_3->setEnabled(true);
 
 }

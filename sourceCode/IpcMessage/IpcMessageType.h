@@ -8,7 +8,8 @@ enum IpcMessageType
     IpcMessage_None,
     IpcMessage_IpcCommunication,
     IpcMessage_SystemMonitor,
-    IpcMessage_ConfigureMgt
+    IpcMessage_ConfigureMgt,
+    IpcMessage_ShellCommand
 };
 std::string IpcMessageTypeString(IpcMessageType type);
 
@@ -38,6 +39,14 @@ enum IpcConfigureMgtMessageType
 };
 
 std::string IpcConfigureMgtTypeToString(IpcConfigureMgtMessageType type);
+
+enum IpcShellCommandMessageType
+{
+    ShellCommandRequestMessage,
+    ShellCommandResponseMessage
+};
+
+std::string IpcShellCommandTypeToString(IpcShellCommandMessageType type);
 
 }
 #endif // _IPCMESSAGE_IPCMESSAGETYPE_H_

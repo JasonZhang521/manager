@@ -26,13 +26,10 @@ public:
     bool messageReceived();
     std::unique_ptr<IpcMessage::IIpcMessage> getOneMessage();
     void sendMessage(std::unique_ptr<IpcMessage::IIpcMessage> msg);
-public:
+private:
     void process();
-    std::string remoteHost="0.0.0.0";
 public:
      GETCLASSNAME(UiClientProcess)
-     std::string getRemoteHost() const;
-     void setRemoteHost(const std::string &value);
 };
 }
 #endif // UICLIENTPROCESS_H

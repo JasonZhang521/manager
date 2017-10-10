@@ -5,6 +5,9 @@
 #include "NetworkInfo.h"
 #include "MiscInfo.h"
 #include "DiskUsageInfo.h"
+#include "ShellCommandPsTopnCpuUsageOutput.h"
+#include "ShellCommandPsTopnMemoryUsageOutput.h"
+#include "ShellCommandGenericOutput.h"
 #include "ShellCommandDataType.h"
 
 namespace Environment {
@@ -16,8 +19,10 @@ class SystemInfoBriefly
     NetworkInfo networkInfo_;
     MiscInfo miscInfo_;
     DiskUsageInfo diskUsageInfo_;
-    CommandOutputString psTop10CpuUsage_;
-    CommandOutputString psTop10MemoryUsage_;
+    ShellCommandPsTopnCpuUsageOutputs psTop10CpuUsage_;
+    ShellCommandPsTopnMemoryUsageOutputs psTop10MemoryUsage_;
+    ShellCommandGenericOutput nvidiaSmiGpuInfo_;
+    ShellCommandGenericOutput infiniBandStatInfo_;
 
 public:
     SystemInfoBriefly();
@@ -33,10 +38,15 @@ public:
 	void setMiscInfo(const MiscInfo& info);
     const DiskUsageInfo& getDiskUsageInfo() const;
     void setDiskUsageInfo(const DiskUsageInfo& info);
-    const CommandOutputString& getPsTop10CpuUsage() const;
-    void setPsTop10CpuUsage(const CommandOutputString& info);
-    const CommandOutputString& getPsTop10MemoryUsage() const;
-    void setPsTop10MemoryUsage(const CommandOutputString& info);
+    const ShellCommandPsTopnCpuUsageOutputs& getPsTop10CpuUsage() const;
+    void setPsTop10CpuUsage(const ShellCommandPsTopnCpuUsageOutputs& info);
+    const ShellCommandPsTopnMemoryUsageOutputs& getPsTop10MemoryUsage() const;
+    void setPsTop10MemoryUsage(const ShellCommandPsTopnMemoryUsageOutputs& info);
+    const ShellCommandGenericOutput& getNvidiaSmiGpuInfo() const;
+    void setNvidiaSmiGpuInfo( const ShellCommandGenericOutput& nvidiaSmiGpuInfo);
+    const ShellCommandGenericOutput& getInfiniBandStatInfo() const;
+    void setInfiniBandStatInfo( const ShellCommandGenericOutput& infiniBandStatInfo);
+
 
     void serialize(Serialize::WriteBuffer& writeBuffer) const;
     void unserialize(Serialize::ReadBuffer& readBuffer);

@@ -15,8 +15,11 @@
 #include "IpAddress.h"
 #include "Environment.h"
 #include "ShellCommandThread.h"
+#include "NetworkConfig.h"
+#include "RemoveCharacter.h"
 #include <memory>
 #include <iostream>
+#include <fstream>
 
 namespace SystemMonitor {
 
@@ -26,16 +29,10 @@ SystemMonitorProcess::SystemMonitorProcess()
 
 void SystemMonitorProcess::process()
 {
-    Network::IpAddresses ipAddresses = Network::NetworkEnv::getLocalIpAddress();
-    for (auto ipAddress : ipAddresses)
-    {
-        std::cout << ipAddress << std::endl;
-    }
-
+    std::vector<std::string> nodeServerIpPorts = ConfigureManagement::NetworkConfig::getNodeServerIpPort();
     // Local and remote endpoint.
     Network::IpSocketEndpoint localEndpoint("0.0.0.0:0");
-    Network::IpSocketEndpoint remoteEndpoint(std::string("127.0.0.1:23832"));
-    //Network::IpSocketEndpoint remoteEndpoint(std::string("192.168.5.138:23832"));
+    Network::IpSocketEndpoint remoteEndpoint(nodeServerIpPorts[0]);
     // SystemMonitorHandler
     SystemMonitorHandler* systemMonitorHandlerPtr = new SystemMonitorHandler();
     std::shared_ptr<ISystemMonitorHandler> systemMonitorHandler(systemMonitorHandlerPtr);
@@ -81,6 +78,14 @@ void SystemMonitorProcess::process()
         Environment::IShellCommand* commandPsTop10MemoryUsage =
                 new Environment::ShellCommandThread(Environment::ShellCommand::getCmdString(Environment::ShellCommandType::PsTop10MemoryUsage), 5000);
         Environment::Environment::instance().registerShellCmd(Environment::ShellCommandType::PsTop10MemoryUsage, commandPsTop10MemoryUsage);
+
+        Environment::IShellCommand* commandNvidiaSmiGpu =
+                new Environment::ShellCommandThread(Environment::ShellCommand::getCmdString(Environment::ShellCommandType::NvidiaSmiGpu), 3600000);
+        Environment::Environment::instance().registerShellCmd(Environment::ShellCommandType::NvidiaSmiGpu, commandNvidiaSmiGpu);
+
+        Environment::IShellCommand* commandInfiniBandStat =
+                new Environment::ShellCommandThread(Environment::ShellCommand::getCmdString(Environment::ShellCommandType::InfiniBandStat), 3600000);
+        Environment::Environment::instance().registerShellCmd(Environment::ShellCommandType::InfiniBandStat, commandInfiniBandStat);
 
     }
 

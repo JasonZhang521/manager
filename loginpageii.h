@@ -56,6 +56,9 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_scrollArea_customContextMenuRequested(const QPoint &pos);
+
+    void editAccountInfo();
 private:
     Ui::LoginPageII *ui;
     //ssh related variables

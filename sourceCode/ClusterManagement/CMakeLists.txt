@@ -13,6 +13,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/Environment"
                      "${PROJECT_SOURCE_DIR}/TimerHandler"
                      "${PROJECT_SOURCE_DIR}/TraceLog"
                      "${PROJECT_SOURCE_DIR}/Serialize"
+                     "${PROJECT_SOURCE_DIR}/ConfigureManagement"
 																										 
 )
 add_executable(ClusterNodesControl.elf ${ClusterNodesControl_SRCS})
@@ -30,5 +31,6 @@ target_link_libraries (ClusterNodesControl.elf
 					   eventhandler
 					   timerhandler
 					   serialize
+					   configuremanagement
 					   ${LIBs}
 					  )

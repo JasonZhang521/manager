@@ -384,7 +384,7 @@ font: 75 italic 11pt &quot;Arial&quot;;</string>
            <widget class="QWidget" name="tab_overview">
             <attribute name="icon">
              <iconset resource="hungclustermanager1.qrc">
-              <normaloff>:/Resources/home.png</normaloff>:/Resources/home.png</iconset>
+              <normaloff>:/Resources/temp/totalview.png</normaloff>:/Resources/temp/totalview.png</iconset>
             </attribute>
             <attribute name="title">
              <string/>
@@ -3182,7 +3182,7 @@ border:1.5px solid #008080;</string>
            <widget class="QWidget" name="tab_jobs">
             <attribute name="icon">
              <iconset resource="hungclustermanager1.qrc">
-              <normaloff>:/Resources/job.png</normaloff>:/Resources/job.png</iconset>
+              <normaloff>:/Resources/temp/jobview.png</normaloff>:/Resources/temp/jobview.png</iconset>
             </attribute>
             <attribute name="title">
              <string/>
@@ -4372,7 +4372,7 @@ p, li { white-space: pre-wrap; }
            <widget class="QWidget" name="tab_monitor">
             <attribute name="icon">
              <iconset resource="hungclustermanager1.qrc">
-              <normaloff>:/Resources/monitor.png</normaloff>:/Resources/monitor.png</iconset>
+              <normaloff>:/Resources/temp/monitorview.png</normaloff>:/Resources/temp/monitorview.png</iconset>
             </attribute>
             <attribute name="title">
              <string/>
@@ -5762,7 +5762,7 @@ p, li { white-space: pre-wrap; }
            <widget class="QWidget" name="tab_control">
             <attribute name="icon">
              <iconset resource="hungclustermanager1.qrc">
-              <normaloff>:/Resources/control.png</normaloff>:/Resources/control.png</iconset>
+              <normaloff>:/Resources/temp/managerview.png</normaloff>:/Resources/temp/managerview.png</iconset>
             </attribute>
             <attribute name="title">
              <string/>
@@ -7180,7 +7180,7 @@ QTabBar::tab:selected {
            <widget class="QWidget" name="tab_ftp">
             <attribute name="icon">
              <iconset resource="hungclustermanager1.qrc">
-              <normaloff>:/Resources/FTP.png</normaloff>:/Resources/FTP.png</iconset>
+              <normaloff>:/Resources/temp/ftpview.png</normaloff>:/Resources/temp/ftpview.png</iconset>
             </attribute>
             <attribute name="title">
              <string/>
@@ -7537,7 +7537,7 @@ QTabBar::tab:selected {
            <widget class="QWidget" name="tab_terminal">
             <attribute name="icon">
              <iconset resource="hungclustermanager1.qrc">
-              <normaloff>:/Resources/terminal.png</normaloff>:/Resources/terminal.png</iconset>
+              <normaloff>:/Resources/temp/terminalview.png</normaloff>:/Resources/temp/terminalview.png</iconset>
             </attribute>
             <attribute name="title">
              <string/>
@@ -7603,7 +7603,7 @@ QTabBar::tab:selected {
            <widget class="QWidget" name="tab_message">
             <attribute name="icon">
              <iconset resource="hungclustermanager1.qrc">
-              <normaloff>:/Resources/temp/message54.png</normaloff>:/Resources/temp/message54.png</iconset>
+              <normaloff>:/Resources/temp/messageview.png</normaloff>:/Resources/temp/messageview.png</iconset>
             </attribute>
             <attribute name="title">
              <string/>
@@ -7612,7 +7612,7 @@ QTabBar::tab:selected {
            <widget class="QWidget" name="tab_devices">
             <attribute name="icon">
              <iconset resource="hungclustermanager1.qrc">
-              <normaloff>:/Resources/hardware.png</normaloff>:/Resources/hardware.png</iconset>
+              <normaloff>:/Resources/temp/hardwareview.png</normaloff>:/Resources/temp/hardwareview.png</iconset>
             </attribute>
             <attribute name="title">
              <string/>
