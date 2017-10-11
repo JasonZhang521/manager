@@ -241,9 +241,6 @@ void MainWindow::setPlotStyle()
 void MainWindow::updateCPUTotal(int input)
 {
 
-    qDebug()<<"@123123";
-    // prepare x axis with  labels:
-    //    QVector<double> ticks;
     ticks.clear();
     QVector<QString> labels;
     ticks << 1;
@@ -252,10 +249,10 @@ void MainWindow::updateCPUTotal(int input)
     textTicker->addTicks(ticks, labels);
     ui.plot_cpuUsage->xAxis->setTicker(textTicker);
 
-    //set data
-    //    QVector<double> regenData;
     regenData.clear();
-    regenData   << rangedRand(1,100);
+    qDebug()<<"@1";
+    qDebug()<<input;
+    regenData   << input;
     regen->setData(ticks, regenData);
     ui.plot_cpuUsage->replot();
 
@@ -272,11 +269,8 @@ void MainWindow::updateRamTotal(int input)
     textTicker->addTicks(ticks, labels);
     ui.plot_ramUsage->xAxis->setTicker(textTicker);
 
-
     //set data
-
     QVector<double> regen2Data;
-//    regen2Data   << rangedRand(1,100);
     regen2Data << input;
     rengen2->setData(ticks, regen2Data);
     ui.plot_ramUsage->replot();
@@ -1041,119 +1035,117 @@ void MainWindow::updateGetHardwareInfo()
 
 void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport* resp)
 {
-    int cpu_usage;
-    int ram_usage;
-    std::stringstream str_cpuUsageInfo;
+    int cpu_usage;//cpu usage
+    int ram_usage;//ram usage
 
-    std::stringstream str_stream;
-    str_stream<< resp->getSystemInfoBriefly();
-    qDebug()<<QString::fromStdString(str_stream.str());
+    std::stringstream str_stream;//raw system information for debug only
+    str_stream << resp->getSystemInfoBriefly();//retrieve system info
+    qDebug()<<QString::fromStdString(str_stream.str());//for debug use only
 
-    std::stringstream str_process;
-    str_process << resp->getSystemInfoBriefly();
-    QString temp_sys = QString::fromStdString(str_process.str());
+    std::stringstream str_process;//raw system info for display usage
+    str_process << resp->getSystemInfoBriefly();//get
+    QString temp_sys = QString::fromStdString(str_process.str());//transfer to qstring
 
     //----------------get total cpu usage and make a display--------------------//
+
+    std::stringstream str_cpuUsageInfo;//raw cpu usage data
     str_cpuUsageInfo << resp->getCpuUsageInfo();
-    qDebug()<<"cpu usage info show";
-    QString temp_str = QString::fromStdString(str_cpuUsageInfo.str());
-    qDebug()<<temp_str;
+    QString temp_cpuInfo = QString::fromStdString(str_cpuUsageInfo.str());
+    qDebug()<<temp_cpuInfo;
     QRegularExpression re("(?<=total=)[\\d]+");
-    QRegularExpressionMatch match = re.match(temp_str);
-    if(match.hasMatch()){
-        cpu_usage = match.captured(0).toInt();
+    QRegularExpressionMatch match_cpu_total = re.match(temp_cpuInfo);
+    if(match_cpu_total.hasMatch()){
+        cpu_usage = match_cpu_total.captured(0).toInt();
     }
     updateCPUTotal(cpu_usage);
-    //---------------------------------------------------------------------------------//
+    //--------------------------------------------------------------------------//
 
     //-----------------calculate ram usage and make a display-----------------------//
-    //(?<=memTotal=)[\d]+
     int memTotal;
-    QRegularExpression re3("(?<=memTotal=)[\\d]+(?= )");
-    QRegularExpressionMatch match3 = re3.match(temp_sys);
-    if(match3.hasMatch())
-    {
-        memTotal = match3.captured(0).toInt();
-    }
     int memFree;
+    QRegularExpression re3("(?<=memTotal=)[\\d]+(?= )");
+    QRegularExpressionMatch match_ram_total = re3.match(temp_sys);
+    if(match_ram_total.hasMatch())
+    {
+        memTotal = match_ram_total.captured(0).toInt();
+    }
+
     QRegularExpression re4("(?<=memFree=)[\\d]+(?= )");
     QRegularExpressionMatch match4 = re4.match(temp_sys);
     if(match4.hasMatch())
     {
         memFree = match4.captured(0).toInt();
     }
-    ram_usage = ((double)memTotal - (double)memFree)/(double)memTotal * 100;qDebug()<<"@123321";
-    qDebug()<<memTotal;
-    qDebug()<<memFree;
+    ram_usage = ((double)memTotal - (double)memFree)/(double)memTotal * 100;qDebug()<<"@2";
     qDebug()<<ram_usage;
     updateRamTotal(ram_usage);
 
-    //----------------------------------------------------------------------------------//
+    //-------------------------------------------------------------------------------//
 
     //----------------------process cpu-----------------------------------//
-    //(?<=psTop10CpuUsage:\\n)[\w\W]+(?=,)
     ui.cpu_process->clear();
 
-    QRegularExpression re2("(?<=psTop10CpuUsage:\\n)[\\w\\W]+(?=,)");
-    QRegularExpressionMatch match2 =re2.match(temp_sys);
+    // QRegularExpression re2("(?<=psTop10CpuUsage:\\n)[\\w\\W]+(?=,)");
+    QRegularExpression re2("(?<=psTop10CpuUsage=)[\\w\\W]+(?=\\n,)");
+    QRegularExpressionMatch match_psTop10CpuProcess =re2.match(temp_sys);
     QString temp_process_cpu;
-    if(match2.hasMatch()){
+    if(match_psTop10CpuProcess.hasMatch()){
 
-        temp_process_cpu = match2.captured(0);
+        temp_process_cpu = match_psTop10CpuProcess.captured(0);
 
     }
-    QStringList list_temp_process_cpu = temp_process_cpu.split("\n");
-    QStringList list_temp_process_cpu_item;
-    if(list_temp_process_cpu.size()>0)
+    qDebug()<<"@3";
+    qDebug()<<temp_process_cpu.remove("[").remove("]").split("\n");
+    QStringList processList_cpu = temp_process_cpu.remove("[").remove("]").split("\n");
+    int maximumPropertySize = 5;
+    foreach(QString each,processList_cpu)
     {
-        for(int i =1;i<list_temp_process_cpu.size()-1;i++)
-        {
-            list_temp_process_cpu_item = list_temp_process_cpu[i].split(QRegExp("[\\s]+"));
-            if(list_temp_process_cpu_item.size()>=5)
-            {
-                QTreeWidgetItem* item = new QTreeWidgetItem(ui.cpu_process);
-                item->setText(0,list_temp_process_cpu_item[0]);
-                item->setData(1,Qt::EditRole,list_temp_process_cpu_item[1].toInt());
-                item->setText(2,list_temp_process_cpu_item[2]);
-                item->setData(3,Qt::EditRole,list_temp_process_cpu_item[3].toInt());
-                item->setData(4,Qt::EditRole,list_temp_process_cpu_item[4].toDouble());
+        QStringList temp_str=each.split(",");
+                 if(temp_str.size()>=maximumPropertySize)
+                 {
+                     QTreeWidgetItem* item = new QTreeWidgetItem(ui.cpu_process);
+                     item->setText(0,temp_str[0].split("=")[1]);
+                     item->setData(1,Qt::EditRole,temp_str[1].split("=")[1].toInt());
+                     item->setText(2,temp_str[2].split("=")[1]);
+                     item->setData(3,Qt::EditRole,temp_str[3].split("=")[1].toInt());
+                     item->setData(4,Qt::EditRole,temp_str[4].split("=")[1].toDouble());
 
-            }
-        }
+                 }
+
+
     }
 
-
-    //------------------------------------------------------------//
+    //-------------------------------------------------------------------//
 
     //--------------------process ram------------------------------//
 
     ui.ram_process->clear();
-    QRegularExpression re5("(?<=psTop10MemoryUsage:\\n)[\\w\\W]+(?=\])");
-    QRegularExpressionMatch match5 =re5.match(temp_sys);
+    QRegularExpression re5("(?<=psTop10MemoryUsage=)[\\w\\W]+(?=\\nnvidia)");
+    QRegularExpressionMatch match_psTop10RamProcess =re5.match(temp_sys);
     QString temp_process_mem;
-    if(match5.hasMatch()){
+    if(match_psTop10RamProcess.hasMatch()){
 
-        temp_process_mem = match5.captured(0);
+        temp_process_mem = match_psTop10RamProcess.captured(0);
 
     }
-    QStringList list_temp_process_mem = temp_process_mem.split("\n");
-    QStringList list_temp_process_mem_item;
-    if(list_temp_process_mem.size()>0)
+    qDebug()<<"@4";
+    qDebug()<<temp_process_mem.remove("[").remove("]").split("\n");
+    QStringList processList_mem = temp_process_mem.remove("[").remove("]").split("\n");
+    foreach(QString each,processList_mem)
     {
-        for(int i =1;i<list_temp_process_mem.size()-1;i++)
-        {
-            list_temp_process_mem_item = list_temp_process_mem[i].split(QRegExp("[\\s]+"));
-            if(list_temp_process_mem_item.size()>=5)
-            {
-                QTreeWidgetItem* item = new QTreeWidgetItem(ui.ram_process);
-                item->setText(0,list_temp_process_mem_item[0]);
-                item->setData(1,Qt::EditRole,list_temp_process_mem_item[1].toInt());
-                item->setText(2,list_temp_process_mem_item[2]);
-                item->setData(3,Qt::EditRole,list_temp_process_mem_item[3].toInt());
-                item->setData(4,Qt::EditRole,list_temp_process_mem_item[4].toInt());
+        QStringList temp_str=each.split(",");
+                 if(temp_str.size()>=maximumPropertySize)
+                 {
+                     QTreeWidgetItem* item = new QTreeWidgetItem(ui.ram_process);
+                     item->setText(0,temp_str[0].split("=")[1]);
+                     item->setData(1,Qt::EditRole,temp_str[1].split("=")[1].toInt());
+                     item->setText(2,temp_str[2].split("=")[1]);
+                     item->setData(3,Qt::EditRole,temp_str[3].split("=")[1].toInt());
+                     item->setData(4,Qt::EditRole,temp_str[4].split("=")[1].toInt());
 
-            }
-        }
+                 }
+
+
     }
 
 
@@ -1163,7 +1155,7 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     //hei man
     //i need you to plot our data on ui every time
     x.append(increamter);
-    y.append(rangedRand(0,100));
+    y.append(cpu_usage);
     ui.plot_cpuHistory->graph(0)->setData(x,y);
 
     ui.plot_cpuHistory->xAxis->setRange(-50+increamter,0+increamter);
@@ -3415,14 +3407,6 @@ void MainWindow::on_pushButton_control_queue_delete_clicked()
     }
     //store queue name
     //get all nodes with property queue name
-    //    QStringList nodes_list;
-    //read nodes file is it costly? what if you dont have that file?
-    //setup your download karma
-    //
-    //how to locate nodes file automatically? // if it is too costly, then dont do it.
-    //ok dont do it.
-    //self check
-
 
     client->executeShellCommand("qmgr -c 'del queue "+selected_queue.toStdString()+"'",outputString);
     emit refreshStartSignal();
@@ -3579,4 +3563,3 @@ void MainWindow::on_listWidget_nodes_hardware_itemClicked(QListWidgetItem *item)
     ui.label_selectedNodes_hardware->setText("节点：\n"+activated_node);
     plotHistoryRangeReset();
 }
-
