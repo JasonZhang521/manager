@@ -1,3 +1,10 @@
+/*
+ * embedded email account and password: embedded email account(hungclustermanager@163.com)
+ * and password(123581321)
+ *
+*/
+
+
 #include "contactinfoform.h"
 #include "ui_contactinfoform.h"
 #include <thirdPartyLib/src/SmtpMime>
@@ -29,8 +36,10 @@ void ContactInfoForm::on_pushButton_submit_clicked()
     m_message = ui->textEdit_message->toPlainText();
 
     SmtpClient smtp("smtp.qq.com", 465, SmtpClient::SslConnection);
+//    smtp.setUser("hungclustermanager@163.com");
     smtp.setUser("728670667@qq.com");
-    smtp.setPassword("123581321zjzj");
+
+    smtp.setPassword("123581321zj");
 
     MimeMessage message;
 

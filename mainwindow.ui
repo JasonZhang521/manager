@@ -139,11 +139,11 @@ border:0px solid #008080;</string>
            </column>
            <item>
             <property name="text">
-             <string>主节点</string>
+             <string> 集群</string>
             </property>
             <property name="icon">
              <iconset resource="hungclustermanager1.qrc">
-              <normaloff>:/Resources/node_32px.png</normaloff>:/Resources/node_32px.png</iconset>
+              <normaloff>:/Resources/temp/机柜.png</normaloff>:/Resources/temp/机柜.png</iconset>
             </property>
            </item>
            <item>
@@ -170,7 +170,7 @@ border:0px solid #008080;</string>
             </property>
             <property name="icon">
              <iconset resource="hungclustermanager1.qrc">
-              <normaloff>:/Resources/gpu_graphics_card_24px.png</normaloff>:/Resources/gpu_graphics_card_24px.png</iconset>
+              <normaloff>:/Resources/temp/gpu.png</normaloff>:/Resources/temp/gpu.png</iconset>
             </property>
            </item>
           </widget>
@@ -226,29 +226,6 @@ padding:2px 4px;
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_18">
-              <item>
-               <widget class="QLabel" name="label_titleIcon">
-                <property name="minimumSize">
-                 <size>
-                  <width>16</width>
-                  <height>30</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16</width>
-                  <height>30</height>
-                 </size>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">background-image: url(:/Resources/computer.png);
-border: 0px;</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
               <item>
                <widget class="QLabel" name="label_title">
                 <property name="sizePolicy">
@@ -358,7 +335,7 @@ font: 75 italic 11pt &quot;Arial&quot;;</string>
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>4</number>
+            <number>0</number>
            </property>
            <property name="iconSize">
             <size>
@@ -404,7 +381,7 @@ font: 75 italic 11pt &quot;Arial&quot;;</string>
                   <x>0</x>
                   <y>0</y>
                   <width>905</width>
-                  <height>490</height>
+                  <height>523</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_53">
@@ -457,22 +434,7 @@ border:1.5px solid #008080;</string>
                        <property name="lineWidth">
                         <number>2</number>
                        </property>
-                       <layout class="QHBoxLayout" name="horizontalLayout_27">
-                        <property name="spacing">
-                         <number>3</number>
-                        </property>
-                        <property name="leftMargin">
-                         <number>3</number>
-                        </property>
-                        <property name="topMargin">
-                         <number>3</number>
-                        </property>
-                        <property name="rightMargin">
-                         <number>3</number>
-                        </property>
-                        <property name="bottomMargin">
-                         <number>3</number>
-                        </property>
+                       <layout class="QHBoxLayout" name="horizontalLayout_57">
                         <item>
                          <widget class="QFrame" name="frame_19">
                           <property name="sizePolicy">
@@ -480,6 +442,18 @@ border:1.5px solid #008080;</string>
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                            </sizepolicy>
+                          </property>
+                          <property name="minimumSize">
+                           <size>
+                            <width>0</width>
+                            <height>140</height>
+                           </size>
+                          </property>
+                          <property name="maximumSize">
+                           <size>
+                            <width>16777215</width>
+                            <height>140</height>
+                           </size>
                           </property>
                           <property name="styleSheet">
                            <string notr="true">border:0 px;</string>
@@ -491,244 +465,8 @@ border:1.5px solid #008080;</string>
                            <enum>QFrame::Raised</enum>
                           </property>
                           <layout class="QVBoxLayout" name="verticalLayout_6">
-                           <property name="spacing">
-                            <number>3</number>
-                           </property>
-                           <property name="leftMargin">
-                            <number>3</number>
-                           </property>
-                           <property name="topMargin">
-                            <number>3</number>
-                           </property>
-                           <property name="rightMargin">
-                            <number>3</number>
-                           </property>
-                           <property name="bottomMargin">
-                            <number>3</number>
-                           </property>
-                           <item>
-                            <layout class="QHBoxLayout" name="horizontalLayout_25">
-                             <item>
-                              <widget class="QLabel" name="label_onAir">
-                               <property name="sizePolicy">
-                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                                </sizepolicy>
-                               </property>
-                               <property name="font">
-                                <font>
-                                 <family>黑体</family>
-                                 <pointsize>10</pointsize>
-                                 <weight>50</weight>
-                                 <italic>false</italic>
-                                 <bold>false</bold>
-                                </font>
-                               </property>
-                               <property name="text">
-                                <string>开机时间：</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QLabel" name="label_openTime">
-                               <property name="sizePolicy">
-                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                                </sizepolicy>
-                               </property>
-                               <property name="font">
-                                <font>
-                                 <family>黑体</family>
-                                 <pointsize>10</pointsize>
-                                 <weight>50</weight>
-                                 <italic>false</italic>
-                                 <bold>false</bold>
-                                </font>
-                               </property>
-                               <property name="styleSheet">
-                                <string notr="true">color: rgb(0, 0, 255);</string>
-                               </property>
-                               <property name="text">
-                                <string>null</string>
-                               </property>
-                              </widget>
-                             </item>
-                            </layout>
-                           </item>
                            <item>
                             <layout class="QHBoxLayout" name="horizontalLayout_26">
-                             <item>
-                              <widget class="QLabel" name="label_onRuning">
-                               <property name="sizePolicy">
-                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                                </sizepolicy>
-                               </property>
-                               <property name="font">
-                                <font>
-                                 <family>黑体</family>
-                                 <pointsize>10</pointsize>
-                                 <weight>50</weight>
-                                 <italic>false</italic>
-                                 <bold>false</bold>
-                                </font>
-                               </property>
-                               <property name="text">
-                                <string>运行时间：</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QLabel" name="label_RDay">
-                               <property name="sizePolicy">
-                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                                </sizepolicy>
-                               </property>
-                               <property name="font">
-                                <font>
-                                 <family>黑体</family>
-                                 <pointsize>10</pointsize>
-                                 <weight>50</weight>
-                                 <italic>false</italic>
-                                 <bold>false</bold>
-                                </font>
-                               </property>
-                               <property name="styleSheet">
-                                <string notr="true">color: rgb(0, 0, 255);</string>
-                               </property>
-                               <property name="text">
-                                <string>0</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QLabel" name="label_day_2">
-                               <property name="sizePolicy">
-                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                                </sizepolicy>
-                               </property>
-                               <property name="font">
-                                <font>
-                                 <family>黑体</family>
-                                 <pointsize>10</pointsize>
-                                 <weight>50</weight>
-                                 <italic>false</italic>
-                                 <bold>false</bold>
-                                </font>
-                               </property>
-                               <property name="text">
-                                <string>天</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QLabel" name="label_RHour">
-                               <property name="sizePolicy">
-                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                                </sizepolicy>
-                               </property>
-                               <property name="font">
-                                <font>
-                                 <family>黑体</family>
-                                 <pointsize>10</pointsize>
-                                 <weight>50</weight>
-                                 <italic>false</italic>
-                                 <bold>false</bold>
-                                </font>
-                               </property>
-                               <property name="styleSheet">
-                                <string notr="true">color: rgb(0, 0, 255);</string>
-                               </property>
-                               <property name="text">
-                                <string>0</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QLabel" name="label_hour_2">
-                               <property name="sizePolicy">
-                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                                </sizepolicy>
-                               </property>
-                               <property name="font">
-                                <font>
-                                 <family>黑体</family>
-                                 <pointsize>10</pointsize>
-                                 <weight>50</weight>
-                                 <italic>false</italic>
-                                 <bold>false</bold>
-                                </font>
-                               </property>
-                               <property name="text">
-                                <string>小时</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QLabel" name="label_RMin">
-                               <property name="sizePolicy">
-                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                                </sizepolicy>
-                               </property>
-                               <property name="font">
-                                <font>
-                                 <family>黑体</family>
-                                 <pointsize>10</pointsize>
-                                 <weight>50</weight>
-                                 <italic>false</italic>
-                                 <bold>false</bold>
-                                </font>
-                               </property>
-                               <property name="styleSheet">
-                                <string notr="true">color: rgb(0, 0, 255);</string>
-                               </property>
-                               <property name="text">
-                                <string>0</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QLabel" name="label_min_2">
-                               <property name="sizePolicy">
-                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                                </sizepolicy>
-                               </property>
-                               <property name="font">
-                                <font>
-                                 <family>黑体</family>
-                                 <pointsize>10</pointsize>
-                                 <weight>50</weight>
-                                 <italic>false</italic>
-                                 <bold>false</bold>
-                                </font>
-                               </property>
-                               <property name="text">
-                                <string>分</string>
-                               </property>
-                              </widget>
-                             </item>
-                            </layout>
-                           </item>
-                           <item>
-                            <layout class="QHBoxLayout" name="horizontalLayout_5">
-                             <property name="spacing">
-                              <number>2</number>
-                             </property>
                              <item>
                               <widget class="QLabel" name="label_2">
                                <property name="sizePolicy">
@@ -911,6 +649,210 @@ border:0px;</string>
                              </item>
                             </layout>
                            </item>
+                           <item>
+                            <layout class="QHBoxLayout" name="horizontalLayout_5">
+                             <item>
+                              <widget class="QLabel" name="label_onAir">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="text">
+                                <string>开机时间：</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_openTime">
+                               <property name="styleSheet">
+                                <string notr="true">color: rgb(0, 0, 255);
+border:0px;</string>
+                               </property>
+                               <property name="text">
+                                <string>null</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </item>
+                           <item>
+                            <layout class="QHBoxLayout" name="horizontalLayout_25">
+                             <item>
+                              <widget class="QLabel" name="label_onRuning">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="text">
+                                <string>运行时间：</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_RDay">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">color: rgb(0, 0, 255);</string>
+                               </property>
+                               <property name="text">
+                                <string>0</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_day_2">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="text">
+                                <string>天</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_RHour">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">color: rgb(0, 0, 255);</string>
+                               </property>
+                               <property name="text">
+                                <string>0</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_hour_2">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="text">
+                                <string>小时</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_RMin">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">color: rgb(0, 0, 255);</string>
+                               </property>
+                               <property name="text">
+                                <string>0</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_min_2">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="text">
+                                <string>分</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </item>
                           </layout>
                           <zorder></zorder>
                          </widget>
@@ -982,213 +924,217 @@ border:0px;</string>
                           <property name="frameShadow">
                            <enum>QFrame::Raised</enum>
                           </property>
-                          <layout class="QGridLayout" name="gridLayout">
-                           <item row="0" column="0">
-                            <widget class="QLabel" name="label_name">
-                             <property name="sizePolicy">
-                              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                               <horstretch>0</horstretch>
-                               <verstretch>0</verstretch>
-                              </sizepolicy>
-                             </property>
-                             <property name="minimumSize">
-                              <size>
-                               <width>0</width>
-                               <height>25</height>
-                              </size>
-                             </property>
-                             <property name="font">
-                              <font>
-                               <family>黑体</family>
-                               <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
-                              </font>
-                             </property>
-                             <property name="styleSheet">
-                              <string notr="true">border:0px;</string>
-                             </property>
-                             <property name="text">
-                              <string>主机名：</string>
-                             </property>
-                             <property name="alignment">
-                              <set>Qt::AlignCenter</set>
-                             </property>
-                            </widget>
-                           </item>
-                           <item row="0" column="1">
-                            <widget class="QLabel" name="label_nameshow">
-                             <property name="sizePolicy">
-                              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                               <horstretch>0</horstretch>
-                               <verstretch>0</verstretch>
-                              </sizepolicy>
-                             </property>
-                             <property name="minimumSize">
-                              <size>
-                               <width>0</width>
-                               <height>25</height>
-                              </size>
-                             </property>
-                             <property name="font">
-                              <font>
-                               <family>黑体</family>
-                               <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
-                              </font>
-                             </property>
-                             <property name="styleSheet">
-                              <string notr="true">color: rgb(0, 0, 255);
+                          <layout class="QHBoxLayout" name="horizontalLayout_27">
+                           <item>
+                            <layout class="QGridLayout" name="gridLayout">
+                             <item row="0" column="0">
+                              <widget class="QLabel" name="label_name">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>25</height>
+                                </size>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">border:0px;</string>
+                               </property>
+                               <property name="text">
+                                <string>主机名：</string>
+                               </property>
+                               <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="0" column="1">
+                              <widget class="QLabel" name="label_nameshow">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>25</height>
+                                </size>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">color: rgb(0, 0, 255);
 border:0px;</string>
-                             </property>
-                             <property name="text">
-                              <string>null</string>
-                             </property>
-                             <property name="alignment">
-                              <set>Qt::AlignCenter</set>
-                             </property>
-                            </widget>
-                           </item>
-                           <item row="1" column="0">
-                            <widget class="QLabel" name="label_ip">
-                             <property name="sizePolicy">
-                              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                               <horstretch>0</horstretch>
-                               <verstretch>0</verstretch>
-                              </sizepolicy>
-                             </property>
-                             <property name="minimumSize">
-                              <size>
-                               <width>0</width>
-                               <height>25</height>
-                              </size>
-                             </property>
-                             <property name="font">
-                              <font>
-                               <family>黑体</family>
-                               <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
-                              </font>
-                             </property>
-                             <property name="styleSheet">
-                              <string notr="true">border:0px;</string>
-                             </property>
-                             <property name="text">
-                              <string>IP地址：</string>
-                             </property>
-                             <property name="alignment">
-                              <set>Qt::AlignCenter</set>
-                             </property>
-                            </widget>
-                           </item>
-                           <item row="1" column="1">
-                            <widget class="QLabel" name="label_ipshow">
-                             <property name="sizePolicy">
-                              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                               <horstretch>0</horstretch>
-                               <verstretch>0</verstretch>
-                              </sizepolicy>
-                             </property>
-                             <property name="minimumSize">
-                              <size>
-                               <width>0</width>
-                               <height>25</height>
-                              </size>
-                             </property>
-                             <property name="font">
-                              <font>
-                               <family>黑体</family>
-                               <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
-                              </font>
-                             </property>
-                             <property name="styleSheet">
-                              <string notr="true">color: rgb(0, 0, 255);
+                               </property>
+                               <property name="text">
+                                <string>null</string>
+                               </property>
+                               <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="1" column="0">
+                              <widget class="QLabel" name="label_ip">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>25</height>
+                                </size>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">border:0px;</string>
+                               </property>
+                               <property name="text">
+                                <string>IP地址：</string>
+                               </property>
+                               <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="1" column="1">
+                              <widget class="QLabel" name="label_ipshow">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>25</height>
+                                </size>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">color: rgb(0, 0, 255);
 border:0px;</string>
-                             </property>
-                             <property name="text">
-                              <string>null</string>
-                             </property>
-                             <property name="alignment">
-                              <set>Qt::AlignCenter</set>
-                             </property>
-                            </widget>
-                           </item>
-                           <item row="2" column="0">
-                            <widget class="QLabel" name="label_mac">
-                             <property name="sizePolicy">
-                              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                               <horstretch>0</horstretch>
-                               <verstretch>0</verstretch>
-                              </sizepolicy>
-                             </property>
-                             <property name="minimumSize">
-                              <size>
-                               <width>0</width>
-                               <height>25</height>
-                              </size>
-                             </property>
-                             <property name="font">
-                              <font>
-                               <family>黑体</family>
-                               <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
-                              </font>
-                             </property>
-                             <property name="styleSheet">
-                              <string notr="true">border:0px;</string>
-                             </property>
-                             <property name="text">
-                              <string>MAC地址：</string>
-                             </property>
-                             <property name="alignment">
-                              <set>Qt::AlignCenter</set>
-                             </property>
-                            </widget>
-                           </item>
-                           <item row="2" column="1">
-                            <widget class="QLabel" name="label_macshow">
-                             <property name="sizePolicy">
-                              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                               <horstretch>0</horstretch>
-                               <verstretch>0</verstretch>
-                              </sizepolicy>
-                             </property>
-                             <property name="minimumSize">
-                              <size>
-                               <width>0</width>
-                               <height>25</height>
-                              </size>
-                             </property>
-                             <property name="font">
-                              <font>
-                               <family>黑体</family>
-                               <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
-                              </font>
-                             </property>
-                             <property name="styleSheet">
-                              <string notr="true">color: rgb(0, 0, 255);
+                               </property>
+                               <property name="text">
+                                <string>null</string>
+                               </property>
+                               <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="2" column="0">
+                              <widget class="QLabel" name="label_mac">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>25</height>
+                                </size>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">border:0px;</string>
+                               </property>
+                               <property name="text">
+                                <string>MAC地址：</string>
+                               </property>
+                               <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="2" column="1">
+                              <widget class="QLabel" name="label_macshow">
+                               <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                 <horstretch>0</horstretch>
+                                 <verstretch>0</verstretch>
+                                </sizepolicy>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>25</height>
+                                </size>
+                               </property>
+                               <property name="font">
+                                <font>
+                                 <family>黑体</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>50</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">color: rgb(0, 0, 255);
 border:0px;</string>
-                             </property>
-                             <property name="text">
-                              <string>null</string>
-                             </property>
-                             <property name="alignment">
-                              <set>Qt::AlignCenter</set>
-                             </property>
-                            </widget>
+                               </property>
+                               <property name="text">
+                                <string>null</string>
+                               </property>
+                               <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
                            </item>
                           </layout>
                          </widget>
@@ -1595,7 +1541,7 @@ border: 0 px;
                                   <string notr="true">color: rgb(0, 0, 255);</string>
                                  </property>
                                  <property name="text">
-                                  <string>null</string>
+                                  <string>0</string>
                                  </property>
                                 </widget>
                                </item>
@@ -1643,7 +1589,7 @@ border: 0 px;
                                   <string notr="true">color: rgb(0, 0, 255);</string>
                                  </property>
                                  <property name="text">
-                                  <string>null</string>
+                                  <string>0</string>
                                  </property>
                                 </widget>
                                </item>
@@ -1691,7 +1637,7 @@ border: 0 px;
                                   <string notr="true">color: rgb(0, 0, 255);</string>
                                  </property>
                                  <property name="text">
-                                  <string>null</string>
+                                  <string>0</string>
                                  </property>
                                 </widget>
                                </item>
@@ -1840,7 +1786,7 @@ color: rgb(0, 0, 255);</string>
                                 <string notr="true">color: rgb(0, 0, 255);</string>
                                </property>
                                <property name="text">
-                                <string>null</string>
+                                <string>0</string>
                                </property>
                               </widget>
                              </item>
@@ -1891,7 +1837,7 @@ color: rgb(0, 0, 255);</string>
                                 <string notr="true">color: rgb(0, 0, 255);</string>
                                </property>
                                <property name="text">
-                                <string>null</string>
+                                <string>0</string>
                                </property>
                               </widget>
                              </item>
@@ -2187,7 +2133,7 @@ border:1.5px solid #008080;</string>
                               <string notr="true">color: rgb(0, 0, 255);</string>
                              </property>
                              <property name="text">
-                              <string>1200mhz</string>
+                              <string>2401mhz</string>
                              </property>
                              <property name="alignment">
                               <set>Qt::AlignCenter</set>
@@ -2340,7 +2286,7 @@ border:1.5px solid #008080;</string>
                               <string notr="true">color: rgb(0, 0, 255);</string>
                              </property>
                              <property name="text">
-                              <string>GDDR5</string>
+                              <string>GDDR</string>
                              </property>
                              <property name="alignment">
                               <set>Qt::AlignCenter</set>
@@ -3054,7 +3000,7 @@ border:1.5px solid #008080;</string>
                         <item>
                          <widget class="QLabel" name="label_CPUUsage">
                           <property name="sizePolicy">
-                           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                            </sizepolicy>
@@ -3124,7 +3070,7 @@ border:1.5px solid #008080;</string>
                         <item>
                          <widget class="QLabel" name="label_RamUsage">
                           <property name="sizePolicy">
-                           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                            </sizepolicy>
@@ -4450,6 +4396,16 @@ p, li { white-space: pre-wrap; }
                    </widget>
                   </item>
                   <item>
+                   <widget class="QPushButton" name="pushButton_monitor_IBCard">
+                    <property name="text">
+                     <string>IB卡</string>
+                    </property>
+                    <property name="checkable">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <spacer name="horizontalSpacer_21">
                     <property name="orientation">
                      <enum>Qt::Horizontal</enum>
@@ -4482,7 +4438,7 @@ p, li { white-space: pre-wrap; }
                    <number>0</number>
                   </property>
                   <property name="currentIndex">
-                   <number>2</number>
+                   <number>0</number>
                   </property>
                   <widget class="QWidget" name="node">
                    <layout class="QVBoxLayout" name="verticalLayout_32">
@@ -5578,8 +5534,8 @@ p, li { white-space: pre-wrap; }
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>881</width>
-                         <height>441</height>
+                         <width>187</width>
+                         <height>191</height>
                         </rect>
                        </property>
                        <layout class="QVBoxLayout" name="verticalLayout_58">
@@ -5752,6 +5708,133 @@ p, li { white-space: pre-wrap; }
                     </item>
                    </layout>
                   </widget>
+                  <widget class="QWidget" name="page">
+                   <layout class="QVBoxLayout" name="verticalLayout_60">
+                    <item>
+                     <widget class="QGroupBox" name="groupBox_11">
+                      <property name="title">
+                       <string>IB nodes</string>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_59">
+                       <item>
+                        <widget class="QListWidget" name="listWidget_2">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>100</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>100</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <item>
+                          <property name="text">
+                           <string>comput1 HCA-1</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>comput2 HCA-1</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>comput3 HCA-1</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>admin HCA-1</string>
+                          </property>
+                         </item>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QTreeWidget" name="treeWidget_4">
+                         <column>
+                          <property name="text">
+                           <string>Port</string>
+                          </property>
+                         </column>
+                         <column>
+                          <property name="text">
+                           <string>state</string>
+                          </property>
+                         </column>
+                         <column>
+                          <property name="text">
+                           <string>phys state</string>
+                          </property>
+                         </column>
+                         <column>
+                          <property name="text">
+                           <string>rate</string>
+                          </property>
+                         </column>
+                         <column>
+                          <property name="text">
+                           <string>link layer</string>
+                          </property>
+                         </column>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QGroupBox" name="groupBox_12">
+                      <property name="title">
+                       <string>IB0 setting</string>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_58">
+                       <item>
+                        <widget class="QTreeWidget" name="treeWidget_5">
+                         <column>
+                          <property name="text">
+                           <string>index</string>
+                          </property>
+                         </column>
+                         <column>
+                          <property name="text">
+                           <string>HWaddr</string>
+                          </property>
+                         </column>
+                         <column>
+                          <property name="text">
+                           <string>inet address</string>
+                          </property>
+                         </column>
+                         <column>
+                          <property name="text">
+                           <string>bcast</string>
+                          </property>
+                         </column>
+                         <column>
+                          <property name="text">
+                           <string>mask</string>
+                          </property>
+                         </column>
+                         <column>
+                          <property name="text">
+                           <string>scope</string>
+                          </property>
+                         </column>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
                  </widget>
                 </item>
                </layout>
@@ -5870,7 +5953,7 @@ p, li { white-space: pre-wrap; }
                    <number>1</number>
                   </property>
                   <property name="currentIndex">
-                   <number>1</number>
+                   <number>0</number>
                   </property>
                   <widget class="QWidget" name="shutdownpage_stack">
                    <layout class="QVBoxLayout" name="verticalLayout_22">
@@ -7619,40 +7702,49 @@ QTabBar::tab:selected {
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_28">
              <item>
-              <widget class="QListWidget" name="listWidget_nodes_hardware">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
+              <widget class="QGroupBox" name="groupBox_13">
+               <property name="title">
+                <string>在线节点</string>
                </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>90</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>90</height>
-                </size>
-               </property>
-               <property name="movement">
-                <enum>QListView::Free</enum>
-               </property>
-               <property name="flow">
-                <enum>QListView::LeftToRight</enum>
-               </property>
-               <property name="viewMode">
-                <enum>QListView::IconMode</enum>
-               </property>
-               <property name="selectionRectVisible">
-                <bool>true</bool>
-               </property>
-               <property name="sortingEnabled">
-                <bool>true</bool>
-               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_60">
+                <item>
+                 <widget class="QListWidget" name="listWidget_nodes_hardware">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>90</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>90</height>
+                   </size>
+                  </property>
+                  <property name="movement">
+                   <enum>QListView::Free</enum>
+                  </property>
+                  <property name="flow">
+                   <enum>QListView::LeftToRight</enum>
+                  </property>
+                  <property name="viewMode">
+                   <enum>QListView::IconMode</enum>
+                  </property>
+                  <property name="selectionRectVisible">
+                   <bool>true</bool>
+                  </property>
+                  <property name="sortingEnabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
              <item>
@@ -7682,7 +7774,7 @@ QTabBar::tab:selected {
                      </property>
                      <property name="text">
                       <string>节点：
-comput23</string>
+null</string>
                      </property>
                      <property name="textFormat">
                       <enum>Qt::PlainText</enum>
@@ -8020,19 +8112,17 @@ border:0px solid #008080;
              <property name="lineWidth">
               <number>3</number>
              </property>
+             <property name="sortingEnabled">
+              <bool>true</bool>
+             </property>
              <column>
               <property name="text">
-               <string>…</string>
+               <string>类别</string>
               </property>
              </column>
              <column>
               <property name="text">
                <string>时间</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>簇</string>
               </property>
              </column>
              <column>

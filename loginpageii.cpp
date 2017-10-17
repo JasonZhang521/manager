@@ -12,6 +12,7 @@
 #include "simplecrypt.h"
 #include "clientworker.h"
 #include "contactpage.h"
+#include "contactinfoform.h"
 #include <QGraphicsDropShadowEffect>
 
 LoginPageII::LoginPageII(QWidget *parent) :
@@ -19,7 +20,7 @@ LoginPageII::LoginPageII(QWidget *parent) :
     ui(new Ui::LoginPageII)
 {
     ui->setupUi(this);
-    this->setWindowFlags(Qt::WindowTitleHint | Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    this->setWindowFlags(Qt::WindowTitleHint | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);// | Qt::WindowStaysOnTopHint
     this->setAttribute(Qt::WA_TranslucentBackground);
     //add shadows
     QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
@@ -56,7 +57,8 @@ LoginPageII::LoginPageII(QWidget *parent) :
     configure.verbosity = SSH_LOG_PROTOCOL;
     configure.unknownHostContinue = true;
 
-
+    ui->frame->setStyleSheet("QFrame {background-color: #f0fff0;border:1.5px solid #008080;}" "QPushButton { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #2198c0, stop: 1 #0d5ca6);}" "QPushButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #0d5ca6, stop: 1 #2198c0);}");
+    ui->frame_3->setStyleSheet("QFrame {background-color: #f0fff0;border:1.5px solid #008080;background: url(:/Resources/0001-01.png) no-repeat left center fixed color #f0fff0;}""QPushButton { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: rbg(140,140,198);}" "QPushButton:pressed {background-color: pink;}");
 
 
     w = new MainWindow();
@@ -370,7 +372,7 @@ void LoginPageII::processloggingIn()
 
 void LoginPageII::on_pushButton_clicked()
 {
-    ContactPage* c = new ContactPage;
+    ContactInfoForm *c = new ContactInfoForm;
     c->show();
 }
 

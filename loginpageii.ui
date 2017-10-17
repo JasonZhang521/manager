@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>604</width>
+    <height>411</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -113,9 +113,7 @@ background: url(:/Resources/0001-01.png) no-repeat left center fixed color #f0ff
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 170, 255);
-background-image: url(:/Resources/temp/bg2.png);</string>
+            <string notr="true"/>
            </property>
            <property name="text">
             <string>产品</string>
@@ -143,9 +141,7 @@ background-image: url(:/Resources/temp/bg2.png);</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 170, 255);
-background-image: url(:/Resources/temp/bg2.png);</string>
+            <string notr="true"/>
            </property>
            <property name="text">
             <string>运维</string>
@@ -173,9 +169,7 @@ background-image: url(:/Resources/temp/bg2.png);</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 170, 255);
-background-image: url(:/Resources/temp/bg2.png);</string>
+            <string notr="true"/>
            </property>
            <property name="text">
             <string>联系我们</string>
@@ -225,8 +219,8 @@ background-image: url(:/Resources/temp/bg2.png);</string>
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>634</width>
-           <height>138</height>
+           <width>598</width>
+           <height>69</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5"/>
@@ -486,6 +480,10 @@ border-color: rgb(255, 255, 222);</string>
                  <width>16777215</width>
                  <height>30</height>
                 </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">
+</string>
                </property>
                <property name="text">
                 <string>清除历史</string>

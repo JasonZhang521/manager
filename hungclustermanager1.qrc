@@ -99,5 +99,7 @@
         <file>Resources/temp/hardwareview.png</file>
         <file>Resources/temp/ftpview.png</file>
         <file>Resources/temp/managerview.png</file>
+        <file>Resources/temp/gpu.png</file>
+        <file>Resources/temp/机柜.png</file>
     </qresource>
 </RCC>

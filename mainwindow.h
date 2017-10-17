@@ -157,6 +157,8 @@ private slots:
     void updateGetHardwareInfo();
     void on_listWidget_nodes_hardware_itemClicked(QListWidgetItem *item);
 
+    void on_pushButton_monitor_IBCard_clicked();
+
 public slots:
     void processFtpUploadFinishEvent();//process after upload finished signal
     void processFtpDownloadFinishEvent();//process after recieve download finished signal
@@ -244,6 +246,9 @@ private:
     //declare ipc thread and worker
     QThread* ipcThread;
     IPCWorker* ipcWorker;
+
+    //event type
+    enum E_TYPE  {ALERT,EVENT};
 
 
      UiClient::UiClientProcess process;
@@ -335,6 +340,7 @@ private:
     void plotHistoryRangeReset();
     void setRAMHistoryPlotStyle();
     void setupCurrentUser(QString input);
+    void updateEventMessage(E_TYPE type, QString node_name, QString message);
 public:
     void setupSessionConfigure(SshConfigure configure);
 signals:

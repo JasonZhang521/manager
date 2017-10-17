@@ -299,6 +299,18 @@ void MainWindow::setupStyleSheet()
                         "QScrollArea::horizontalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
                         "QTreeWidget::verticalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
                         "QTreeWidget::horizontalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
+                        "QMenuBar {background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,stop:0 lightgray, stop:1 darkgray);}"
+                        "QMenuBar::item {spacing: 3px; /* spacing between menu bar items */padding: 1px 4px;background: transparent;border-radius: 4px;}"
+                        "QMenuBar::item:selected { /* when selected using mouse or keyboard */background: #a8a8a8;}"
+                        "QMenuBar::item:pressed {background: #888888;}"
+//                        "QProgressBar {border: 2px solid grey;border-radius: 5px;}"
+//                        "QProgressBar::chunk {background-color: #05B8CC;width: 20px;}"
+                        "QMenu {background-color: white;margin: 2px; /* some spacing around the menu */}"
+                        "QMenu::item {padding: 2px 25px 2px 20px;border: 1px solid transparent; /* reserve space for selection border */}"
+                        "QMenu::item:selected {border-color: darkblue;background: rgba(100, 100, 100, 150);}"
+                        "QMenu::icon:checked { /* appearance of a 'checked' icon */background: gray;border: 1px inset gray;position: absolute;top: 1px;right: 1px;bottom: 1px;left: 1px;}"
+                        "QMenu::separator {height: 2px;background: lightblue;margin-left: 10px;margin-right: 5px;}"
+                        "QMenu::indicator {width: 13px;height: 13px;}"
                         );
     //QTreeWidget::verticalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
     //    QTreeWidget::horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
@@ -368,6 +380,7 @@ void MainWindow::setupStyleSheet()
                                                                    "alternate-background-color: #D5EAFF;");
 
     //    ui.tabWidget->setTabPosition(QTabWidget::North);
+    updateEventMessage(EVENT,"com1","helloworld");
 }
 
 MainWindow::~MainWindow()
@@ -404,6 +417,18 @@ void MainWindow::createCircleBar(){
     ui.widget_cpubar->setPalette(p1);
     ui.widget_rambar->setValue(0);
     ui.widget_rambar->setPalette(p2);
+}
+
+void MainWindow::updateEventMessage(E_TYPE type,QString node_name,QString message)
+{
+    QTreeWidgetItem* item = new QTreeWidgetItem(ui.treeWidget_bottomMessage);
+    if(type==ALERT)
+        item->setText(0,QString("Alert"));
+    else if(type==EVENT)
+        item->setText(0,QString("Event"));
+    item->setData(1,Qt::EditRole,QTime::currentTime());
+    item->setText(2,node_name);
+    item->setText(3,message);
 }
 
 void MainWindow::setupThreads(SshConfigure configure){
@@ -524,7 +549,7 @@ void MainWindow::setupMac()
     //show mac address
     client->executeShellCommand("cat /sys/class/net/eth0/address",outputString);
     if(outputString!=""){
-        ui.label_macshow->setText(QString::fromStdString(outputString));
+        ui.label_macshow->setText(QString::fromStdString(outputString).remove("\n"));
     }
 }
 
@@ -582,7 +607,7 @@ void MainWindow::setupDateAndUptime()
 {
     client->executeShellCommand("date -d \"$(awk -F. '{print $1}' /proc/uptime) second ago\" +\"%Y-%m-%d %H:%M:%S\"",outputString);
     if(!outputString.empty())
-        openTime = QString::fromStdString(outputString);
+        openTime = QString::fromStdString(outputString).remove("\n");
     ui.label_openTime->setText(openTime);
 
     client->executeShellCommand("cat /proc/uptime| awk -F. '{run_days=$1 / 86400;run_hour=($1 % 86400)/3600;run_minute=($1 % 3600)/60;run_second=$1 % 60;printf(\"%d/%d/%d/%d\",run_days,run_hour,run_minute,run_second)}'",outputString);
@@ -602,13 +627,13 @@ void MainWindow::setupHostAndIP()
     if(!outputString.empty()){
         //        QStringList strList = QString::fromStdString(outputString).split(" ");
         //        ui.label_ipshow->setText(strList[1]);
-        ui.label_ipshow->setText(QString::fromStdString(outputString));
+        ui.label_ipshow->setText(QString::fromStdString(outputString).remove("\n"));
     }
 
 
     client->executeShellCommand("hostname",outputString);
     if(!outputString.empty())
-        ui.label_nameshow->setText(QString::fromStdString(outputString));
+        ui.label_nameshow->setText(QString::fromStdString(outputString).remove("\n"));
 }
 
 void MainWindow::setupStorageDisplay()
@@ -639,16 +664,22 @@ void MainWindow::setupStorageDisplay()
                 ui.label_usedShowRow1_4->setText(storageInfoList[i].split(QRegExp("[\\s]+"))[1]);
                 ui.label_sizeShowRow1_4->setText(storageInfoList[i].split(QRegExp("[\\s]+"))[0]);
                 ui.progressBar_distShowRow1_4->setValue(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt());
+                if(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt()>=80)
+                    updateEventMessage(ALERT,"管理节点","/ 目录存储空间不足");
             }
             if(QString::compare(storageInfoList[i].split(QRegExp("[\\s]+"))[4],"/boot",Qt::CaseInsensitive)==0){
                 ui.label_usedShowRow2_4->setText(storageInfoList[i].split(QRegExp("[\\s]+"))[1]);
                 ui.label_sizeShowRow2_4->setText(storageInfoList[i].split(QRegExp("[\\s]+"))[0]);
                 ui.progressBar_diskShowRow2_4->setValue(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt());
+                if(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt()>=80)
+                    updateEventMessage(ALERT,"管理节点","/boot 目录存储空间不足");
             }
             if(QString::compare(storageInfoList[i].split(QRegExp("[\\s]+"))[4],"/home",Qt::CaseInsensitive)==0){
                 ui.label_usedShowRow3_4->setText(storageInfoList[i].split(QRegExp("[\\s]+"))[1]);
                 ui.label_sizeShowRow3_4->setText(storageInfoList[i].split(QRegExp("[\\s]+"))[0]);
                 ui.progressBar_diskShowRow3_4->setValue(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt());
+                if(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt()>=80)
+                    updateEventMessage(ALERT,"管理节点","/home 目录存储空间不足");
             }
         }
 
@@ -674,11 +705,11 @@ void MainWindow::setupNodesDisplay()
         ui.treeWidget_nodeViewer->clear();
         //create root node1
         QTreeWidgetItem *mainNode = new QTreeWidgetItem(ui.treeWidget_nodeViewer);
-        mainNode->setIcon(0,QIcon(":/Resources/node_32px.png"));
+        mainNode->setIcon(0,QIcon(":/Resources/temp/机柜.png"));
         mainNode->setText(0,"主节点");
         //create son node of node1
         QTreeWidgetItem *controlComputer = new QTreeWidgetItem(mainNode);
-        controlComputer->setIcon(0,QIcon(":/Resources/computer.png"));
+        controlComputer->setIcon(0,QIcon(":/Resources/node_32px.png"));
         controlComputer->setText(0,"管理节点");
         //create root node2
         QTreeWidgetItem *cpuNode = new QTreeWidgetItem(ui.treeWidget_nodeViewer);
@@ -686,7 +717,7 @@ void MainWindow::setupNodesDisplay()
         cpuNode->setText(0,"CPU节点");
         for(int j=0;j<nodesList.size()-1;j++){
             QTreeWidgetItem *CPUComputer = new QTreeWidgetItem(cpuNode);
-            CPUComputer->setIcon(0,QIcon(":/Resources/computer.png"));
+            CPUComputer->setIcon(0,QIcon(":/Resources/cpu_intel.png"));
             CPUComputer->setText(0,nodesList[j][0]);
         }
 
@@ -695,7 +726,7 @@ void MainWindow::setupNodesDisplay()
         exchanger->setText(0,"交换机");
 
         QTreeWidgetItem *GPUNode = new QTreeWidgetItem(ui.treeWidget_nodeViewer);
-        GPUNode->setIcon(0,QIcon(":/Resources/gpu_graphics_card_24px.png"));
+        GPUNode->setIcon(0,QIcon(":/Resources/temp/gpu.png"));
         GPUNode->setText(0,"GPU节点");
 
         //initilizing nodes counters
@@ -1023,7 +1054,7 @@ void MainWindow::updateGetHardwareInfo()
         std::cout << "-----------------------" << std::endl;
         if(resp->getHostName().compare(activated_node.toStdString())==0)
         {
-            updateHardwareGUI(resp);
+           updateHardwareGUI(resp);
         }
     }
     qDebug()<<"check node list";
@@ -1174,6 +1205,12 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     //----------------------------------------------------------------//
 
 
+    //--------------------------------process GPU informations-----------------------//
+    
+
+
+    //-------------------------------------------------------------------------------//
+
 }
 
 void MainWindow::plotHistoryRangeReset()
@@ -1234,6 +1271,7 @@ void MainWindow::on_pushButton_monitor_node_clicked()
     ui.pushButton_monitor_node->setChecked(true);
     ui.pushButton_monitor_jobs->setChecked(false);
     ui.pushButton_monitor_GPU->setChecked(false);
+    ui.pushButton_monitor_IBCard->setChecked(false);
 
 }
 void MainWindow::on_pushButton_monitor_jobs_clicked()
@@ -1242,6 +1280,7 @@ void MainWindow::on_pushButton_monitor_jobs_clicked()
     ui.pushButton_monitor_node->setChecked(false);
     ui.pushButton_monitor_jobs->setChecked(true);
     ui.pushButton_monitor_GPU->setChecked(false);
+    ui.pushButton_monitor_IBCard->setChecked(false);
 }
 void MainWindow::on_pushButton_monitor_GPU_clicked()
 {
@@ -1249,7 +1288,18 @@ void MainWindow::on_pushButton_monitor_GPU_clicked()
     ui.pushButton_monitor_node->setChecked(false);
     ui.pushButton_monitor_jobs->setChecked(false);
     ui.pushButton_monitor_GPU->setChecked(true);
+    ui.pushButton_monitor_IBCard->setChecked(false);
 }
+
+void MainWindow::on_pushButton_monitor_IBCard_clicked()
+{
+    ui.stackedWidget_monior->setCurrentIndex(3);
+    ui.pushButton_monitor_node->setChecked(false);
+    ui.pushButton_monitor_jobs->setChecked(false);
+    ui.pushButton_monitor_GPU->setChecked(false);
+    ui.pushButton_monitor_IBCard->setChecked(true);
+}
+
 void MainWindow::on_pushButton_control_shutdownpage_clicked()
 {
     ui.stackedWidget_control->setCurrentIndex(0);
