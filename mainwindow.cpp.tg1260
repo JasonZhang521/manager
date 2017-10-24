@@ -289,7 +289,7 @@ void MainWindow::setupStyleSheet()
                         "QTabBar::tab:selected {margin-left: -4px;margin-right: -4px;}"
                         "QTabBar::tab:selected {background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb(236, 255, 172), stop:1 #f0fff0);}"
                         "QTabBar::tab:selected {border-top-left-radius: 0px;border-bottom-left-radius: 0px;/*background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f0fff0, stop: 0.4 #f0fff0,stop: 0.5 #f0fff0, stop: 1.0 #f0fff0);*/}"
-                        "QTabBar::tab {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);border: 2px solid #C4C4C3;border-bottom-color: #C2C7CB;border-top-left-radius: 10px;border-bottom-left-radius: 10px;min-width: 18ex;}"
+                        "QTabBar::tab {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);border: 2px solid #C4C4C3;border-bottom-color: #C2C7CB;border-top-left-radius: 10px;border-bottom-left-radius: 10px;min-width: 8ex;}"
                         "QTabWidget::pane { border-top: 2px solid #C2C7CB;} "
                         "QTabBar::tab {padding-bottom: 10 px; background-color: #FFD39B/*rgba(211, 255, 211, 255)*/;} "
                         "QTabBar::tab:hover {background-color: rgb(28, 67, 255);}"
@@ -836,25 +836,7 @@ void MainWindow::setupNodesDisplay()
         for (int i = 0 ;i<nodesList.size()-1;i++){
             QTreeWidgetItem *nodeItem = new QTreeWidgetItem(ui.treeWidget_control_nodes);
             nodeItem->setText(0,nodesList[i][0]);
-            if(nodesList[i][1].split(" = ")[1]=="free")
-            {
-                nodeItem->setText(1,"空闲");
-                nodeItem->setTextColor(1,Qt::green);
-
-            }
-
-           else if(nodesList[i][1].split(" = ")[1]=="down")
-            {
-
-                nodeItem->setText(1,"无响应");
-                nodeItem->setTextColor(1,Qt::red);
-            }
-            else
-            {
-
-                nodeItem->setText(1,"负载");
-                nodeItem->setTextColor(1,Qt::blue);
-            }
+            nodeItem->setText(1,nodesList[i][1].split(" = ")[1]);
         }
 
     }
@@ -982,9 +964,15 @@ void MainWindow::setupCPUInfo()
         cpuCores=QString::fromStdString(outputString).remove("\n").toInt();
         ui.label_CPUCoreShow->setText(QString::number(cpuCores));
     }
-        client->executeShellCommand("cat /proc/cpuinfo | grep 'model name' | awk -F: '{print $2}'",outputString);
-        ui.label_CPUTypeShow->setText(QString::fromStdString(outputString).split("\n")[0]);
-
+    //    client->executeShellCommand("cat /proc/cpuinfo",outputString);
+    //    get cores
+    //            QRegularExpression re("(?<=^CPU\(s\):)(.*)");
+    //    QRegularExpressionMatch match = re.match(QString::fromStdString(outputString));
+    //    ui.textBrowser_job_submit_show->setPlainText("QString::fromStdString(outputString)");
+    //    if (match.hasMatch()) {
+    //        QString cores = match.captured(0).replace(" ","");
+    //        ui.label_CPUCoreShow->setText(cores);
+    //    }
 }
 
 void MainWindow::setupRamInfo()
@@ -2769,32 +2757,13 @@ void MainWindow::updateNODESGUI(QString output){
             if(nodesList[i].size()>1)
             {
                 nodeItem->setText(0,nodesList[i][0]);
-                if(nodesList[i][1].split(" = ")[1]=="free")
-                {
-                    nodeItem->setText(1,"空闲");
-                    nodeItem->setTextColor(1,Qt::green);
-
-                }
-
-               else if(nodesList[i][1].split(" = ")[1]=="down")
-                {
-
-                    nodeItem->setText(1,"无响应");
-                    nodeItem->setTextColor(1,Qt::red);
+                nodeItem->setText(1,nodesList[i][1].split(" = ")[1]);
+                if(nodesList[i][1].split(" = ")[1].compare("down")==0){
 
                     updateEventMessage(ERR,nodesList[i][0],"节点无响应");
                     ui.label_3->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
                     downNodes++;
                 }
-                else
-                {
-
-                    nodeItem->setText(1,"负载");
-                    nodeItem->setTextColor(1,Qt::blue);
-                }
-//                if(nodesList[i][1].split(" = ")[1].compare("down")==0){
-
-//                }
             }
 
         }

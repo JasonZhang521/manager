@@ -159,6 +159,9 @@ private slots:
 
     void on_pushButton_monitor_IBCard_clicked();
 
+    void on_treeWidget_bottomMessage_customContextMenuRequested(const QPoint &pos);
+
+    void messageBoxClearSlot();
 public slots:
     void processFtpUploadFinishEvent();//process after upload finished signal
     void processFtpDownloadFinishEvent();//process after recieve download finished signal
@@ -248,7 +251,7 @@ private:
     IPCWorker* ipcWorker;
 
     //event type
-    enum E_TYPE  {ALERT,EVENT};
+    enum E_TYPE  {ALERT,EVENT,DISK,RAM,TEMP,MESSAGE,ERR};
 
 
      UiClient::UiClientProcess process;
