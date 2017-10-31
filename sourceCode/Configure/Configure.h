@@ -14,6 +14,7 @@
 
 class ExceptionConfigure;
 class TraceLogConfigure;
+class SystemEnvironmentConfigure;
 
 class Configure {
 private:
@@ -22,6 +23,7 @@ private:
 private:
   ExceptionConfigure* exceptionConfigure_;
   TraceLogConfigure* traceLogConfigure_;
+  SystemEnvironmentConfigure* systemEnvironmentConfigure_;
 
 public:
   /* Exception Configuration */
@@ -47,6 +49,9 @@ public:
   bool isConsoleLogStart() const;
   void startConsoleLog();
   void stopConsoleLog();
+  /* System environment */
+  const std::string& getEnvironmentTempPath();
+  void setEnvironmentTempPath(const std::string& path);
 private:
   static Configure* instance_;
 public:

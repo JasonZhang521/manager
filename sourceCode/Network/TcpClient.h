@@ -30,10 +30,27 @@ class TcpClient : public ITcpClient, public Io::IIoEvent
         GETCLASSNAME(ConnectionTimer)
     };
 
+    class OutBuffer
+    {
+        char* buffer_;
+        unsigned int bufferSize_;
+        unsigned int pos_;
+        unsigned int dataSize_;
+        const static unsigned int DefaultBufferSize = 128 * 1024;
+    public:
+        OutBuffer();
+        ~OutBuffer();
+        void append(const void* buf, unsigned int len);
+        char* getUnwrittenBuffer();
+        unsigned getUnwrittenSize() const;
+        void resetPos(unsigned int outSize);
+    };
+
     TcpState state_;
     std::shared_ptr<TcpSocket> socket_;
     std::shared_ptr<ITcpConnectionReceiver> tcpConnectionReceiver_;
     std::shared_ptr<ConnectionTimer> connectionTimer_;
+    OutBuffer outBuffer_;
 public:
     TcpClient(const IpSocketEndpoint& localEndpoint,
               const IpSocketEndpoint& remoteEndpoint,

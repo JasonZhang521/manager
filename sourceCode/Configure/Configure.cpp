@@ -1,20 +1,15 @@
-/*
- * Configure.cpp
- *
- *  Created on: 2015Äê4ÔÂ23ÈÕ
- *      Author: euwyzbc
- */
-
 #include "Configure.h"
 #include "ExceptionConfigure.h"
 #include "TraceLogConfigure.h"
+#include "SystemEnvironmentConfigure.h"
 
 //namespace Common{
 
 Configure* Configure::instance_ = 0;
 Configure::Configure()
-:exceptionConfigure_(new ExceptionConfigure())
-,traceLogConfigure_(new TraceLogConfigure())
+ : exceptionConfigure_(new ExceptionConfigure())
+ , traceLogConfigure_(new TraceLogConfigure())
+ , systemEnvironmentConfigure_(new SystemEnvironmentConfigure())
 {
   // TODO Auto-generated constructor stub
 }
@@ -23,6 +18,7 @@ Configure::~Configure() {
   // TODO Auto-generated destructor stub
   delete exceptionConfigure_;
   delete traceLogConfigure_;
+  delete systemEnvironmentConfigure_;
 }
 
 
@@ -122,7 +118,16 @@ void Configure::stopConsoleLog()
   traceLogConfigure_->stopConsoleLog();
 }
 
+/* System environment */
+const std::string& Configure::getEnvironmentTempPath()
+{
+    return systemEnvironmentConfigure_->getTempPath();
+}
 
+void Configure::setEnvironmentTempPath(const std::string& path)
+{
+    systemEnvironmentConfigure_->setTempPath(path);
+}
 
 
 Configure& Configure::getInstance()

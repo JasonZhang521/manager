@@ -60,6 +60,11 @@ bool SshClient::getFile(const std::string& remoteFile, const std::string& localD
     return session_->getFile(remoteFile, localDir);
 }
 
+bool SshClient::getFileFromLastPos(const std::string& remoteFile, const std::string& localFile)
+{
+    return session_->getFileFromLastPos(remoteFile, localFile);
+}
+
 bool SshClient::putFile(const std::string& localFile, const std::string& remoteDir)
 {
     return session_->putFile(localFile, remoteDir);
@@ -68,6 +73,31 @@ bool SshClient::putFile(const std::string& localFile, const std::string& remoteD
 bool SshClient::listDir(const std::string& dirPath, SftpDirAttributes& dirAttributes)
 {
 	return session_->listDir(dirPath, dirAttributes);
+}
+
+void SshClient::stopGetFile()
+{
+    session_->stopGetFile();
+}
+
+void SshClient::stopPutFile()
+{
+    session_->stopPutFile();
+}
+
+bool SshClient::listRemoteFileAttribute(const std::string& filePath, SftpFileAttribute& fileAttributes)
+{
+    return session_->listRemoteFileAttribute(filePath, fileAttributes);
+}
+
+bool SshClient::isRemoteFileExist(const std::string& remoteFile)
+{
+   return session_->isRemoteFileExist(remoteFile);
+}
+
+bool SshClient::renameRemoteFile(const std::string& srcFile, const std::string& dstFile)
+{
+    return session_->renameRemoteFile(srcFile, dstFile);
 }
 
 }

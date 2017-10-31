@@ -180,7 +180,9 @@ SOURCES += \
     sourceCode/ShellCommandMessage/ShellCommandMessageFactory.cpp \
     sourceCode/ShellCommandMessage/ShellCommandRequest.cpp \
     sourceCode/ShellCommandMessage/ShellCommandResponse.cpp \
-    sourceCode/Environment/ShellCommandGenericOutput.cpp
+    sourceCode/Environment/ShellCommandGenericOutput.cpp \
+    sourceCode/Configure/SystemEnvironmentConfigure.cpp \
+    sourceCode/PlatformWrapper/SystemApi.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -371,7 +373,13 @@ HEADERS += \
     sourceCode/ShellCommandMessage/ShellCommandMessageFactory.h \
     sourceCode/ShellCommandMessage/ShellCommandRequest.h \
     sourceCode/ShellCommandMessage/ShellCommandResponse.h \
-    sourceCode/Environment/ShellCommandGenericOutput.h
+    sourceCode/Environment/ShellCommandGenericOutput.h \
+    sourceCode/Configure/SystemEnvironmentConfigure.h \
+    sourceCode/TraceLog/Trace.h \
+    sourceCode/TraceLog/TraceBuf.h \
+    sourceCode/TraceLog/TraceConsole.h \
+    sourceCode/TraceLog/TraceFile.h \
+    sourceCode/PlatformWrapper/SystemApi.h
 
 
 

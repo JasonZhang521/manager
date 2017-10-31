@@ -56,6 +56,18 @@ public:
         write(&d, sizeof(double));
     }
 
+    template<typename T>
+    bool modify(const T& val, unsigned int start)
+    {
+        if (start + sizeof(T) > dataSize_)
+        {
+            return false;
+        }
+        T v = PlatformWrapper::H2N(val);
+        DataToBuffer::Write<T>(buffer_ + start, v);
+        return true;
+    }
+
     void* getBuffer() const;
     unsigned int getBufferSize() const;
     unsigned int getDataSize() const;
@@ -65,11 +77,6 @@ public:
     std::ostream& operator << (std::ostream& os) const;
 private:
     void resizeBuffer(unsigned int additionSize);
-    template <typename T>
-    T HtoN(T val)
-    {
-
-    }
 
 public:
     const static unsigned int DefaultWriteBufferSize;

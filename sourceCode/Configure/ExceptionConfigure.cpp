@@ -1,10 +1,3 @@
-/*
- * ExceptionConfigure.cpp
- *
- *  Created on: 2015Äê4ÔÂ23ÈÕ
- *      Author: euwyzbc
- */
-
 #include "ExceptionConfigure.h"
 
 //namespace Common{

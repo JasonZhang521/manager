@@ -16,6 +16,7 @@ namespace IpcMessage {
 
 class IIpcMessage
 {
+    uint32_t messageLength_;
     uint64_t messageId_;
     std::string hostName_;
     Network::IpSocketEndpoint source_;
@@ -29,6 +30,8 @@ public:
     virtual std::ostream& operator<< (std::ostream& os) const = 0;
 
 public:
+    uint32_t getMessageLength() const;
+    void setMessageLength(uint32_t len);
     uint64_t getMessageId() const;
     const std::string& getHostName() const;
     void setHostName(const std::string& hostName);
@@ -36,6 +39,7 @@ public:
     void setSource(const Network::IpSocketEndpoint& source);
     const Network::IpSocketEndpoint& getDestnation() const;
     void setDestnation(const Network::IpSocketEndpoint& destnation);
+
 protected:
     void write(Serialize::WriteBuffer& writeBuffer) const;
     void read(Serialize::ReadBuffer& readBuffer);

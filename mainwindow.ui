@@ -354,7 +354,8 @@ font: 75 italic 11pt &quot;Arial&quot;;</string>
             <bool>false</bool>
            </property>
            <property name="styleSheet">
-            <string notr="true">background-color: #f0fff0;</string>
+            <string notr="true">background-color: #f0fff0;
+</string>
            </property>
            <property name="tabPosition">
             <enum>QTabWidget::West</enum>
@@ -409,7 +410,7 @@ font: 75 italic 11pt &quot;Arial&quot;;</string>
                   <x>0</x>
                   <y>0</y>
                   <width>891</width>
-                  <height>540</height>
+                  <height>542</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_53">
@@ -3277,6 +3278,28 @@ border:1.5px solid #008080;</string>
                  <layout class="QHBoxLayout" name="horizontalLayout_37">
                   <item>
                    <widget class="QPushButton" name="pushButton_job_kill">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">* { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: #98fb98/*rbg(140,140,198)*/;} 
+*:checked {background-color: pink;}</string>
+                    </property>
                     <property name="text">
                      <string>查杀</string>
                     </property>
@@ -3296,6 +3319,28 @@ border:1.5px solid #008080;</string>
                   </item>
                   <item>
                    <widget class="QPushButton" name="pushButton_job_submit">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">* { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: #98fb98/*rbg(140,140,198)*/;} 
+*:checked {background-color: pink;}</string>
+                    </property>
                     <property name="text">
                      <string>提交</string>
                     </property>
@@ -3309,6 +3354,28 @@ border:1.5px solid #008080;</string>
                   </item>
                   <item>
                    <widget class="QPushButton" name="pushButton_job_file">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">* { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: #98fb98/*rbg(140,140,198)*/;} 
+*:checked {background-color: pink;}</string>
+                    </property>
                     <property name="text">
                      <string>文件</string>
                     </property>
@@ -4467,6 +4534,28 @@ p, li { white-space: pre-wrap; }
                  <layout class="QHBoxLayout" name="horizontalLayout_20">
                   <item>
                    <widget class="QPushButton" name="pushButton_monitor_node">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">* { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: #98fb98/*rbg(140,140,198)*/;} 
+*:checked {background-color: pink;}</string>
+                    </property>
                     <property name="text">
                      <string>节点</string>
                     </property>
@@ -4486,6 +4575,28 @@ p, li { white-space: pre-wrap; }
                   </item>
                   <item>
                    <widget class="QPushButton" name="pushButton_monitor_jobs">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">* { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: #98fb98/*rbg(140,140,198)*/;} 
+*:checked {background-color: pink;}</string>
+                    </property>
                     <property name="text">
                      <string>作业</string>
                     </property>
@@ -4496,6 +4607,28 @@ p, li { white-space: pre-wrap; }
                   </item>
                   <item>
                    <widget class="QPushButton" name="pushButton_monitor_GPU">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">* { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: #98fb98/*rbg(140,140,198)*/;} 
+*:checked {background-color: pink;}</string>
+                    </property>
                     <property name="text">
                      <string>GPU节点</string>
                     </property>
@@ -4506,6 +4639,28 @@ p, li { white-space: pre-wrap; }
                   </item>
                   <item>
                    <widget class="QPushButton" name="pushButton_monitor_IBCard">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">* { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: #98fb98/*rbg(140,140,198)*/;} 
+*:checked {background-color: pink;}</string>
+                    </property>
                     <property name="text">
                      <string>IB卡</string>
                     </property>
@@ -6089,6 +6244,22 @@ font: 7pt &quot;黑体&quot;;</string>
                  <layout class="QHBoxLayout" name="horizontalLayout_30">
                   <item>
                    <widget class="QPushButton" name="pushButton_control_shutdownpage">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">* { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: #98fb98/*rbg(140,140,198)*/;} 
+*:checked {background-color: pink;}</string>
+                    </property>
                     <property name="text">
                      <string>关机</string>
                     </property>
@@ -6099,6 +6270,22 @@ font: 7pt &quot;黑体&quot;;</string>
                   </item>
                   <item>
                    <widget class="QPushButton" name="pushButton_control_userpage">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">* { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: #98fb98/*rbg(140,140,198)*/;} 
+*:checked {background-color: pink;}</string>
+                    </property>
                     <property name="text">
                      <string>用户</string>
                     </property>
@@ -6109,6 +6296,22 @@ font: 7pt &quot;黑体&quot;;</string>
                   </item>
                   <item>
                    <widget class="QPushButton" name="pushButton_control_queuepage">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">* { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: #98fb98/*rbg(140,140,198)*/;} 
+*:checked {background-color: pink;}</string>
+                    </property>
                     <property name="text">
                      <string>队列</string>
                     </property>
@@ -6119,6 +6322,22 @@ font: 7pt &quot;黑体&quot;;</string>
                   </item>
                   <item>
                    <widget class="QPushButton" name="pushButton_control_computingtimepage">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>90</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">* { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: #98fb98/*rbg(140,140,198)*/;} 
+*:checked {background-color: pink;}</string>
+                    </property>
                     <property name="text">
                      <string>机时</string>
                     </property>
@@ -6157,28 +6376,27 @@ font: 7pt &quot;黑体&quot;;</string>
                    <number>1</number>
                   </property>
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>1</number>
                   </property>
                   <widget class="QWidget" name="shutdownpage_stack">
                    <layout class="QVBoxLayout" name="verticalLayout_22">
                     <item>
-                     <widget class="QTreeWidget" name="treeWidget_control_nodes">
+                     <widget class="QListWidget" name="listWidget_control_nodes">
                       <property name="styleSheet">
                        <string notr="true">background-color: rgb(252, 252, 252);</string>
                       </property>
                       <property name="selectionMode">
                        <enum>QAbstractItemView::ExtendedSelection</enum>
                       </property>
-                      <column>
-                       <property name="text">
-                        <string>节点</string>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
-                        <string>状态</string>
-                       </property>
-                      </column>
+                      <property name="flow">
+                       <enum>QListView::LeftToRight</enum>
+                      </property>
+                      <property name="spacing">
+                       <number>3</number>
+                      </property>
+                      <property name="viewMode">
+                       <enum>QListView::IconMode</enum>
+                      </property>
                      </widget>
                     </item>
                     <item>
@@ -6291,6 +6509,9 @@ QTabBar::tab:selected {
                             <property name="contextMenuPolicy">
                              <enum>Qt::CustomContextMenu</enum>
                             </property>
+                            <property name="styleSheet">
+                             <string notr="true">background-color: rgb(255, 255, 255);</string>
+                            </property>
                             <property name="selectionMode">
                              <enum>QAbstractItemView::SingleSelection</enum>
                             </property>
@@ -6316,6 +6537,9 @@ QTabBar::tab:selected {
                           </item>
                           <item>
                            <widget class="QTreeWidget" name="treeWidget_manager_user_view2">
+                            <property name="styleSheet">
+                             <string notr="true">background-color: rgb(255, 255, 255);</string>
+                            </property>
                             <column>
                              <property name="text">
                               <string>队列</string>
@@ -6489,6 +6713,9 @@ QTabBar::tab:selected {
                            <layout class="QVBoxLayout" name="verticalLayout_14">
                             <item>
                              <widget class="QScrollArea" name="scrollArea_4">
+                              <property name="styleSheet">
+                               <string notr="true">background-color: rgb(255, 255, 255);</string>
+                              </property>
                               <property name="widgetResizable">
                                <bool>true</bool>
                               </property>
@@ -6923,7 +7150,7 @@ QTabBar::tab:selected {
 }</string>
                       </property>
                       <property name="currentIndex">
-                       <number>1</number>
+                       <number>0</number>
                       </property>
                       <widget class="QWidget" name="view">
                        <attribute name="title">
@@ -6932,6 +7159,9 @@ QTabBar::tab:selected {
                        <layout class="QVBoxLayout" name="verticalLayout_39">
                         <item>
                          <widget class="QTreeWidget" name="treeWidget_control_queue_view">
+                          <property name="styleSheet">
+                           <string notr="true">background-color: rgb(255, 255, 255);</string>
+                          </property>
                           <property name="tabKeyNavigation">
                            <bool>false</bool>
                           </property>
@@ -7012,6 +7242,9 @@ QTabBar::tab:selected {
                            <layout class="QHBoxLayout" name="horizontalLayout_48">
                             <item>
                              <widget class="QScrollArea" name="scrollArea_5">
+                              <property name="styleSheet">
+                               <string notr="true">background-color: rgb(255, 255, 255);</string>
+                              </property>
                               <property name="widgetResizable">
                                <bool>true</bool>
                               </property>
@@ -7383,6 +7616,9 @@ QTabBar::tab:selected {
                        <layout class="QVBoxLayout" name="verticalLayout_46">
                         <item>
                          <widget class="QTreeWidget" name="treeWidget_control_time_statics">
+                          <property name="styleSheet">
+                           <string notr="true">background-color: rgb(255, 255, 255);</string>
+                          </property>
                           <property name="alternatingRowColors">
                            <bool>true</bool>
                           </property>
@@ -7560,6 +7796,9 @@ QTabBar::tab:selected {
                    <property name="contextMenuPolicy">
                     <enum>Qt::CustomContextMenu</enum>
                    </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(255, 255, 255);</string>
+                   </property>
                    <property name="editTriggers">
                     <set>QAbstractItemView::DoubleClicked|QAbstractItemView::SelectedClicked</set>
                    </property>
@@ -7733,6 +7972,9 @@ QTabBar::tab:selected {
                    </property>
                    <property name="contextMenuPolicy">
                     <enum>Qt::CustomContextMenu</enum>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(255, 255, 255);</string>
                    </property>
                    <property name="sizeAdjustPolicy">
                     <enum>QAbstractScrollArea::AdjustToContents</enum>
@@ -8022,7 +8264,7 @@ QTabBar::tab:selected {
                   <x>0</x>
                   <y>0</y>
                   <width>891</width>
-                  <height>411</height>
+                  <height>413</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_51">
@@ -8609,6 +8851,14 @@ border:0px solid #008080;
     <string>Ctrl+K</string>
    </property>
   </action>
+  <action name="action_changeUser">
+   <property name="text">
+    <string>切换用户</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -8679,7 +8929,7 @@ border:0px solid #008080;
   <tabstop>pushButton_control_userpage</tabstop>
   <tabstop>pushButton_control_queuepage</tabstop>
   <tabstop>pushButton_control_computingtimepage</tabstop>
-  <tabstop>treeWidget_control_nodes</tabstop>
+  <tabstop>listWidget_control_nodes</tabstop>
   <tabstop>pushButton_shutdown</tabstop>
   <tabstop>pushButton_restart</tabstop>
   <tabstop>tabWidget_control_user</tabstop>

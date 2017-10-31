@@ -128,17 +128,16 @@ bool SshClientSession::setup()
 	}
 
 	if (!verifyUser())
-    {
+	{
 		return false;
 	}
-
    
 	return true;
 }
 
 bool SshClientSession::shutdown()
 {
-    TRACE_NOTICE("Shutdown the ssh session for client session!");
+    TRACE_NOTICE("Shutdow the ssh session for client session!");
 	disconnect();
     return true;
 }
@@ -204,6 +203,16 @@ bool SshClientSession::getFile(const std::string& remoteFile, const std::string&
     return sftpSession_->getFile(remoteFile, localDir);
 }
 
+bool SshClientSession::getFileFromLastPos(const std::string& remoteFile, const std::string& localFile)
+{
+    if (sftpSession_ == NULL)
+    {
+        TRACE_WARNING("Ssh ftp session is NULL");
+        App::ExitNormal();
+    }
+    return sftpSession_->getFileFromLastPos(remoteFile, localFile);
+}
+
 bool SshClientSession::putFile(const std::string& localFile, const std::string& remoteDir)
 {
     if (sftpSession_ == NULL)
@@ -224,6 +233,56 @@ bool SshClientSession::listDir(const std::string& dirPath, SftpDirAttributes& di
     return sftpSession_->listDir(dirPath, dirAttributes);
 }
 
+void SshClientSession::stopGetFile()
+{
+    if (sftpSession_ == NULL)
+    {
+        TRACE_WARNING("Ssh ftp session is NULL");
+        App::ExitNormal();
+    }
+    sftpSession_->stopGetFile();
+}
+
+void SshClientSession::stopPutFile()
+{
+    if (sftpSession_ == NULL)
+    {
+        TRACE_WARNING("Ssh ftp session is NULL");
+        App::ExitNormal();
+    }
+    sftpSession_->stopPutFile();
+}
+
+bool SshClientSession::listRemoteFileAttribute(const std::string& filePath, SftpFileAttribute& fileAttribute)
+{
+    if (sftpSession_ == NULL)
+    {
+        TRACE_WARNING("Ssh ftp session is NULL");
+        App::ExitNormal();
+    }
+    return sftpSession_->listRemoteFileAttribute(filePath, fileAttribute);
+}
+
+bool SshClientSession::isRemoteFileExist(const std::string& remoteFile)
+{
+    if (sftpSession_ == NULL)
+    {
+        TRACE_WARNING("Ssh ftp session is NULL");
+        App::ExitNormal();
+    }
+    return sftpSession_->isRemoteFileExist(remoteFile);
+}
+
+bool SshClientSession::renameRemoteFile(const std::string& srcFile, const std::string& dstFile)
+{
+    if (sftpSession_ == NULL)
+    {
+        TRACE_WARNING("Ssh ftp session is NULL");
+        App::ExitNormal();
+    }
+    return sftpSession_->renameRemoteFile(srcFile, dstFile);
+}
+
 bool SshClientSession::shutdownFtpSessionl()
 {
     bool rc = sftpSession_->shutdown();
@@ -239,11 +298,22 @@ void SshClientSession::disconnect()
 
 bool SshClientSession::verifyKnownhost()
 {
-	 unsigned char *hash = NULL;
 	 int state = ssh_is_server_known(session_);
-	 int hlen = ssh_get_pubkey_hash(session_, &hash);
-	 if (hlen < 0)
-		 return -1;
+     ssh_key srv_pubkey;
+     int rc = ssh_get_publickey(session_, &srv_pubkey);
+     if (rc != SSH_AUTH_SUCCESS)
+     {
+         TRACE_WARNING("Get server public key Error: " << ssh_get_error(session_));
+         return false;
+     }
+     unsigned char *hash = NULL;
+     size_t hlen = 0;
+     rc = ssh_get_publickey_hash(srv_pubkey,
+                                 SSH_PUBLICKEY_HASH_SHA1,
+                                 &hash,
+                                 &hlen);
+     ssh_key_free(srv_pubkey);
+
 	 char *hexa = 0;;
 	 switch (state)
 	 {
@@ -303,12 +373,9 @@ bool SshClientSession::verifyUser()
 	 if (rc != SSH_AUTH_SUCCESS)
 	 {
 	     TRACE_WARNING("Error authenticating with password: " << ssh_get_error(session_));
-
 		 return false; 
-     }
+	 }
 	 return true;
 }
-
-
 
 }

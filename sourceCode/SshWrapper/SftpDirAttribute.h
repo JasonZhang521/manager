@@ -7,13 +7,13 @@
 namespace SshWrapper
 {
 
-struct SftpDirAttribute
+struct SftpFileAttribute
 {
-	SftpDirAttribute();
-	SftpDirAttribute(const SftpDirAttribute& dirAttribute);
-	SftpDirAttribute& operator=(const SftpDirAttribute& dirAttribute);
-	bool operator==(const SftpDirAttribute& dirAttribute);
-	bool operator!=(const SftpDirAttribute& dirAttribute);
+    SftpFileAttribute();
+    SftpFileAttribute(const SftpFileAttribute& dirAttribute);
+    SftpFileAttribute& operator=(const SftpFileAttribute& dirAttribute);
+    bool operator==(const SftpFileAttribute& dirAttribute);
+    bool operator!=(const SftpFileAttribute& dirAttribute);
 	std::string name;
     uint32_t flags;
     uint8_t type;
@@ -25,9 +25,9 @@ struct SftpDirAttribute
     uint32_t permissions;
 };
 
-typedef std::vector<SftpDirAttribute> SftpDirAttributes;
+typedef std::vector<SftpFileAttribute> SftpDirAttributes;
 
-std::ostream& operator<<(std::ostream& oStream, const SftpDirAttribute& b);
+std::ostream& operator<<(std::ostream& oStream, const SftpFileAttribute& b);
 std::ostream& operator<<(std::ostream& oStream, const SftpDirAttributes& bs);
 
 }

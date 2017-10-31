@@ -26,6 +26,11 @@ protected:
 	virtual bool executeCommand(const std::string& cmd, std::string& cmdOutput);
 private:
 	bool sessionAndTerminalInit();
+    bool interactive();
+    /*
+    bool interactive2(const std::string& cmd);
+    void selectLoop();
+    */
 
 public:
      GETCLASSNAME(SshInteractiveShellChannel)

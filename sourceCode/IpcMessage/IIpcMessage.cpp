@@ -8,13 +8,24 @@ namespace IpcMessage {
 
 
 IIpcMessage::IIpcMessage()
-    : messageId_(IpcMessageIdGenerator::generateIpcMessageId())
+    : messageLength_(0)
+    , messageId_(IpcMessageIdGenerator::generateIpcMessageId())
     , hostName_(PlatformWrapper::GetHostName())
 {
 }
 
 IIpcMessage::~IIpcMessage()
 {
+}
+
+uint32_t IIpcMessage::getMessageLength() const
+{
+    return messageLength_;
+}
+
+void IIpcMessage::setMessageLength(uint32_t len)
+{
+    messageLength_ = len;
 }
 
 uint64_t IIpcMessage::getMessageId() const
@@ -53,6 +64,7 @@ void IIpcMessage::setDestnation(const Network::IpSocketEndpoint& destnation)
 
 void IIpcMessage::write(Serialize::WriteBuffer& writeBuffer) const
 {
+    writeBuffer.write(messageLength_);
     writeBuffer.write(messageId_);
     writeBuffer.write(hostName_);
     source_.serialize(writeBuffer);
@@ -61,6 +73,7 @@ void IIpcMessage::write(Serialize::WriteBuffer& writeBuffer) const
 
 void IIpcMessage::read(Serialize::ReadBuffer& readBuffer)
 {
+    readBuffer.read(messageLength_);
     readBuffer.read(messageId_);
     readBuffer.read(hostName_);
     source_.unserialize(readBuffer);
@@ -70,7 +83,8 @@ void IIpcMessage::read(Serialize::ReadBuffer& readBuffer)
 void IIpcMessage::print(std::ostream& os) const
 {
     os << "["
-       << "messageId=" << messageId_
+       << "messageLength=" << messageLength_
+       << ", messageId=" << messageId_
        << ", hostName=" << hostName_
        << ", source=" << source_
        << ", destination=" << destination_

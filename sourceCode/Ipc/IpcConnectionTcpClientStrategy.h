@@ -3,6 +3,8 @@
 #include "IIpcConnectionClientStrategy.h"
 #include "IIpcMessageFactory.h"
 #include "ITcpConnectionReceiver.h"
+#include "WriteBuffer.h"
+#include "ReadBuffer.h"
 #include "Component.h"
 #include "Macro.h"
 #include <memory>
@@ -30,6 +32,7 @@ class IpcConnectionTcpClientStrategy : public IIpcConnectionClientStrategy,
     std::shared_ptr<Network::ITcpClient> client_;
     std::shared_ptr<TimerHandler::ITimer> heartbeartTimer_;
     std::shared_ptr<TimerHandler::ITimer> connectionTimer_;
+    Serialize::ReadBuffer inBuffer_;
 public:
     IpcConnectionTcpClientStrategy(std::shared_ptr<IIpcConnectionReceiver> connectionReceiver,
                                    IpcMessageFactroyMap ipcMessageFactories,

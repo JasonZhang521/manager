@@ -1,10 +1,3 @@
-/*
- * TraceLogConfigure.cpp
- *
- *  Created on: 2015Äê4ÔÂ24ÈÕ
- *      Author: euwyzbc
- */
-
 #include "TraceLogConfigure.h"
 
 TraceLogConfigure::TraceLogConfigure()

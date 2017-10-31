@@ -16,6 +16,7 @@
 #include "NetworkEnv.h"
 #include "IpAddress.h"
 #include "Trace.h"
+#include "Configure.h"
 #include <memory>
 #include <thread>
 
@@ -67,6 +68,7 @@ void UiClientProcess::process()
     // Local and remote endpoint.
     Network::IpSocketEndpoint localEndpoint("0.0.0.0:0");
     //Network::IpSocketEndpoint remoteEndpoint(std::string("127.0.0.1:23833"));
+//    Network::IpSocketEndpoint remoteEndpoint(std::string("192.168.5.138:23833"));
     Network::IpSocketEndpoint remoteEndpoint(std::string("116.236.169.100:23833"));
     // SystemMonitorHandler
     UiClientHandler* uiClientHandlerPtr = new UiClientHandler();

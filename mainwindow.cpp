@@ -67,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui.toolBar->addAction(ui.action_connect);
     ui.toolBar->addSeparator();
     ui.toolBar->addAction(ui.action_disconnect);
+    ui.toolBar->addAction(ui.action_changeUser);
     this->move(QApplication::desktop()->screen()->rect().center()-this->rect().center());
 
 
@@ -315,6 +316,7 @@ void MainWindow::setupStyleSheet()
                         "QToolBar::item {spacing: 3px; /* spacing between menu bar items */padding: 1px 4px;background: transparent;border-radius: 4px;}"
                         "QToolBar::item:selected { /* when selected using mouse or keyboard */background: #f0fff0;}"
                         "QToolBar::item:pressed {background: #888888;}"
+
                         );
     //QTreeWidget::verticalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
     //    QTreeWidget::horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
@@ -342,9 +344,9 @@ void MainWindow::setupStyleSheet()
                                                                     "alternate-background-color: #D5EAFF;");
     ui.treeWidget_bottomMessage->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
                                                                       "alternate-background-color: #D5EAFF;");
-    ui.treeWidget_control_nodes->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
+    ui.listWidget_control_nodes->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
                                                                     "alternate-background-color: #D5EAFF;");
-    ui.treeWidget_control_nodes->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
+    ui.listWidget_control_nodes->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
                                                                       "alternate-background-color: #D5EAFF;");
     ui.treeWidget_control_queue_view->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
                                                                          "alternate-background-color: #D5EAFF;");
@@ -382,7 +384,7 @@ void MainWindow::setupStyleSheet()
                                                                  "alternate-background-color: #D5EAFF;");
     ui.treeWidget_nodeViewer->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
                                                                    "alternate-background-color: #D5EAFF;");
-
+    ui.pushButton_job_kill->setStyleSheet("QPushButton { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: rbg(140,140,198);}" "QPushButton:checked {background-color: pink;}");
 }
 
 MainWindow::~MainWindow()
@@ -561,6 +563,16 @@ void MainWindow::setupMac()
     client->executeShellCommand("cat /sys/class/net/eth0/address",outputString);
     if(outputString!=""){
         ui.label_macshow->setText(QString::fromStdString(outputString).remove("\n"));
+    }
+}
+
+void MainWindow::setupSystemVersion()
+{
+    client->executeShellCommand("lsb_release -a | grep Description | awk -F: '{print $2}'",outputString);
+    if(outputString!="")
+    {
+        QString temp = QString::fromStdString(outputString).remove("\n");
+        ui.label_sysversion_show->setText(temp);
     }
 }
 
@@ -834,26 +846,22 @@ void MainWindow::setupNodesDisplay()
 
         //iterate all nodes for control tab display
         for (int i = 0 ;i<nodesList.size()-1;i++){
-            QTreeWidgetItem *nodeItem = new QTreeWidgetItem(ui.treeWidget_control_nodes);
-            nodeItem->setText(0,nodesList[i][0]);
+            QListWidgetItem *nodeItem = new QListWidgetItem(ui.listWidget_control_nodes);
+            nodeItem->setText(nodesList[i][0]);
             if(nodesList[i][1].split(" = ")[1]=="free")
             {
-                nodeItem->setText(1,"空闲");
-                nodeItem->setTextColor(1,Qt::green);
-
+                nodeItem->setBackgroundColor("#A6FFA6");
             }
 
            else if(nodesList[i][1].split(" = ")[1]=="down")
             {
 
-                nodeItem->setText(1,"无响应");
-                nodeItem->setTextColor(1,Qt::red);
+                nodeItem->setBackgroundColor("#FF5809");
             }
             else
             {
 
-                nodeItem->setText(1,"负载");
-                nodeItem->setTextColor(1,Qt::blue);
+                nodeItem->setBackgroundColor("#97CBFF");
             }
         }
 
@@ -1046,6 +1054,7 @@ void MainWindow::setupSessionConfigure(SshConfigure configure)
     setupMenuAction();
     setupClient(configure);
     setupMac();
+    setupSystemVersion();
     setupQueue();
     setupCurrentpath();
     setupDateAndUptime();
@@ -1063,7 +1072,7 @@ void MainWindow::setupSessionConfigure(SshConfigure configure)
     emit getAllQueueInfosStart();
 
     //setup ipc client
-//    setupIPCClient(configure);
+    setupIPCClient(configure);
 }
 
 void MainWindow::updateGetHardwareInfo()
@@ -2762,35 +2771,31 @@ void MainWindow::updateNODESGUI(QString output){
         ui.label_NodeCount_down->setText(QString::number(partUsedNodes));
 
         //iterate all nodes for control tab display
-        ui.treeWidget_control_nodes->clear();
+        ui.listWidget_control_nodes->clear();
         downNodes=0;
         for (int i = 0 ;i<nodesList.size()-1;i++){
-            QTreeWidgetItem *nodeItem = new QTreeWidgetItem(ui.treeWidget_control_nodes);
+            QListWidgetItem *nodeItem = new QListWidgetItem(ui.listWidget_control_nodes);
             if(nodesList[i].size()>1)
             {
-                nodeItem->setText(0,nodesList[i][0]);
+                nodeItem->setText(nodesList[i][0]);
                 if(nodesList[i][1].split(" = ")[1]=="free")
                 {
-                    nodeItem->setText(1,"空闲");
-                    nodeItem->setTextColor(1,Qt::green);
-
+                    nodeItem->setBackgroundColor("#A6FFA6");
                 }
 
                else if(nodesList[i][1].split(" = ")[1]=="down")
                 {
 
-                    nodeItem->setText(1,"无响应");
-                    nodeItem->setTextColor(1,Qt::red);
 
+                    nodeItem->setBackgroundColor("#FF5809");
                     updateEventMessage(ERR,nodesList[i][0],"节点无响应");
                     ui.label_3->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
                     downNodes++;
                 }
                 else
                 {
+                    nodeItem->setBackgroundColor("#97CBFF");
 
-                    nodeItem->setText(1,"负载");
-                    nodeItem->setTextColor(1,Qt::blue);
                 }
 //                if(nodesList[i][1].split(" = ")[1].compare("down")==0){
 
@@ -2986,7 +2991,7 @@ void MainWindow::on_tabWidget_tabBarClicked(int index)
     }
     case 4:
     {
-        ui.label_title->setText("ftp");
+        ui.label_title->setText("传输");
         break;
     }
     case 5:
@@ -3495,10 +3500,10 @@ void MainWindow::processTimeGetDataFinishEvent(QStringList users,QString startTi
 void MainWindow::on_pushButton_restart_clicked()
 {
     //    client->executeShellCommand("ssh comput24 && reboot",outputString);
-    QList<QTreeWidgetItem *> items = ui.treeWidget_control_nodes->selectedItems();
-    foreach(QTreeWidgetItem* each,items)
+    QList<QListWidgetItem *> items = ui.listWidget_control_nodes->selectedItems();
+    foreach(QListWidgetItem* each,items)
     {
-        client->executeShellCommand("ssh "+configure.user+"@"+each->text(0).toStdString()+" reboot",outputString);
+        client->executeShellCommand("ssh "+configure.user+"@"+each->text().toStdString()+" reboot",outputString);
     }
 
 }
@@ -3524,10 +3529,10 @@ void MainWindow::on_pushButton_control_queue_delete_clicked()
 
 void MainWindow::on_pushButton_shutdown_clicked()
 {
-    QList<QTreeWidgetItem *> items = ui.treeWidget_control_nodes->selectedItems();
-    foreach(QTreeWidgetItem* each,items)
+    QList<QListWidgetItem *> items = ui.listWidget_control_nodes->selectedItems();
+    foreach(QListWidgetItem* each,items)
     {
-        client->executeShellCommand("ssh "+configure.user+"@"+each->text(0).toStdString()+" shutdown -h now",outputString);
+        client->executeShellCommand("ssh "+configure.user+"@"+each->text().toStdString()+" shutdown -h now",outputString);
     }
 }
 

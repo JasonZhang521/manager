@@ -1,6 +1,2 @@
-set(Configure_SRCS
-    Configure.cpp
-    ExceptionConfigure.cpp
-    TraceLogConfigure.cpp
-)
+aux_source_directory(. Configure_SRCS)
 add_library(configure ${Configure_SRCS})

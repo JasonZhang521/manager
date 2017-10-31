@@ -1,10 +1,3 @@
-/*
- * ExceptionConfigure.h
- *
- *  Created on: 2015Äê4ÔÂ23ÈÕ
- *      Author: euwyzbc
- */
-
 #ifndef EXCEPTIONCONFIGURE_H_
 #define EXCEPTIONCONFIGURE_H_
 

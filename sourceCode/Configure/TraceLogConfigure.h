@@ -1,10 +1,3 @@
-/*
- * TraceLogConfigure.h
- *
- *  Created on: 2015Äê4ÔÂ24ÈÕ
- *      Author: euwyzbc
- */
-
 #ifndef TRACELOGCONFIGURE_H_
 #define TRACELOGCONFIGURE_H_
 

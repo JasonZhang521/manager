@@ -4,7 +4,7 @@
 namespace SshWrapper
 {
 
-SftpDirAttribute::SftpDirAttribute()
+SftpFileAttribute::SftpFileAttribute()
 :flags(0)
 ,size(0)
 ,uid(0)
@@ -12,7 +12,7 @@ SftpDirAttribute::SftpDirAttribute()
 ,permissions(0)
 {}
 
-SftpDirAttribute::SftpDirAttribute(const SftpDirAttribute& dirAttribute)
+SftpFileAttribute::SftpFileAttribute(const SftpFileAttribute& dirAttribute)
 :name(dirAttribute.name)
 ,flags(dirAttribute.flags)
 ,type(dirAttribute.type)
@@ -24,7 +24,7 @@ SftpDirAttribute::SftpDirAttribute(const SftpDirAttribute& dirAttribute)
 ,permissions(dirAttribute.permissions)
 {}
 
-SftpDirAttribute& SftpDirAttribute::operator=(const SftpDirAttribute& dirAttribute)
+SftpFileAttribute& SftpFileAttribute::operator=(const SftpFileAttribute& dirAttribute)
 {
 	name = dirAttribute.name;
 	flags = dirAttribute.flags;
@@ -39,7 +39,7 @@ SftpDirAttribute& SftpDirAttribute::operator=(const SftpDirAttribute& dirAttribu
 	return *this;
 }
 
-bool SftpDirAttribute::operator==(const SftpDirAttribute& dirAttribute)
+bool SftpFileAttribute::operator==(const SftpFileAttribute& dirAttribute)
 {
 	if (this == &dirAttribute)
 	{
@@ -59,12 +59,12 @@ bool SftpDirAttribute::operator==(const SftpDirAttribute& dirAttribute)
 	}
 }
 
-bool SftpDirAttribute::operator!=(const SftpDirAttribute& dirAttribute)
+bool SftpFileAttribute::operator!=(const SftpFileAttribute& dirAttribute)
 {
 	return !(*this == dirAttribute);
 }
 
-std::ostream& operator<<(std::ostream& oStream, const SftpDirAttribute& b)
+std::ostream& operator<<(std::ostream& oStream, const SftpFileAttribute& b)
 {
 	oStream << "["
 		    << "name=" << b.name
@@ -75,7 +75,7 @@ std::ostream& operator<<(std::ostream& oStream, const SftpDirAttribute& b)
 			<< ", gid=" << b.gid
 			<< ", owner=" << b.owner
 			<< ", group=" << b.group
-			<< ", permissions" << b.permissions
+			<< ", permissions=" << b.permissions
 			<< "]";
 
 	return oStream;

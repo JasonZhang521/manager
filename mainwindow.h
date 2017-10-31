@@ -344,6 +344,7 @@ private:
     void setRAMHistoryPlotStyle();
     void setupCurrentUser(QString input);
     void updateEventMessage(E_TYPE type, QString node_name, QString message);
+    void setupSystemVersion();
 public:
     void setupSessionConfigure(SshConfigure configure);
 signals:

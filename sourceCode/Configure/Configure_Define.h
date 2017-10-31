@@ -1,10 +1,3 @@
-/*
- * Configure_Define.h
- *
- *  Created on: 2015Äê4ÔÂ24ÈÕ
- *      Author: euwyzbc
- */
-
 #ifndef CONFIGURE_DEFINE_H_
 #define CONFIGURE_DEFINE_H_
 
@@ -25,6 +18,7 @@ enum TraceLogTarget
 };
 
 #define TraceLogFilePath  ("/opt/HongClusterMgt/log/message.log")
+#define SystemTempDir ("/opt/HongClusterMgt/temp")
 
 #define LogBufSize (1024 * 1024)
 

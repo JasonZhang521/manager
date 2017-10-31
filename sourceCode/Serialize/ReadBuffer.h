@@ -74,17 +74,23 @@ public:
             return false;
         }
         val = BufferToData::Read<T>(buffer_ + pos_ + start);
+        val = PlatformWrapper::N2H(val);
         return true;
     }
 
     void* getBuffer() const;
     unsigned int getDataSize() const;
+    unsigned int getUnReadDataSize() const;
     void setDataSize(unsigned int dataSize);
     unsigned int getBufferSize() const;
     bool isEndOfData() const;
 
     void swap(ReadBuffer& buffer);
     bool operator==(const ReadBuffer& buffer);
+
+    void concatenate(const ReadBuffer& buffer);
+    void removeReadedData();
+    void expand(unsigned int addSize);
 
     std::ostream& operator << (std::ostream& os) const;
 

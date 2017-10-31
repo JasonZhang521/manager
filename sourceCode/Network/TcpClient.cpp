@@ -43,6 +43,52 @@ std::ostream& TcpClient::ConnectionTimer::operator<<(std::ostream& os)
     return os;
 }
 
+TcpClient::OutBuffer::OutBuffer()
+    : buffer_(new char[DefaultBufferSize])
+    , bufferSize_(DefaultBufferSize)
+    , pos_(0)
+    , dataSize_(0)
+{
+}
+
+TcpClient::OutBuffer::~OutBuffer()
+{
+    delete [] buffer_;
+}
+
+void TcpClient::OutBuffer::append(const void* buf, unsigned int len)
+{
+    const char* buffer = reinterpret_cast<const char*>(buf);
+    if (bufferSize_ - dataSize_ >= len)
+    {
+        std::copy(buffer, buffer + len, buffer_ + pos_);
+        dataSize_ += len;
+    }
+    else
+    {
+        std::copy(buffer_ + pos_, buffer_ + dataSize_, buffer_);
+        dataSize_ -= pos_;
+        pos_ = 0;
+        std::copy(buffer, buffer + len, buffer_);
+        dataSize_ += len;
+    }
+}
+
+char* TcpClient::OutBuffer::getUnwrittenBuffer()
+{
+    return buffer_ + pos_;
+}
+
+unsigned TcpClient::OutBuffer::getUnwrittenSize() const
+{
+    return dataSize_ - pos_;
+}
+
+void TcpClient::OutBuffer::resetPos(unsigned int outSize)
+{
+    pos_ += outSize;
+}
+
 
 TcpClient::TcpClient(const IpSocketEndpoint& localEndpoint,
                      const IpSocketEndpoint& remoteEndpoint,
@@ -153,8 +199,8 @@ TcpResult TcpClient::connect()
 TcpResult TcpClient::send(const Serialize::WriteBuffer& buffer)
 {
     TRACE_ENTER();
-
-    int sendBytes = socket_->send(reinterpret_cast<SocketDataBuffer>(buffer.getBuffer()), buffer.getDataSize(), SOCKET_FLAG_NONE);
+    outBuffer_.append(buffer.getBuffer(), buffer.getDataSize());
+    int sendBytes = socket_->send(outBuffer_.getUnwrittenBuffer(), outBuffer_.getUnwrittenSize(), SOCKET_FLAG_NONE);
     if (SOCKET_ERROR == sendBytes)
     {
         TRACE_WARNING("send message error: error information = " << socket_->getErrorInfo());
@@ -162,8 +208,15 @@ TcpResult TcpClient::send(const Serialize::WriteBuffer& buffer)
         restart();
         return TcpResult::Failed;
     }
+    else if (static_cast<unsigned int>(sendBytes) != outBuffer_.getUnwrittenSize())
+    {
+        TRACE_NOTICE("send message fragmantation! plan send:" << outBuffer_.getUnwrittenSize() << ", actuall send:" << sendBytes);
+        outBuffer_.resetPos(sendBytes);
+        return TcpResult::Success;
+    }
     else
     {
+        outBuffer_.resetPos(sendBytes);
         return TcpResult::Success;
     }
 }

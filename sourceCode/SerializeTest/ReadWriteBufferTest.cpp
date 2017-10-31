@@ -341,3 +341,250 @@ TEST_F(ReadWriteBufferTest, TestReadWriteString)
     readBuffer.read(vec2);
     ASSERT_EQ(vec1, vec2);
 }
+
+TEST_F(ReadWriteBufferTest, TestReadBufferExpand)
+{
+    Serialize::WriteBuffer writeBuffer;
+    writeBuffer.write(static_cast<int>(6));
+    writeBuffer.write(static_cast<short>(6));
+
+    Serialize::ReadBuffer readBuffer1;
+    Serialize::ReadBuffer readBuffer2;
+    std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer1.getBuffer()));
+    readBuffer1.setDataSize(writeBuffer.getDataSize());
+    std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer2.getBuffer()));
+    readBuffer2.setDataSize(writeBuffer.getDataSize());
+
+    readBuffer2.expand(6);
+    ASSERT_EQ(readBuffer1.getBufferSize() + 6, readBuffer2.getBufferSize());
+    ASSERT_EQ(readBuffer1.getDataSize(), readBuffer2.getDataSize());
+    int v = 0;
+    readBuffer2.read(v);
+    ASSERT_EQ(6, v);
+
+    short vs = 0;
+    readBuffer2.read(vs);
+    ASSERT_EQ(6, vs);
+}
+
+TEST_F(ReadWriteBufferTest, TestReadBufferRemoveReadedData)
+{
+    Serialize::WriteBuffer writeBuffer;
+    writeBuffer.write(static_cast<int>(6));
+    writeBuffer.write(static_cast<short>(6));
+
+    Serialize::ReadBuffer readBuffer1;
+    Serialize::ReadBuffer readBuffer2;
+    std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer1.getBuffer()));
+    readBuffer1.setDataSize(writeBuffer.getDataSize());
+    std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer2.getBuffer()));
+    readBuffer2.setDataSize(writeBuffer.getDataSize());
+
+    ASSERT_EQ(readBuffer1.getBufferSize(), readBuffer2.getBufferSize());
+    ASSERT_EQ(readBuffer1.getDataSize(), readBuffer2.getDataSize());
+    int v = 0;
+    readBuffer2.read(v);
+    ASSERT_EQ(6, v);
+    readBuffer2.removeReadedData();
+    ASSERT_EQ(readBuffer1.getBufferSize(), readBuffer2.getBufferSize());
+    ASSERT_EQ(readBuffer1.getDataSize() - sizeof(int), readBuffer2.getDataSize());
+
+    short vs = 0;
+    readBuffer2.read(vs);
+    ASSERT_EQ(6, vs);
+    ASSERT_EQ(readBuffer1.getBufferSize(), readBuffer2.getBufferSize());
+    ASSERT_EQ(readBuffer1.getDataSize() - sizeof(int), readBuffer2.getDataSize());
+
+    readBuffer2.removeReadedData();
+    ASSERT_EQ(readBuffer1.getBufferSize(), readBuffer2.getBufferSize());
+    ASSERT_EQ(0, readBuffer2.getDataSize());
+}
+
+TEST_F(ReadWriteBufferTest, TestReadBufferConcatenate)
+{
+    {
+        Serialize::WriteBuffer writeBuffer;
+        writeBuffer.write(static_cast<int>(6));
+        writeBuffer.write(static_cast<short>(60));
+
+        Serialize::ReadBuffer readBuffer1;
+        Serialize::ReadBuffer readBuffer2;
+        std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer1.getBuffer()));
+        readBuffer1.setDataSize(writeBuffer.getDataSize());
+        std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer2.getBuffer()));
+        readBuffer2.setDataSize(writeBuffer.getDataSize());
+
+        ASSERT_EQ(readBuffer1.getBufferSize(), readBuffer2.getBufferSize());
+        ASSERT_EQ(readBuffer1.getDataSize(), readBuffer2.getDataSize());
+
+        int vi = 0;
+        short vs = 0;
+        readBuffer1.concatenate(readBuffer2);
+        ASSERT_EQ(readBuffer1.getBufferSize(), readBuffer2.getBufferSize());
+        ASSERT_EQ(readBuffer1.getDataSize(), 2*(sizeof(int) + sizeof(short)));
+
+        readBuffer1.read(vi);
+        readBuffer1.read(vs);
+        ASSERT_EQ(6, vi);
+        ASSERT_EQ(60, vs);
+        ASSERT_TRUE(readBuffer1.read(vi));
+        ASSERT_TRUE(readBuffer1.read(vs));
+        ASSERT_EQ(6, vi);
+        ASSERT_EQ(60, vs);
+    }
+
+    {
+        Serialize::WriteBuffer writeBuffer;
+        writeBuffer.write(static_cast<int>(6));
+        writeBuffer.write(static_cast<short>(60));
+
+        Serialize::ReadBuffer readBuffer1;
+        Serialize::ReadBuffer readBuffer2;
+        std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer1.getBuffer()));
+        readBuffer1.setDataSize(writeBuffer.getDataSize());
+        std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer2.getBuffer()));
+        readBuffer2.setDataSize(writeBuffer.getDataSize());
+
+        ASSERT_EQ(readBuffer1.getBufferSize(), readBuffer2.getBufferSize());
+        ASSERT_EQ(readBuffer1.getDataSize(), readBuffer2.getDataSize());
+
+        int vi = 0;
+        short vs = 0;
+
+        readBuffer1.read(vi);
+
+        readBuffer1.concatenate(readBuffer2);
+        ASSERT_EQ(readBuffer1.getBufferSize(), readBuffer2.getBufferSize());
+        ASSERT_EQ(readBuffer1.getDataSize(), 2 * (sizeof(int) + sizeof(short)));
+
+        readBuffer1.read(vs);
+        ASSERT_EQ(60, vs);
+        ASSERT_TRUE(readBuffer1.read(vi));
+        ASSERT_TRUE(readBuffer1.read(vs));
+        ASSERT_EQ(6, vi);
+        ASSERT_EQ(60, vs);
+    }
+
+    {
+        Serialize::WriteBuffer writeBuffer;
+        writeBuffer.write(static_cast<int>(6));
+        writeBuffer.write(static_cast<short>(60));
+
+        Serialize::ReadBuffer readBuffer1;
+        Serialize::ReadBuffer readBuffer2;
+        std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer1.getBuffer()));
+        readBuffer1.setDataSize(writeBuffer.getDataSize());
+        std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer2.getBuffer()));
+        readBuffer2.setDataSize(writeBuffer.getDataSize());
+
+        ASSERT_EQ(readBuffer1.getBufferSize(), readBuffer2.getBufferSize());
+        ASSERT_EQ(readBuffer1.getDataSize(), readBuffer2.getDataSize());
+
+        int vi = 0;
+        short vs = 0;
+
+        readBuffer2.read(vi);
+        ASSERT_EQ(6, vi);
+
+        readBuffer1.concatenate(readBuffer2);
+        ASSERT_EQ(readBuffer1.getBufferSize(), readBuffer2.getBufferSize());
+        ASSERT_EQ(readBuffer1.getDataSize(), 2*(sizeof(int) + sizeof(short)));
+
+        readBuffer1.read(vi);
+        readBuffer1.read(vs);
+        ASSERT_EQ(6, vi);
+        ASSERT_EQ(60, vs);
+        ASSERT_TRUE(readBuffer1.read(vs));
+        ASSERT_EQ(60, vs);
+    }
+
+    {
+        Serialize::WriteBuffer writeBuffer;
+        writeBuffer.write(static_cast<int>(6));
+        writeBuffer.write(static_cast<short>(60));
+
+        Serialize::ReadBuffer readBuffer1;
+        Serialize::ReadBuffer readBuffer2;
+        std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer1.getBuffer()));
+        readBuffer1.setDataSize(writeBuffer.getDataSize());
+        std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer2.getBuffer()));
+        readBuffer2.setDataSize(writeBuffer.getDataSize());
+
+        ASSERT_EQ(readBuffer1.getBufferSize(), readBuffer2.getBufferSize());
+        ASSERT_EQ(readBuffer1.getDataSize(), readBuffer2.getDataSize());
+
+        int vi = 0;
+        short vs = 0;
+        readBuffer1.read(vi);
+        ASSERT_EQ(6, vi);
+        readBuffer2.read(vi);
+        ASSERT_EQ(6, vi);
+
+        readBuffer1.concatenate(readBuffer2);
+        ASSERT_EQ(readBuffer1.getBufferSize(), readBuffer2.getBufferSize());
+        ASSERT_EQ(readBuffer1.getDataSize(), 2*(sizeof(int) + sizeof(short)));
+
+        ASSERT_TRUE(readBuffer1.read(vs));
+        ASSERT_EQ(60, vs);
+        ASSERT_TRUE(readBuffer1.read(vs));
+        ASSERT_EQ(60, vs);
+    }
+
+    {
+        Serialize::WriteBuffer writeBuffer;
+        writeBuffer.write(static_cast<int>(6));
+        writeBuffer.write(static_cast<short>(60));
+
+        Serialize::ReadBuffer readBuffer1(8);
+        Serialize::ReadBuffer readBuffer2;
+        std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer1.getBuffer()));
+        readBuffer1.setDataSize(writeBuffer.getDataSize());
+        std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer2.getBuffer()));
+        readBuffer2.setDataSize(writeBuffer.getDataSize());
+
+        int vi = 0;
+        short vs = 0;
+        readBuffer1.concatenate(readBuffer2);
+        ASSERT_EQ(readBuffer1.getBufferSize(), 2*(sizeof(int) + sizeof(short)));
+        ASSERT_EQ(readBuffer1.getDataSize(), 2*(sizeof(int) + sizeof(short)));
+
+        readBuffer1.read(vi);
+        readBuffer1.read(vs);
+        ASSERT_EQ(6, vi);
+        ASSERT_EQ(60, vs);
+        ASSERT_TRUE(readBuffer1.read(vi));
+        ASSERT_TRUE(readBuffer1.read(vs));
+        ASSERT_EQ(6, vi);
+        ASSERT_EQ(60, vs);
+    }
+
+    {
+        Serialize::WriteBuffer writeBuffer;
+        writeBuffer.write(static_cast<int>(6));
+        writeBuffer.write(static_cast<short>(60));
+
+        Serialize::ReadBuffer readBuffer1(8);
+        Serialize::ReadBuffer readBuffer2;
+        std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer1.getBuffer()));
+        readBuffer1.setDataSize(writeBuffer.getDataSize());
+        std::copy(reinterpret_cast<char*>(writeBuffer.getBuffer()), reinterpret_cast<char*>(writeBuffer.getBuffer()) + writeBuffer.getDataSize(), reinterpret_cast<char*>(readBuffer2.getBuffer()));
+        readBuffer2.setDataSize(writeBuffer.getDataSize());
+
+        int vi = 0;
+        short vs = 0;
+        readBuffer1.read(vi);
+        ASSERT_EQ(6, vi);
+
+        readBuffer1.concatenate(readBuffer2);
+
+        ASSERT_EQ(readBuffer1.getBufferSize(), (sizeof(int) + 2*sizeof(short)));
+        ASSERT_EQ(readBuffer1.getDataSize(), (sizeof(int) + 2*sizeof(short)));
+
+        readBuffer1.read(vs);
+        ASSERT_EQ(60, vs);
+        ASSERT_TRUE(readBuffer1.read(vi));
+        ASSERT_TRUE(readBuffer1.read(vs));
+        ASSERT_EQ(6, vi);
+        ASSERT_EQ(60, vs);
+    }
+}

@@ -12,6 +12,7 @@
 #include "Configure_Define.h"
 #include "Configure.h"
 #include "LocalTime.h"
+#include <iostream>
 
 template <TraceLogLevel level>
 class TraceFile
@@ -45,6 +46,7 @@ std::ofstream* TraceFile<level>::getInstance()
   {
     if (traceFile_ == 0)
     {
+        std::cout << Configure::getInstance().getTraceLogFilePath() << std::endl;
       traceFile_ = new std::ofstream(Configure::getInstance().getTraceLogFilePath().c_str(), std::ofstream::app);
       if (!Configure::getInstance().isFileLogStart())
       {
