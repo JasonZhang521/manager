@@ -29,16 +29,18 @@ void ServerCreationWindow::on_pushButton_ok_clicked()
     crypto.setCompressionMode(SimpleCrypt::CompressionAlways); //always compress the data, see section below
     crypto.setIntegrityProtectionMode(SimpleCrypt::ProtectionHash); //properly protect the integrity of the data
     //get all server infos
-    QString name,hostname,username,password,notes;
+    QString name,hostname,username,password,notes,port;
     name=ui->lineEdit_name->text();//server name for identity
     username=ui->lineEdit_username->text();//user name for login
     password=ui->lineEdit_passwd->text();//passowrd for login
     hostname=ui->lineEdit_host->text();//hostname for login
+    port=ui->lineEdit_host_port->text();
     notes=ui->textEdit_notes->toPlainText();//notes for description
     //store all infos
-    if(!name.isEmpty()&&!username.isEmpty()&&!password.isEmpty()&&!hostname.isEmpty())
+    if(!name.isEmpty()&&!username.isEmpty()&&!password.isEmpty()&&!hostname.isEmpty()&&!port.isEmpty())
     {
         m_setting->setValue(name+"/hostname",hostname);
+        m_setting->setValue(name+"/port",port);
         m_setting->setValue(name+"/username",username);
         m_setting->setValue(name+"/password",crypto.encryptToString(password));
         m_setting->setValue(name+"/notes",notes);

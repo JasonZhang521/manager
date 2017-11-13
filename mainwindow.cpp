@@ -25,7 +25,6 @@
 #include "timeuserselectiondialog.h"
 #include <QDesktopWidget>
 
-//
 #include "UiClientProcess.h"
 #include "ControlNodeBrieflyInfoRequest.h"
 #include "ControlNodeBrieflyInfoResponse.h"
@@ -123,7 +122,6 @@ void MainWindow::setRAMHistoryPlotStyle()
 
 void MainWindow::setCpuPlotData(int input)
 {
-    //    QVector<double> ticks;
     QVector<QString> labels;
     ticks << 1;
     labels << "%";
@@ -133,12 +131,10 @@ void MainWindow::setCpuPlotData(int input)
     //set data
     regen = new QCPBars(ui.plot_cpuUsage->xAxis, ui.plot_cpuUsage->yAxis);
     regen->setAntialiased(false);
-    // regen->setName("CPU total usage");
     regen->setPen(QPen(QColor(0, 168, 140).lighter(130)));
     regen->setBrush(QColor(0, 168, 140));
 
     //set data
-    //    QVector<double> regenData;
     regenData   << input;
     regen->setData(ticks, regenData);
 }
@@ -215,7 +211,6 @@ void MainWindow::setRamPlotData(int input)
 
     rengen2 = new QCPBars(ui.plot_ramUsage->xAxis, ui.plot_ramUsage->yAxis);
     rengen2->setAntialiased(false);
-    //rengen2->setName("CPU total usage");
     rengen2->setPen(QPen(QColor(0, 168, 140).lighter(130)));
     rengen2->setBrush(QColor(0, 168, 140));
 
@@ -227,7 +222,6 @@ void MainWindow::setRamPlotData(int input)
 void MainWindow::setPlotStyle()
 {
     setPlotBackground();
-
     setCPUHistoryPlotStyle();
 
     setCPUPlotCustomizeStyle();
@@ -304,8 +298,6 @@ void MainWindow::setupStyleSheet()
                         "QMenuBar::item {spacing: 3px; /* spacing between menu bar items */padding: 1px 4px;background: transparent;border-radius: 4px;}"
                         "QMenuBar::item:selected { /* when selected using mouse or keyboard */background: #f0fff0;}"
                         "QMenuBar::item:pressed {background: #888888;}"
-//                        "QProgressBar {border: 2px solid grey;border-radius: 5px;}"
-//                        "QProgressBar::chunk {background-color: #05B8CC;width: 20px;}"
                         "QMenu {background-color: white;margin: 2px; /* some spacing around the menu */}"
                         "QMenu::item {padding: 2px 25px 2px 20px;border: 1px solid transparent; /* reserve space for selection border */}"
                         "QMenu::item:selected {border-color: darkblue;background: rgba(100, 100, 100, 150);}"
@@ -318,10 +310,6 @@ void MainWindow::setupStyleSheet()
                         "QToolBar::item:pressed {background: #888888;}"
 
                         );
-    //QTreeWidget::verticalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
-    //    QTreeWidget::horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
-    //    QScrollArea::verticalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
-    //    QScrollArea::horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;alternate-background-color: #D5EAFF;");
     ui.scrollArea->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
                                                       "alternate-background-color: #D5EAFF;");
     ui.scrollArea_2->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
@@ -401,12 +389,6 @@ MainWindow::~MainWindow()
 }
 
 //create cpu ram indicator
-/*variables:
-* gradientPoints
-* p1
-* p2
-*
-*/
 void MainWindow::createCircleBar(){
     QGradientStops gradientPoints;
     gradientPoints << QGradientStop(0, Qt::green) << QGradientStop(0.5, Qt::yellow) << QGradientStop(1, Qt::red);
@@ -452,14 +434,10 @@ void MainWindow::setupThreads(SshConfigure configure){
     shellWorker = new ShellWorker(0,configure);
     manageThread = new QThread;
     manageWorker = new ManageWorker(0,configure);
-    //    ipcThread = new QThread;
-    //    ipcWorker = new IPCWorker(0,configure.host);
 
     ftpWorker->moveToThread(ftpThread);//move worker to thread
     shellWorker->moveToThread(updatorThread);
     manageWorker->moveToThread(manageThread);
-    //    ipcWorker->moveToThread(ipcThread);
-    //    ipcThread->start();
 
     /*************************************ftp***************************************/
     //connect sigal and slots
@@ -529,9 +507,6 @@ void MainWindow::setupThreads(SshConfigure configure){
     manageThread->start();
     /**************************************************************************/
 
-    //!connect ipcworker and mainwindow
-    //    connect(this,SIGNAL(startIPCEngineSignal(QString)),ipcWorker,SLOT(setup(QString)));
-    //    connect(this,SIGNAL(startGetIPCDataSignal()),ipcWorker,SLOT(update()));
 }
 
 void MainWindow::setupMenuAction()
@@ -604,12 +579,6 @@ void MainWindow::setupQueue()
         }
 
 
-        //update  queue table in control
-        //                ui.treeWidget_control_queue_view->clear();
-        //        for(int i = 0;i<queueContentList.size();i++){
-        //            QTreeWidgetItem* item = new QTreeWidgetItem(ui.treeWidget_control_queue_view);
-        //            item->setText(0,queueContentList[i].split(QRegExp("[\\s]+"))[0]);
-        //        }
     }
 
 }
@@ -648,8 +617,6 @@ void MainWindow::setupHostAndIP()
     //show host ip address
     client->executeShellCommand("hostname -I | awk '{print $1}'",outputString);
     if(!outputString.empty()){
-        //        QStringList strList = QString::fromStdString(outputString).split(" ");
-        //        ui.label_ipshow->setText(strList[1]);
         ui.label_ipshow->setText(QString::fromStdString(outputString).remove("\n"));
     }
 
@@ -661,7 +628,6 @@ void MainWindow::setupHostAndIP()
 
 void MainWindow::setupStorageDisplay()
 {
-    //bug detected
     //make storage display
     client->executeShellCommand("df -h",outputString);//raw data
     if(outputString!=""){//data exists
@@ -676,11 +642,6 @@ void MainWindow::setupStorageDisplay()
             storageInfoList<<storageInfo;
 
         }
-        //        if(match.hasMatch()){
-        //            storageInfoList=match.capturedTexts();
-        //            QMessageBox msg;
-        //            msg.setText(QString::number(match.capturedTexts().size()));
-        //            msg.exec();
 
         for(int i =0;i<storageInfoList.size();i++){
             if(QString::compare(storageInfoList[i].split(QRegExp("[\\s]+"))[4],"/",Qt::CaseInsensitive)==0){
@@ -870,111 +831,7 @@ void MainWindow::setupNodesDisplay()
 
 void MainWindow::setupFtp()
 {
-    //    //display FILE VIEW   browser
-    //    SftpDirAttributes attr;
-    //    client->listDir(currentPathRemote,attr);
 
-    //    ui.treeWidget_job_file->clear();
-    //    for(unsigned int i =0;i<attr.size();i++){
-    //        if(QString::fromStdString(attr[i].name).at(0)!='.'){
-    //            QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget_job_file);
-    //            if(QString::number(attr[i].type).compare("1")==0)
-    //            {
-    //                file->setIcon(0,QIcon(":/Resources/file.png"));
-    //            }
-    //            else if (QString::number(attr[i].type).compare("2")==0)
-    //            {
-    //                file->setIcon(0,QIcon(":/Resources/dir.png"));
-    //            }
-    //            file->setText(0,QString::fromStdString(attr[i].name));
-    //            //            file->setText(1,QString::number(attr[i].size));
-    //            file->setData(1,Qt::EditRole,float(attr[i].size/1024.0));
-    //            file->setText(3,QString::fromStdString(attr[i].owner));
-    //            file->setText(4,QString::fromStdString(attr[i].group));
-    //            file->setText(5,QString::number(attr[i].permissions));
-
-    //            ui.treeWidget_job_file->addTopLevelItem(file);
-    //            if(!ui.treeWidget_job_file->currentItem()){
-    //                ui.treeWidget_job_file->setCurrentItem(ui.treeWidget_job_file->topLevelItem(0));
-    //                ui.treeWidget_job_file->setEnabled(true);
-    //            }
-    //        }
-
-    //    }
-
-    //    //display job submit ftp browser
-    //    attr.clear();
-    //    client->listDir(currentPathRemote,attr);
-
-    //    ui.treeWidget_jobsubmitfile->clear();
-    //    for(unsigned int i =0;i<attr.size();i++){
-    //        if(QString::fromStdString(attr[i].name).at(0)!='.'){
-    //            QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget_jobsubmitfile);
-    //            if(QString::number(attr[i].type).compare("1")==0)
-    //            {
-    //                file->setIcon(0,QIcon(":/Resources/file.png"));
-    //            }
-    //            else if (QString::number(attr[i].type).compare("2")==0)
-    //            {
-    //                file->setIcon(0,QIcon(":/Resources/dir.png"));
-    //            }
-    //            file->setText(0,QString::fromStdString(attr[i].name));
-    //            //            file->setText(1,QString::number(attr[i].size));
-    //            file->setData(1,Qt::EditRole,float(attr[i].size/1024.0));
-    //            file->setText(3,QString::fromStdString(attr[i].owner));
-    //            file->setText(4,QString::fromStdString(attr[i].group));
-    //            file->setText(5,QString::number(attr[i].permissions));
-
-    //            ui.treeWidget_jobsubmitfile->addTopLevelItem(file);
-    //            if(!ui.treeWidget_jobsubmitfile->currentItem()){
-    //                ui.treeWidget_jobsubmitfile->setCurrentItem(ui.treeWidget_jobsubmitfile->topLevelItem(0));
-    //                ui.treeWidget_jobsubmitfile->setEnabled(true);
-    //            }
-    //        }
-
-    //    }
-
-
-    //    //clear attrlist
-    //    attr.clear();
-    //    //retrieve attrlist
-    //    client->listDir(currentPathRemote,attr);
-    //    //renew treewidget
-    //    ui.treeWidget->clear();
-    //    //display itemlist
-    //    for(unsigned int i =0;i<attr.size();i++){
-    //        //remove . and .. directories
-    //        if(QString::fromStdString(attr[i].name).at(0)!='.'){
-    //            //new a treewidgetitem
-    //            QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget);
-    //            //identify file item
-    //            if(QString::number(attr[i].type).compare("1")==0)
-    //            {
-    //                file->setIcon(0,QIcon(":/Resources/file.png"));
-    //            }
-    //            //identify directory item
-    //            else if (QString::number(attr[i].type).compare("2")==0)
-    //            {
-    //                file->setIcon(0,QIcon(":/Resources/dir.png"));
-    //            }
-    //            //parse attr into fileitem
-    //            file->setText(0,QString::fromStdString(attr[i].name));
-    //            //            file->setText(1,QString::number(attr[i].size));
-    //            file->setData(1,Qt::EditRole,float(attr[i].size/1024.0));
-    //            file->setText(3,QString::fromStdString(attr[i].owner));
-    //            file->setText(4,QString::fromStdString(attr[i].group));
-    //            file->setText(5,QString::number(attr[i].permissions));
-
-    //            //add to widget
-    //            ui.treeWidget->addTopLevelItem(file);
-    //            //resign item location?
-    //            if(!ui.treeWidget->currentItem()){
-    //                ui.treeWidget->setCurrentItem(ui.treeWidget->topLevelItem(0));
-    //                ui.treeWidget->setEnabled(true);
-    //            }
-    //        }
-
-    //    }
     updateFileList(ui.treeWidget,3);
     updateFileList(ui.treeWidget_jobsubmitfile,1);
     updateFileList(ui.treeWidget_job_file,2);
@@ -998,7 +855,6 @@ void MainWindow::setupCPUInfo()
 void MainWindow::setupRamInfo()
 {
     //show ram usage
-    //    client->executeShellCommand("free | awk '{print $2"^"$3}'",outputString);
     client->executeShellCommand("free",outputString);
     if(outputString!=""){
         QRegularExpression re("\\b\\d.*");
@@ -1035,9 +891,6 @@ void MainWindow::updateStatusTracer()
     {
         isOnline = false;
         ui.label_connection_indicator->setText("offline");
-        // QMessageBox msg;
-        // msg.setText("服务器无响应，请检查网络连接。");
-        // msg.exec();
     }
 
 }
@@ -1082,7 +935,6 @@ void MainWindow::updateGetHardwareInfo()
     while (process.messageReceived())
     {
         std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
-        //                              IpcMessage::IIpcMessage* pMsg = msg.get(); //获取指针
         SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
                 dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
         SystemMonitorMessage::ComputerNodeInfoReport* resp =
@@ -1161,7 +1013,6 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     //----------------------process cpu-----------------------------------//
     ui.cpu_process->clear();
 
-    // QRegularExpression re2("(?<=psTop10CpuUsage:\\n)[\\w\\W]+(?=,)");
     QRegularExpression re2("(?<=psTop10CpuUsage=)[\\w\\W]+(?=\\n,)");
     QRegularExpressionMatch match_psTop10CpuProcess =re2.match(temp_sys);
     QString temp_process_cpu;
@@ -1228,8 +1079,6 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     //--------------------------------------------------------------//
 
     //----------------------------cpu history------------------------//
-    //hei man
-    //i need you to plot our data on ui every time
     x.append(increamter);
     y.append(cpu_usage);
     ui.plot_cpuHistory->graph(0)->setData(x,y);
@@ -1251,7 +1100,7 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
 
 
     //--------------------------------process GPU informations-----------------------//
-    
+
 
 
     //-------------------------------------------------------------------------------//
@@ -1428,8 +1277,6 @@ void MainWindow::on_pushButton_job_submit_makescript_clicked()
         //show script
         ui.textBrowser_job_submit_show->setText(script);
         //show qsub command
-        //        std::string str(jobSubCommand);
-        //        qDebug()<<QString("qsub ")+QString::fromStdString(currentPathRemote)+QString("/temp.pbs");
         ui.textBrowser_job_qsubCommand->setText(QString::fromStdString("qsub "+currentPathRemote+"/temp.pbs"));
         //make local temp
         QFile file("temp.pbs");
@@ -1477,7 +1324,6 @@ void MainWindow::on_pushButton_job_submit_makescript_clicked()
         //show script
         ui.textBrowser_job_submit_show->setText(script);
         //show qsub command
-        //        std::string str(jobSubCommand);
         ui.textBrowser_job_qsubCommand->setText(QString::fromStdString("qsub "+currentPathRemote+"/temp.pbs"));
         //make local temp
         QFile file("temp.pbs");
@@ -1706,7 +1552,6 @@ void MainWindow::on_pushButton_clicked()
             speedCalculatorThread->start();
 
             emit ftpDownloadStart(QString::fromStdString(currentPathRemote)+"/"+ui.treeWidget->currentItem()->text(0),filePathLocal);//fire download start signal
-            // emit downloadSpeedMonitingStart(QString::fromStdString(currentPathRemote),fileInfo.absoluteFilePath(),fileInfo.fileName());
             emit downloadSpeedMonitingStart(QString::fromStdString(currentPathRemote),filePathLocal,ui.treeWidget->currentItem()->text(0));
             ui.pushButton->setText("下载中...");//close button
             ui.pushButton->setEnabled(false);//close button
@@ -1751,38 +1596,6 @@ void MainWindow::processConnectionSuccessEvent()
 //process ftp upload finish event
 void MainWindow::processFtpUploadFinishEvent(){
 
-    //get remote dir
-//    SftpDirAttributes attr;
-//    client->listDir(currentPathRemote,attr);
-
-    //renew display
-//    ui.treeWidget->clear();
-//    for(unsigned int i =0;i<attr.size();i++){
-//        if(QString::fromStdString(attr[i].name).at(0)!='.'){
-//            QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget);
-//            if(QString::number(attr[i].type).compare("1")==0)
-//            {
-//                file->setIcon(0,QIcon(":/Resources/file.png"));
-//            }
-//            else if (QString::number(attr[i].type).compare("2")==0)
-//            {
-//                file->setIcon(0,QIcon(":/Resources/dir.png"));
-//            }
-//            file->setText(0,QString::fromStdString(attr[i].name));
-//            //            file->setText(1,QString::number(attr[i].size));
-//            file->setData(1,Qt::EditRole,float(attr[i].size/1024.0));
-//            file->setText(3,QString::fromStdString(attr[i].owner));
-//            file->setText(4,QString::fromStdString(attr[i].group));
-//            file->setText(5,QString::number(attr[i].permissions));
-
-//            ui.treeWidget->addTopLevelItem(file);
-//            if(!ui.treeWidget->currentItem()){
-//                ui.treeWidget->setCurrentItem(ui.treeWidget->topLevelItem(0));
-//                ui.treeWidget->setEnabled(true);
-//            }
-//        }
-
-//    }
 
     updateFileList(ui.treeWidget,1);
     ui.pushButton_3->setText("上传");
@@ -1815,7 +1628,6 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
                 if(m_list[i][4].toInt()>=1048576){file->setText(1,QString::number(m_list[i][4].toInt()/1048576)+QString(" MB"));}
                 else if(m_list[i][4].toInt()<1048576 && m_list[i][4].toInt()>=1024){file->setText(1,QString::number(m_list[i][4].toInt()/1024)+QString(" KB"));}
                 else if(m_list[i][4].toInt()<1024){file->setText(1,QString::number(m_list[i][4].toInt())+QString(" Bytes"));}
-//                file->setData(1,Qt::EditRole,m_list[i][4].toInt());
                 file->setText(2,m_list[i][5]+" "+m_list[i][6]+" "+m_list[i][7]);
                 file->setText(3,m_list[i][2]);
                 file->setText(4,m_list[i][3]);
@@ -1847,12 +1659,9 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
                     file->setIcon(0,QIcon(":/Resources/dir.png"));
                 }
                 file->setText(0,m_list[i][8]);
-                //            file->setText(1,QString::number(attr[i].size));
                 if(m_list[i][4].toInt()>=1048576){file->setText(1,QString::number(m_list[i][4].toInt()/1048576)+QString(" MB"));}
                 else if(m_list[i][4].toInt()<1048576 && m_list[i][4].toInt()>=1024){file->setText(1,QString::number(m_list[i][4].toInt()/1024)+QString(" KB"));}
                 else if(m_list[i][4].toInt()<1024){file->setText(1,QString::number(m_list[i][4].toInt())+QString(" Bytes"));}
-//
-//                file->setData(1,Qt::EditRole,m_list[i][4].toInt());
                 file->setText(2,m_list[i][5]+" "+m_list[i][6]+" "+m_list[i][7]);
                 file->setText(3,m_list[i][2]);
                 file->setText(4,m_list[i][3]);
@@ -1884,12 +1693,9 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
                     file->setIcon(0,QIcon(":/Resources/dir.png"));
                 }
                 file->setText(0,m_list[i][8]);
-                //            file->setText(1,QString::number(attr[i].size));
                 if(m_list[i][4].toInt()>=1048576){file->setText(1,QString::number(m_list[i][4].toInt()/1048576)+QString(" MB"));}
                 else if(m_list[i][4].toInt()<1048576 && m_list[i][4].toInt()>=1024){file->setText(1,QString::number(m_list[i][4].toInt()/1024)+QString(" KB"));}
                 else if(m_list[i][4].toInt()<1024){file->setText(1,QString::number(m_list[i][4].toInt())+QString(" Bytes"));}
-//
-//                file->setData(1,Qt::EditRole,m_list[i][4].toInt());
                 file->setText(2,m_list[i][5]+" "+m_list[i][6]+" "+m_list[i][7]);
                 file->setText(3,m_list[i][2]);
                 file->setText(4,m_list[i][3]);
@@ -1940,7 +1746,6 @@ void MainWindow::processManageGetUserFinishEvent(QList<QStringList> s)
 void MainWindow::processManageGetQueueOfUserFinishEvent(QHash<QString,QList<QStringList>> s)
 {
     ui.treeWidget_manager_user_view2->clear();
-    // qDebug()<<s;
     //in what way to show all queue info in to widget
     QList<QStringList> temp_list;
     QString temp_name;
@@ -1953,10 +1758,6 @@ void MainWindow::processManageGetQueueOfUserFinishEvent(QHash<QString,QList<QStr
         item->setText(0,temp_name);
         foreach(QStringList each,temp_list)
         {
-            //in ... way to get max nodes and max cores
-            //find item named resources_max if have show number if not set as no limit
-            //set queue reg_64 resources_min.ncpus = 63
-            //set queue reg_64 resources_min.nodes = 32
             if(each[0]=="resources_max.nodes")
             {
                 item->setData(1,Qt::DisplayRole,each[1].toInt());
@@ -1998,9 +1799,6 @@ void MainWindow::processManageGetQueueOfUserFinishEvent(QHash<QString,QList<QStr
 void MainWindow::processGetLimitedQueueFinishEvent(QStringList s)
 {
 
-    //what is the next step to finish the job?
-    //recall your getUploadSpeedSignal
-    //display limited queues
     foreach(QString each,s)
     {
         ui.listWidget_showLimitedQueues->addItem(each);
@@ -2020,9 +1818,6 @@ void MainWindow::processGetAllQueueInfosFinishEvent(QStringList queueList,QList<
         setQueueName(item,i,queueList_);
         setQueuePriority(item,i,queuePBSInfos_);
         setQueueState(item,i,queueContentList_);
-        //max nodes       resources_max.nodes
-        //max tasks       max_running
-        //max cores       resources_max.ncpus
         setQueueUsability(item,i,queuePBSInfos_[i]);
 
     }
@@ -2247,9 +2042,6 @@ void MainWindow::on_pushButton_monitor_job_refresh_clicked()
             QRegularExpressionMatch match = re.match(QString::fromStdString(outputString));
 
             if(match.hasMatch()){
-                //                QMessageBox msg;
-                //                msg.setText(match.captured(0));
-                //                msg.exec();
                 nodesString=match.captured(0).remove("\n");
             }
             //make job item
@@ -2291,7 +2083,6 @@ void MainWindow::on_pushButton_job_submit_edit_clicked()
         jobName = ui.lineEdit_job_name->text();
         queueName = ui.comboBox_queue->currentText();
         outputLog = ui.lineEdit_job_submit_logname->text();
-        //   walltime = ui.timeEdit_walltime->text()+":00";
         //get script name
         QString sName = ui.treeWidget_jobsubmitfile->currentItem()->text(0);
 
@@ -2315,7 +2106,6 @@ void MainWindow::on_pushButton_job_submit_edit_clicked()
         jobName = ui.lineEdit_jobsubmit_taskname2->text();
         queueName = ui.comboBox_queue->currentText();
         outputLog = ui.lineEdit_job_submit_logname->text();
-        //  walltime = ui.timeEdit_walltime->text()+":00";
         //get script name
         QString sName = ui.treeWidget_jobsubmitfile->currentItem()->text(0);
 
@@ -2389,13 +2179,9 @@ void MainWindow::ftpDeleteFile(){
     //get selected rows
     QModelIndexList indexList = ui.treeWidget->selectionModel()->selectedRows(0);
     QString filename;//store file name for delection
-    //int currentIndex = 0;//indicate current index
     int indexCount = indexList.count();//get all selected items count
     for(int i =0;i<indexCount;i++){//iterate selected rows
         filename = indexList.at(i).data().toString();//store fileName
-        //        qDebug()<<"-----------------------"<<endl;
-        //        qDebug()<<"currentPath:"+QString::fromStdString(currentPathRemote);
-        //        qDebug()<<"-----------------------"<<endl;
         client->executeShellCommand("rm "+currentPathRemote+"/"+filename.toStdString(),outputString);//rm file by name
     }
     ftpRefreshList();
@@ -2689,7 +2475,6 @@ void MainWindow::updateNODESGUI(QString output){
             //store item in list of stringlist
             nodesList.append(nodesinfos.split("\n\n")[i].split(QRegExp("\\n[\\s]+")));
         }
-        //        qDebug()<<nodesinfos.split("\n\n")[0].split(QRegExp("\\n[\\s]+"));
 
 
         //initilizing nodes counters
@@ -3492,14 +3277,10 @@ void MainWindow::processTimeGetDataFinishEvent(QStringList users,QString startTi
         }
 
     }
-    //    cmd = "cd /opt/gridview/pbs/dispatcher/server_priv/accounting && python main.py prop 20170707 20170709"
-    //cd /opt/gridview/pbs/dispatcher/server_priv/accounting && python main.py prop 20170707 20170709
-    //    client->executeShellCommand("",outputString);
 }
 
 void MainWindow::on_pushButton_restart_clicked()
 {
-    //    client->executeShellCommand("ssh comput24 && reboot",outputString);
     QList<QListWidgetItem *> items = ui.listWidget_control_nodes->selectedItems();
     foreach(QListWidgetItem* each,items)
     {
@@ -3611,7 +3392,6 @@ QString MainWindow::getSelectedNode()
 void MainWindow::monitorSonNode()
 {
     QString hostname = getSelectedNode();//store hostname
-    // qDebug()<<
 
     QThread * nodeHeartBeatUpdatorThread = new QThread; //initilize heartbeat thread
     MonitorWorker *nodeInfoHeartBeatWorker = new MonitorWorker(0,configure,hostname); //initilize heartbeat worker

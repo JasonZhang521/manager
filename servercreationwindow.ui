@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
+    <width>531</width>
     <height>380</height>
    </rect>
   </property>
@@ -103,20 +103,17 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="lineEdit_name"/>
-              </item>
               <item row="1" column="0">
                <widget class="QLabel" name="label_3">
                 <property name="text">
-                 <string>主机:</string>
+                 <string>主机IP:</string>
                 </property>
                </widget>
               </item>
               <item row="1" column="1">
                <widget class="QLineEdit" name="lineEdit_host"/>
               </item>
-              <item row="2" column="0">
+              <item row="3" column="0">
                <widget class="QLabel" name="label_6">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -129,18 +126,35 @@
                 </property>
                </widget>
               </item>
-              <item row="2" column="1">
+              <item row="3" column="1">
                <widget class="QLineEdit" name="lineEdit_username"/>
               </item>
-              <item row="3" column="0">
+              <item row="4" column="0">
                <widget class="QLabel" name="label_4">
                 <property name="text">
                  <string>密码:</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
+              <item row="4" column="1">
                <widget class="QLineEdit" name="lineEdit_passwd"/>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="lineEdit_name"/>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_7">
+                <property name="text">
+                 <string>SSH端口号:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="lineEdit_host_port">
+                <property name="text">
+                 <string>22</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>

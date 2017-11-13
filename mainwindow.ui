@@ -6376,7 +6376,7 @@ font: 7pt &quot;黑体&quot;;</string>
                    <number>1</number>
                   </property>
                   <property name="currentIndex">
-                   <number>1</number>
+                   <number>2</number>
                   </property>
                   <widget class="QWidget" name="shutdownpage_stack">
                    <layout class="QVBoxLayout" name="verticalLayout_22">
@@ -7150,7 +7150,7 @@ QTabBar::tab:selected {
 }</string>
                       </property>
                       <property name="currentIndex">
-                       <number>0</number>
+                       <number>1</number>
                       </property>
                       <widget class="QWidget" name="view">
                        <attribute name="title">
@@ -7253,8 +7253,8 @@ QTabBar::tab:selected {
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>405</width>
-                                 <height>207</height>
+                                 <width>831</width>
+                                 <height>433</height>
                                 </rect>
                                </property>
                                <layout class="QVBoxLayout" name="verticalLayout_37">
@@ -8238,6 +8238,9 @@ QTabBar::tab:selected {
                   </property>
                   <property name="flow">
                    <enum>QListView::LeftToRight</enum>
+                  </property>
+                  <property name="spacing">
+                   <number>3</number>
                   </property>
                   <property name="viewMode">
                    <enum>QListView::IconMode</enum>

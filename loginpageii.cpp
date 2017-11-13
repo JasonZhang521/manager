@@ -316,6 +316,8 @@ void LoginPageII::processConnectEvent()
         QString user = m_setting->value("username").toString();//get username
         QString  password = crypto.decryptToString(m_setting->value("password").toString());//get passwd
         QString  hostname = m_setting->value("hostname").toString();//get hostname
+        QString port = m_setting->value("port").toString();//get port number
+
         m_setting->endGroup();
         //show up
         ui->comboBox_username->setCurrentText(user);
@@ -325,6 +327,7 @@ void LoginPageII::processConnectEvent()
         configure.user = user.toStdString();
         configure.password =password.toStdString();
         configure.host = hostname.toStdString();
+        configure.port = port.toInt();
 
         //create thread
         QThread* thread = new QThread;
@@ -354,6 +357,7 @@ void LoginPageII::processloggingIn()
     configure.user = user;
     configure.password = password;
     configure.host = hostname;
+    configure.port = 22;
     //this->hide();//hide login page
 
     //create thread
