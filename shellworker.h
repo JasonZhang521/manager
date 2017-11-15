@@ -75,6 +75,9 @@ private:
 
     //jobs by showjobs
     void getJOBS2();
+
+public:
+    bool canceled_flag = false;
 };
 
 #endif // SHELLWORKER_H

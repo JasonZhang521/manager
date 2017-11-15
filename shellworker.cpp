@@ -45,7 +45,7 @@ void ShellWorker::process(){
 
 void ShellWorker::update(){
     int i =0;
-    while(1){
+    while(1&&canceled_flag != true){
         client->executeShellCommand("ls /usr",outputString);
         if(QString::fromStdString(outputString).contains("lib64"))
         {
@@ -64,6 +64,7 @@ void ShellWorker::update(){
 
             emit connectionFailedSignal();
             qDebug()<<"connection failed";
+            process();
             break;
         }
 
@@ -72,7 +73,7 @@ void ShellWorker::update(){
 
     }
     process();
-    this->deleteLater();
+//    this->deleteLater();
 
 
 }

@@ -162,6 +162,14 @@ private slots:
     void on_treeWidget_bottomMessage_customContextMenuRequested(const QPoint &pos);
 
     void messageBoxClearSlot();
+    void on_action_disconnect_triggered();
+
+    void on_action_connect_triggered();
+
+    void on_action_ChangeUser_triggered();
+
+    void on_action_changeUser_triggered();
+
 public slots:
     void processFtpUploadFinishEvent();//process after upload finished signal
     void processFtpDownloadFinishEvent();//process after recieve download finished signal
@@ -177,6 +185,7 @@ public slots:
     void processConnectionFailedEvent();
     void processConnectionSuccessEvent();
     void updatePlotHeatBeat();
+    void closeSession();
 private:
     Ui::MainWindow ui;
     void createCircleBar();
@@ -206,7 +215,7 @@ private:
     int length;
 
     std::string user, password, hostname;
-    SshConfigure configure;
+    SshConfigure m_configure;
     ssh_session session;
     SshShellChannel *channel;
     SshClientSession *clientSession;
@@ -345,6 +354,10 @@ private:
     void setupCurrentUser(QString input);
     void updateEventMessage(E_TYPE type, QString node_name, QString message);
     void setupSystemVersion();
+    void setupSSHConfigureInfo(SshConfigure configure);
+    void closeSshClientSession();
+    void closeThreads();
+    void reconnect();
 public:
     void setupSessionConfigure(SshConfigure configure);
 signals:

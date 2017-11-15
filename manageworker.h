@@ -195,6 +195,9 @@ private:
 public:
   void test();
 
+public:
+  bool canceled_flag = false;
+
 };
 
 #endif // MANAGEWORKER_H

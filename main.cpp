@@ -26,8 +26,8 @@ int main(int argc, char *argv[])
 {
     MyApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     MyApplication a(argc, argv);
-    LoginPageII l;
-    l.show();
+    LoginPageII *l=new LoginPageII();
+    l->show();
 //    M* m;
 //    m = new M();
 //    m->show();

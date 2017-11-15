@@ -30,6 +30,7 @@ FtpWorker::FtpWorker(QObject *parent,SshConfigure configure) : QObject(parent)
 //deconstructor
 FtpWorker::~FtpWorker(){
     client->shutdownShell();
+    client->shutdownSftp();
     client->shutdown();
     ssh_disconnect(session);
     ssh_free(session);

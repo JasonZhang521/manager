@@ -1,3 +1,4 @@
+#include "loginpageii.h"
 #include "mainwindow.h"
 #include <QProcess>
 #include <QString>
@@ -46,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     model->setSorting(QDir::DirsFirst | QDir::IgnoreCase | QDir::Name);
     ui.treeView->setModel(model);
 
-    QApplication::setQuitOnLastWindowClosed(true);
+//    QApplication::setQuitOnLastWindowClosed(false);
     QApplication::setActiveWindow(this);
     createCircleBar();
     QButtonGroup *group1=new QButtonGroup(ui.horizontalLayout_29);
@@ -377,13 +378,40 @@ void MainWindow::setupStyleSheet()
 
 MainWindow::~MainWindow()
 {
-    client->shutdownShell();
-    client->shutdownSftp();
-    client->shutdown();
-    ssh_disconnect(session);
-    ssh_free(session);
+    closeSshClientSession();
     ftpThread->quit();//destroy ftp thread
     ftpThread->deleteLater();
+    ftpWorker->deleteLater();
+
+    manageThread->quit();
+    manageThread->deleteLater();
+    manageWorker->deleteLater();
+
+}
+
+void MainWindow::closeSshClientSession()
+{
+
+        client->shutdownShell();
+        client->shutdownSftp();
+        client->shutdown();
+        ssh_disconnect(session);
+        ssh_free(session);
+
+
+}
+
+void MainWindow::closeThreads()
+{
+    ftpThread->quit();//destroy ftp thread
+    ftpThread->deleteLater();
+    ftpWorker->deleteLater();
+
+    manageThread->quit();
+    manageThread->deleteLater();
+    manageWorker->deleteLater();
+
+    shellWorker->canceled_flag = true;
 
 
 }
@@ -521,11 +549,11 @@ void MainWindow::setupMenuAction()
 void MainWindow::setupClient(SshConfigure configure)
 {
     //get configure
-    this->configure=configure;
+    this->m_configure=configure;
     //main thread client
     session = ssh_new();
     channel = new SshShellChannel(session);
-    clientSession = new SshClientSession(session, channel, this->configure);
+    clientSession = new SshClientSession(session, channel, this->m_configure);
     client = new SshClient(clientSession);
     client->setup();
     client->startShell();
@@ -898,10 +926,16 @@ void MainWindow::setupCurrentUser(QString input)
 {
     ui.label_current_user->setText(input);
 }
+
+void MainWindow::setupSSHConfigureInfo(SshConfigure configure)
+{
+    m_configure = configure;
+}
 //setup ssh client session and initilizations
 void MainWindow::setupSessionConfigure(SshConfigure configure)
 {
 
+    setupSSHConfigureInfo(configure);
     setupCurrentUser(QString::fromStdString(configure.user));
     setupThreads(configure);
     setupMenuAction();
@@ -926,6 +960,34 @@ void MainWindow::setupSessionConfigure(SshConfigure configure)
 
     //setup ipc client
     setupIPCClient(configure);
+}
+
+void MainWindow::reconnect()
+{
+    setupCurrentUser(QString::fromStdString(m_configure.user));
+    setupThreads(m_configure);
+    setupClient(m_configure);
+    setupMac();
+    setupSystemVersion();
+    setupQueue();
+    setupCurrentpath();
+    setupDateAndUptime();
+    setupHostAndIP();
+    setupStorageDisplay();
+    setupNodesDisplay();
+    setupFtp();
+    setupCPUInfo();
+    setupRamInfo();
+    // //display control tab node list
+    updatorThread->start();//start shellTHread
+    emit manageGetAllUserStart();
+    emit getLimitedQueuesStart();
+    emit getAllQueueInfosStart();
+}
+
+void MainWindow::closeSession()
+{
+
 }
 
 void MainWindow::updateGetHardwareInfo()
@@ -1239,8 +1301,8 @@ void MainWindow::on_pushButton_4_clicked()
     QString cmd = "putty.exe";
     QStringList args;
     args.append("-pw");
-    args.append(QString::fromStdString(configure.password));
-    args.append(QString::fromStdString(configure.user)+"@"+QString::fromStdString(configure.host));
+    args.append(QString::fromStdString(m_configure.password));
+    args.append(QString::fromStdString(m_configure.user)+"@"+QString::fromStdString(m_configure.host));
 
     m_process->start(cmd,args);
 
@@ -1537,7 +1599,7 @@ void MainWindow::on_pushButton_clicked()
         if(!isDir(ui.treeWidget->currentItem()->text(0)))
         {//identify if selected item is dir
             speedCalculatorThread = new QThread;
-            speedWorker = new SpeedCalculator(0,configure);
+            speedWorker = new SpeedCalculator(0,m_configure);
             speedWorker->moveToThread(speedCalculatorThread);
             connect(ftpWorker, SIGNAL(finishDownload()), speedWorker, SLOT(process()));
             //connect start signal to process slot
@@ -1915,7 +1977,7 @@ void MainWindow::on_pushButton_3_clicked()
                 file.close();
 
                 speedCalculatorThread = new QThread;
-                speedWorker = new SpeedCalculator(0,configure);
+                speedWorker = new SpeedCalculator(0,m_configure);
                 speedWorker->moveToThread(speedCalculatorThread);
                 connect(ftpWorker, SIGNAL(finishUpload()), speedWorker, SLOT(process()));
                 //connect start signal to process slot
@@ -1944,7 +2006,7 @@ void MainWindow::on_pushButton_3_clicked()
             file.close();
 
             speedCalculatorThread = new QThread;
-            speedWorker = new SpeedCalculator(0,configure);
+            speedWorker = new SpeedCalculator(0,m_configure);
             speedWorker->moveToThread(speedCalculatorThread);
             connect(ftpWorker, SIGNAL(finishUpload()), speedWorker, SLOT(process()));
             //connect start signal to process slot
@@ -2147,8 +2209,13 @@ void MainWindow::on_pushButton_job_submit_selectRemote_clicked()
 
 
 void MainWindow::changeUserSlot(){
-    emit changeUserSignal();
-    this->close();
+//    emit changeUserSignal();
+//    closeSshClientSession();
+//    closeThreads();
+//    this->hide();
+    qApp->closeAllWindows();
+        QProcess::startDetached(qApp->applicationFilePath(), QStringList());
+
 }
 
 //invoke menu when right click
@@ -2608,7 +2675,7 @@ void MainWindow::updateJOBSGUI1(QStringList jobList,QStringList nodeList){
         if(m_jobsList[i].split(QRegExp("[\\s]+")).size()>10){
             job->setText(0,m_jobsList[i].split(QRegExp("[\\s]+"))[0]);//jobID
             job->setText(1,m_jobsList[i].split(QRegExp("[\\s]+"))[1]);//user
-            if(m_jobsList[i].split(QRegExp("[\\s]+"))[1].compare(QString::fromStdString(configure.user))==0)
+            if(m_jobsList[i].split(QRegExp("[\\s]+"))[1].compare(QString::fromStdString(m_configure.user))==0)
                 job->setTextColor(1,Qt::red); //set user as red
             job->setText(2,m_jobsList[i].split(QRegExp("[\\s]+"))[2]);//queue
             job->setText(3,m_jobsList[i].split(QRegExp("[\\s]+"))[3]);//jobName
@@ -3284,7 +3351,7 @@ void MainWindow::on_pushButton_restart_clicked()
     QList<QListWidgetItem *> items = ui.listWidget_control_nodes->selectedItems();
     foreach(QListWidgetItem* each,items)
     {
-        client->executeShellCommand("ssh "+configure.user+"@"+each->text().toStdString()+" reboot",outputString);
+        client->executeShellCommand("ssh "+m_configure.user+"@"+each->text().toStdString()+" reboot",outputString);
     }
 
 }
@@ -3313,7 +3380,7 @@ void MainWindow::on_pushButton_shutdown_clicked()
     QList<QListWidgetItem *> items = ui.listWidget_control_nodes->selectedItems();
     foreach(QListWidgetItem* each,items)
     {
-        client->executeShellCommand("ssh "+configure.user+"@"+each->text().toStdString()+" shutdown -h now",outputString);
+        client->executeShellCommand("ssh "+m_configure.user+"@"+each->text().toStdString()+" shutdown -h now",outputString);
     }
 }
 
@@ -3394,7 +3461,7 @@ void MainWindow::monitorSonNode()
     QString hostname = getSelectedNode();//store hostname
 
     QThread * nodeHeartBeatUpdatorThread = new QThread; //initilize heartbeat thread
-    MonitorWorker *nodeInfoHeartBeatWorker = new MonitorWorker(0,configure,hostname); //initilize heartbeat worker
+    MonitorWorker *nodeInfoHeartBeatWorker = new MonitorWorker(0,m_configure,hostname); //initilize heartbeat worker
     nodeInfoHeartBeatWorker->moveToThread(nodeHeartBeatUpdatorThread);//move to thread start event loop
 
 
@@ -3468,4 +3535,53 @@ void MainWindow::on_treeWidget_bottomMessage_customContextMenuRequested(const QP
 void MainWindow::messageBoxClearSlot()
 {
     ui.treeWidget_bottomMessage->clear();
+}
+
+void MainWindow::on_action_disconnect_triggered()
+{
+
+
+    if(ui.label_connection_indicator->text().compare("online")==0)
+    {
+        ui.label_connection_indicator->setText("offline");
+        closeSshClientSession();
+        closeThreads();
+    }
+
+    else
+    {
+        QMessageBox messageBox;
+        messageBox.setText("已断开连接。");
+        messageBox.exec();
+    }
+}
+
+void MainWindow::on_action_connect_triggered()
+{
+    if(ui.label_connection_indicator->text().compare("offline")==0)
+    {
+        ui.label_connection_indicator->setText("online");
+        reconnect();
+
+    }
+
+    else
+    {
+        QMessageBox messageBox;
+        messageBox.setText("已连接。");
+        messageBox.exec();
+    }
+
+}
+
+void MainWindow::on_action_ChangeUser_triggered()
+{
+
+}
+
+void MainWindow::on_action_changeUser_triggered()
+{
+    qApp->closeAllWindows();
+        QProcess::startDetached(qApp->applicationFilePath(), QStringList());
+
 }
