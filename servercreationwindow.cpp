@@ -10,6 +10,13 @@ ServerCreationWindow::ServerCreationWindow(QWidget *parent) :
     this->setWindowFlags(Qt::WindowStaysOnTopHint);
     ui->setupUi(this);
     this->setFixedSize(512,380);
+    this->setTabOrder(ui->lineEdit_name,ui->lineEdit_host);
+    this->setTabOrder(ui->lineEdit_host,ui->lineEdit_host_port);
+    this->setTabOrder(ui->lineEdit_host_port,ui->lineEdit_username);
+    this->setTabOrder(ui->lineEdit_username,ui->lineEdit_passwd);
+    this->setTabOrder(ui->lineEdit_passwd,ui->textEdit_notes);
+    this->setTabOrder(ui->textEdit_notes,ui->pushButton_ok);
+
     ui->treeWidget->header()->close();
     ui->lineEdit_passwd->setEchoMode(QLineEdit::Password);
 

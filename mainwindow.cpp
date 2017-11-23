@@ -94,8 +94,12 @@ void MainWindow::setCPUHistoryPlotStyle()
     x.append(0);
     y.append(0);
 
+    QPen pen;
+    pen.setColor(QColor(41,166,244));
 
     ui.plot_cpuHistory->addGraph();
+    ui.plot_cpuHistory->graph(0)->setPen(pen);
+//    ui.plot_cpuHistory->graph(0)->setLineStyle(QCPGraph::lsLine);
     ui.plot_cpuHistory->graph(0)->setData(x,y);
     ui.plot_cpuHistory->xAxis->setLabel("");
     ui.plot_cpuHistory->yAxis->setLabel("");
@@ -111,8 +115,11 @@ void MainWindow::setRAMHistoryPlotStyle()
     x1.append(0);
     y1.append(0);
 
+    QPen pen;
+    pen.setColor(QColor(41,166,244));
 
     ui.plot_ramUsageHistory->addGraph();
+    ui.plot_ramUsageHistory->graph(0)->setPen(pen);
     ui.plot_ramUsageHistory->graph(0)->setData(x,y);
     ui.plot_ramUsageHistory->xAxis->setLabel("");
     ui.plot_ramUsageHistory->yAxis->setLabel("");
@@ -145,14 +152,14 @@ void MainWindow::setCPUPlotCustomizeStyle()
     //custimize cpuusage plot
     ui.plot_cpuUsage->yAxis->setRange(0,100);
     ui.plot_cpuUsage->yAxis->setPadding(1); // a bit more space to the left border
-    ui.plot_cpuUsage->yAxis->setLabel("cpu usage");
+//    ui.plot_cpuUsage->yAxis->setLabel("");
     ui.plot_cpuUsage->yAxis->setBasePen(QPen(Qt::white));
     ui.plot_cpuUsage->yAxis->setTickPen(QPen(Qt::white));
     ui.plot_cpuUsage->yAxis->setSubTickPen(QPen(Qt::white));
-    ui.plot_cpuUsage->yAxis->grid()->setSubGridVisible(true);
+    ui.plot_cpuUsage->yAxis->grid()->setSubGridVisible(false);
     ui.plot_cpuUsage->yAxis->setTickLabelColor(Qt::white);
     ui.plot_cpuUsage->yAxis->setLabelColor(Qt::white);
-    ui.plot_cpuUsage->yAxis->setVisible(false);
+    ui.plot_cpuUsage->yAxis->setVisible(true);
     ui.plot_cpuUsage->yAxis->grid()->setPen(QPen(QColor(130, 130, 130), 0, Qt::SolidLine));
     ui.plot_cpuUsage->yAxis->grid()->setSubGridPen(QPen(QColor(130, 130, 130), 0, Qt::DotLine));
 
@@ -175,14 +182,14 @@ void MainWindow::setRamPlotCustomizeStyle()
     //custimize ram usage plot
     ui.plot_ramUsage->yAxis->setRange(0,100);
     ui.plot_ramUsage->yAxis->setPadding(1); // a bit more space to the left border
-    ui.plot_ramUsage->yAxis->setLabel("cpu usage");
+//    ui.plot_ramUsage->yAxis->setLabel("cpu usage");
     ui.plot_ramUsage->yAxis->setBasePen(QPen(Qt::white));
     ui.plot_ramUsage->yAxis->setTickPen(QPen(Qt::white));
     ui.plot_ramUsage->yAxis->setSubTickPen(QPen(Qt::white));
-    ui.plot_ramUsage->yAxis->grid()->setSubGridVisible(true);
+    ui.plot_ramUsage->yAxis->grid()->setSubGridVisible(false);
     ui.plot_ramUsage->yAxis->setTickLabelColor(Qt::white);
     ui.plot_ramUsage->yAxis->setLabelColor(Qt::white);
-    ui.plot_ramUsage->yAxis->setVisible(false);
+    ui.plot_ramUsage->yAxis->setVisible(true);
     ui.plot_ramUsage->yAxis->grid()->setPen(QPen(QColor(130, 130, 130), 0, Qt::SolidLine));
     ui.plot_ramUsage->yAxis->grid()->setSubGridPen(QPen(QColor(130, 130, 130), 0, Qt::DotLine));
 
@@ -744,6 +751,8 @@ void MainWindow::setupNodesDisplay()
             QTreeWidgetItem *CPUComputer = new QTreeWidgetItem(cpuNode);
             CPUComputer->setIcon(0,QIcon(":/Resources/cpu_intel.png"));
             CPUComputer->setText(0,nodesList[j][0]);
+            CPUComputer->setText(1,"hello");
+            CPUComputer->setText(2,"world");
         }
 
         QTreeWidgetItem *exchanger = new QTreeWidgetItem(mainNode);
@@ -1005,19 +1014,54 @@ void MainWindow::updateGetHardwareInfo()
         std::cout << "-----------------------" << std::endl;
         //             std::cout << *msg << std::endl;
         std::cout << resp->getHostName()<<std::endl;
+
         temp_str = QString::fromStdString(resp->getHostName());
-        if(!hardware_hostname_list.contains(temp_str))
-        {
-            hardware_hostname_list.append(temp_str);
+        QString cpu_usage;
+        std::stringstream str_cpuUsageInfo;//raw cpu usage data
+        str_cpuUsageInfo << resp->getCpuUsageInfo();
+        QString temp_cpuInfo = QString::fromStdString(str_cpuUsageInfo.str());
+        QRegularExpression re("(?<=total=)[\\d]+");
+        QRegularExpressionMatch match_cpu_total = re.match(temp_cpuInfo);
+        if(match_cpu_total.hasMatch()){
+            cpu_usage = match_cpu_total.captured(0);
         }
+
+        //computer i need you to put this message item in that list.
+       // but before that , i need you to check if this item already exist in that list
+        QStringList temp_strList;
+        temp_strList.append(temp_str);
+        temp_strList.append(cpu_usage);
+        if(hardware_hostname_list.isEmpty())
+        {
+            hardware_hostname_list.append(temp_strList);
+        }
+        bool temp_signal = false;
+        foreach(QStringList each,hardware_hostname_list)
+        {
+            if(each.at(0).compare(temp_str)==0)
+            {
+                temp_signal = true;
+                break;
+            }
+
+        }
+
+        if(temp_signal==false)
+        {
+            hardware_hostname_list.append(temp_strList);
+        }
+        qDebug()<<hardware_hostname_list;
+
+//        if(!hardware_hostname_list.contains(temp_str))
+//        {
+//            hardware_hostname_list.append(temp_str);
+//        }
         std::cout << "-----------------------" << std::endl;
         if(resp->getHostName().compare(activated_node.toStdString())==0)
         {
            updateHardwareGUI(resp);
         }
     }
-    qDebug()<<"check node list";
-    qDebug()<<hardware_hostname_list;
     makeHardwareNodesButtons(hardware_hostname_list);
 
 
@@ -1138,7 +1182,7 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     }
 
 
-    //--------------------------------------------------------------//
+    //---------------------------------------------------------------//
 
     //----------------------------cpu history------------------------//
     x.append(increamter);
@@ -1148,7 +1192,7 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     ui.plot_cpuHistory->xAxis->setRange(-50+increamter,0+increamter);
     ui.plot_cpuHistory->replot();
 
-    //---------------------------------------------------------------//
+    //----------------------------------------------------------------//
 
     //----------------------------ram history-------------------------//
     x1.append(increamter);
@@ -1179,14 +1223,21 @@ void MainWindow::plotHistoryRangeReset()
 
 }
 
-void MainWindow::makeHardwareNodesButtons(QStringList list)
+void MainWindow::makeHardwareNodesButtons(QList<QStringList> list)
 {
+    qDebug()<<list;
+    qDebug()<<"@123";
     ui.listWidget_nodes_hardware->clear();
-    foreach(QString each,list)
+    foreach(QStringList each,list)
     {
         QListWidgetItem* item = new QListWidgetItem(ui.listWidget_nodes_hardware);
-        item->setText(each);
+        item->setText(each.at(0));
+        if(each.at(1).toInt()<10)
         item->setBackground(Qt::green);
+        else if(each.at(1).toInt()>=10&&each.at(1).toInt()<80)
+            item->setBackground(Qt::blue);
+        else if(each.at(1).toInt()>=80)
+            item->setBackground(Qt::red);
 
     }
 }
@@ -1209,6 +1260,7 @@ void MainWindow::on_pushButton_job_kill_clicked(){
     ui.pushButton_job_submit->setChecked(false);
     ui.pushButton_job_file->setChecked(false);
 }
+
 void MainWindow::on_pushButton_job_submit_clicked(){
     ui.stackedWidget_job->setCurrentIndex(1);
     ui.pushButton_job_submit->setChecked(true);

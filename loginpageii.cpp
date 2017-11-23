@@ -9,6 +9,7 @@
 #include "ui_loginpageii.h"
 #include "flowlayout.h"
 #include "servercreationwindow.h"
+#include "serverwindow.h"
 #include "simplecrypt.h"
 #include "clientworker.h"
 #include "contactpage.h"
@@ -383,11 +384,15 @@ void LoginPageII::on_pushButton_clicked()
 void LoginPageII::on_scrollArea_customContextMenuRequested(const QPoint &pos)
 {
     QMenu * menu = new QMenu;
-    menu->addAction(QString(tr("修改")),this,SLOT(editAccountInfo()));
+    menu->addAction(QString(tr("编辑")),this,SLOT(editAccountInfo()));
             menu->exec(QCursor::pos());
 }
 
 void LoginPageII::editAccountInfo()
-{
+{//computer , i want you to invoke that server window and add edit functionality.
+
+    ServerWindow * server_window = new ServerWindow;
+    server_window->show();
+    connect(server_window,SIGNAL(updateLoginServerWidgetSignal()),this,SLOT(updateServerWidges()));
 
 }

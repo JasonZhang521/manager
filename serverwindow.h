@@ -30,6 +30,10 @@ private slots:
 
     void on_actiondelete_triggered();
 
+    void on_treeWidget_itemChanged(QTreeWidgetItem *item, int column);
+
+    void on_actioncopy_triggered();
+
 private:
     Ui::ServerWindow *ui;
     ServerCreationWindow* c;
@@ -37,6 +41,7 @@ private:
 
 signals:
     connectSignal(QString str);
+    updateLoginServerWidgetSignal();
 
 };
 

@@ -38,6 +38,7 @@ public slots:
     void isValid(bool isValideUser);
     void runValidation();
     void showLoginPage();
+    void updateServerWidges();
 protected slots:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -78,7 +79,7 @@ private:
 
      QSettings *settings;//for login history cache
      QSettings* m_setting;//for server storation
-     void updateServerWidges();
+
      void clearWidgets(QLayout *layout);
      void processLoginCache();
      bool verifyUser();

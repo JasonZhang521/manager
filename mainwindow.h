@@ -267,7 +267,7 @@ private:
     // static IPCWorker ipcWorker;
     QString activated_node;//node name for hardware display.
     QTimer * timer_hardware_getInfo;
-    QStringList hardware_hostname_list;
+    QList<QStringList> hardware_hostname_list;
 
     QCPBars *regen;
     QCPBars *rengen2;
@@ -335,7 +335,7 @@ private:
     QString getSelectedNode();
     void setPlotStyle();
     void setupIPCClient(SshConfigure configure);
-    void makeHardwareNodesButtons(QStringList list);
+    void makeHardwareNodesButtons(QList<QStringList> list);
     void updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport *resp);
     void updateCPUTotal(int input);
     void setPlotBackground();
