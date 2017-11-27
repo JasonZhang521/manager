@@ -380,7 +380,7 @@ void MainWindow::setupStyleSheet()
                                                                  "alternate-background-color: #D5EAFF;");
     ui.treeWidget_nodeViewer->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
                                                                    "alternate-background-color: #D5EAFF;");
-    ui.pushButton_job_kill->setStyleSheet("QPushButton { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: rbg(140,140,198);}" "QPushButton:checked {background-color: pink;}");
+//    ui.pushButton_job_kill->setStyleSheet("QPushButton { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: rbg(140,140,198);}" "QPushButton:checked {background-color: pink;}");
 }
 
 MainWindow::~MainWindow()
@@ -685,8 +685,12 @@ void MainWindow::setupStorageDisplay()
                 ui.progressBar_distShowRow1_4->setValue(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt());
                 if(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt()>=80)
                     {
-                        updateEventMessage(DISK,"管理节点","/ 目录存储空间不足");
-                        ui.label_2->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+//                        if(update_flag_s1 == true)
+//                        {
+                            updateEventMessage(DISK,"管理节点","/ 目录存储空间不足");
+                            ui.label_2->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+//                            update_flag_s1 = false;
+//                        }
 
                     }
 
@@ -697,8 +701,12 @@ void MainWindow::setupStorageDisplay()
                 ui.progressBar_diskShowRow2_4->setValue(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt());
                 if(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt()>=80)
                 {
-                    updateEventMessage(DISK,"管理节点","/boot 目录存储空间不足");
-                    ui.label_2->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+//                    if(update_flag_s1 == true)
+//                    {
+                        updateEventMessage(DISK,"管理节点","/boot 目录存储空间不足");
+                        ui.label_2->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+//                        update_flag_s1 = false;
+//                    }
 
                 }
             }
@@ -708,11 +716,17 @@ void MainWindow::setupStorageDisplay()
                 ui.progressBar_diskShowRow3_4->setValue(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt());
                 if(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt()>=80)
                 {
-                    updateEventMessage(DISK,"管理节点","/home 目录存储空间不足");
-                    ui.label_2->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+//                    if(update_flag_s1 == true)
+//                    {
+                        updateEventMessage(DISK,"管理节点","/home 目录存储空间不足");
+                        ui.label_2->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+//                        update_flag_s1 = false;
+//                    }
 
                 }
             }
+
+//            update_flag_s1 = false;
         }
 
     }
@@ -915,6 +929,20 @@ void MainWindow::setupStatusTracer()
 
 }
 
+void MainWindow::setupMessageUpdateTimer()
+{
+    message_update_timer = new QTimer(this);
+    connect(message_update_timer,SIGNAL(timeout()),this,SLOT(updateMessageUpdateTimerFlag()));
+    message_update_timer->start(15000);
+}
+
+void MainWindow::updateMessageUpdateTimerFlag()
+{
+    update_flag_s1 = true;
+    update_flag_s2 = true;
+    update_flag_s3 = true;
+}
+
 void MainWindow::updateStatusTracer()
 {
 
@@ -961,6 +989,7 @@ void MainWindow::setupSessionConfigure(SshConfigure configure)
     setupCPUInfo();
     setupRamInfo();
     setupStatusTracer();
+    setupMessageUpdateTimer();
     // //display control tab node list
     updatorThread->start();//start shellTHread
     emit manageGetAllUserStart();
@@ -2692,7 +2721,12 @@ void MainWindow::updateNODESGUI(QString output){
 
 
                     nodeItem->setBackgroundColor("#FF5809");
-                    updateEventMessage(ERR,nodesList[i][0],"节点无响应");
+                    if(update_flag_s2 == true)
+                    {
+                        updateEventMessage(ERR,nodesList[i][0],"节点无响应");
+//                        update_flag_s2 = false;
+
+                    }
                     ui.label_3->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
                     downNodes++;
                 }
@@ -2707,6 +2741,8 @@ void MainWindow::updateNODESGUI(QString output){
             }
 
         }
+        update_flag_s2 = false;
+
         ui.label_NodeCount_red->setText(QString::number(downNodes));
         ui.label_downnodes->setText(QString::number(downNodes));
         ui.label_NodeCount_down->setText(QString::number(partUsedNodes+fullUsedNodes));

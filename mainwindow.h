@@ -170,6 +170,7 @@ private slots:
 
     void on_action_changeUser_triggered();
 
+    void updateMessageUpdateTimerFlag();
 public slots:
     void processFtpUploadFinishEvent();//process after upload finished signal
     void processFtpDownloadFinishEvent();//process after recieve download finished signal
@@ -192,6 +193,11 @@ private:
 
     QTreeWidgetItem * temp_ptr;
     QTreeWidgetItem * temp_ptr2=nullptr;
+
+    bool update_flag_s1 = true;
+    bool update_flag_s2 = true;
+    bool update_flag_s3 = true;
+    QTimer* message_update_timer;
 
     Highlighter *highLighter;
     Highlighter *highLighter2;
@@ -358,6 +364,7 @@ private:
     void closeSshClientSession();
     void closeThreads();
     void reconnect();
+    void setupMessageUpdateTimer();
 public:
     void setupSessionConfigure(SshConfigure configure);
 signals:
