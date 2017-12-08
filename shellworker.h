@@ -33,6 +33,9 @@ signals:
      void jobsQSubFinished(QStringList l1,QStringList l2);
      //jobs by showjobs
      void jobsShowjobsFinished(QStringList l1,QStringList l2);
+
+     //tempratuer for host
+     void hostTempratureFinished(int);
      //declare finish signal
      void finished();
 
@@ -76,6 +79,7 @@ private:
     //jobs by showjobs
     void getJOBS2();
 
+    void getHostTemprature();
 public:
     bool canceled_flag = false;
 };

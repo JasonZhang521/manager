@@ -50,6 +50,7 @@ void ShellWorker::update(){
         if(QString::fromStdString(outputString).contains("lib64"))
         {
             emit connectionSuccessSignal();
+            getHostTemprature();
             getCPU();
             getRAM();
             getDISK();
@@ -74,6 +75,18 @@ void ShellWorker::update(){
     }
     process();
 //    this->deleteLater();
+
+
+}
+
+//temprature
+void ShellWorker::getHostTemprature()
+{
+    //computer i need you to get host temprature and send this info through signal
+    int temprature_Host;
+    client->executeShellCommand("cat /sys/class/hwmon/hwmon0/device/temp1_input",outputString);
+    temprature_Host = QString::fromStdString(outputString).toInt()/1000;
+    emit hostTempratureFinished(temprature_Host);
 
 
 }

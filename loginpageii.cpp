@@ -15,6 +15,7 @@
 #include "contactpage.h"
 #include "contactinfoform.h"
 #include <QGraphicsDropShadowEffect>
+#include "doubleclickedbutton.h"
 
 LoginPageII::LoginPageII(QWidget *parent) :
     QWidget(parent),
@@ -262,7 +263,7 @@ void LoginPageII::enableButtons()
 }
 
 void LoginPageII::updateServerWidges()
-{
+{    
     clearWidgets(flowLayout);
     QPushButton* m_button = new QPushButton;//create button
     //    m_button->resize(80,80);
@@ -273,17 +274,110 @@ void LoginPageII::updateServerWidges()
     flowLayout->addWidget(m_button);//add to layout
 
     QStringList groups = m_setting->childGroups();
-    foreach (QString each, groups) {qDebug()<<each;
-        QPushButton* m_button = new QPushButton;
+    foreach (QString each, groups) {
+        DoubleClickedButton* m_button = new DoubleClickedButton;
         m_button->setFixedSize(QSize(100,80));
         m_button->setStyleSheet("color: rgb(255, 255, 255);"
-                                "background-color: rbg(163,255,232);");
+                                "background-color: rgb(36,160,97);");
         m_button->setText(each);
-        connect(m_button,SIGNAL(clicked()),this,SLOT(processConnectEvent()));
+        connect(m_button,SIGNAL(doubleClicked()),this,SLOT(processConnectEvent()));
+        connect(m_button,SIGNAL(singleClicked()),this,SLOT(processButtonSelectionEvent()));
 
 
         flowLayout->addWidget(m_button);
     }
+    QPushButton* m_button1 = new QPushButton;
+    m_button1->setFixedSize(QSize(100,80));
+    m_button1->setText("编辑");
+    m_button1->setStyleSheet("background-color: blue; color: white;");
+    connect(m_button1,SIGNAL(clicked()),this,SLOT(processEditButtonClicked()));
+    flowLayout->addWidget(m_button1);
+
+}
+
+void LoginPageII::processButtonSelectionEvent()
+{
+
+
+    DoubleClickedButton* pButton = qobject_cast<DoubleClickedButton*>(sender());
+    QString temp_name;
+    temp_name = pButton->text();
+
+
+    //fill login infos
+    SimpleCrypt crypto(Q_UINT64_C(0x0c2ad4a4acb9f083)); //some random number
+    crypto.setCompressionMode(SimpleCrypt::CompressionAlways); //always compress the data, see section below
+    crypto.setIntegrityProtectionMode(SimpleCrypt::ProtectionHash); //properly protect the integrity of the data
+
+    m_setting->beginGroup(pButton->text());
+
+    QString user = m_setting->value("username").toString();//get username
+    QString  password = crypto.decryptToString(m_setting->value("password").toString());//get passwd
+    QString  hostname = m_setting->value("hostname").toString();//get hostname
+    QString port = m_setting->value("port").toString();//get port number
+
+    m_setting->endGroup();
+    //show up
+    ui->comboBox_username->setCurrentText(user);
+    ui->lineEdit_login_password->setText(password);
+    ui->comboBox_server->setCurrentText(hostname);
+
+    configure.user = user.toStdString();
+    configure.password =password.toStdString();
+    configure.host = hostname.toStdString();
+    configure.port = port.toInt();
+
+    clearWidgets(flowLayout);
+    QPushButton* m_button = new QPushButton;//create button
+    //    m_button->resize(80,80);
+    m_button->setFixedSize(QSize(100,80));
+    m_button->setText("添加");
+    m_button->setStyleSheet("background-color: blue; color: white;");//set button for add
+    connect(m_button,SIGNAL(clicked()),this,SLOT(addServer_buttonClicked()));//connect add button signal to slot
+    flowLayout->addWidget(m_button);//add to layout
+
+    QStringList groups = m_setting->childGroups();
+    foreach (QString each, groups) {
+        DoubleClickedButton* m_button = new DoubleClickedButton;
+        m_button->setFixedSize(QSize(100,80));
+        m_button->setStyleSheet("color: rgb(255, 255, 255);"
+                                "background-color: rgb(36,160,97);");
+        m_button->setText(each);
+        if(each.compare(temp_name)==0)
+        {
+            m_button->setCheckable(true);
+            m_button->setChecked(true);
+        }
+        connect(m_button,SIGNAL(doubleClicked()),this,SLOT(processConnectEvent()));
+        connect(m_button,SIGNAL(singleClicked()),this,SLOT(processButtonSelectionEvent()));
+
+
+        flowLayout->addWidget(m_button);
+    }
+    QPushButton* m_button1 = new QPushButton;
+    m_button1->setFixedSize(QSize(100,80));
+    m_button1->setText("编辑");
+    m_button1->setStyleSheet("background-color: blue; color: white;");
+    connect(m_button1,SIGNAL(clicked()),this,SLOT(processEditButtonClicked()));
+    flowLayout->addWidget(m_button1);
+
+
+
+}
+
+void LoginPageII::processEditButtonClicked()
+{
+    editAccountInfo();
+
+}
+void LoginPageII::testSingleClick()
+{
+    qDebug()<<"single clicked";
+}
+
+void LoginPageII::testDoubleClick()
+{
+    qDebug()<<"double clicked";
 }
 
 void LoginPageII::clearWidgets(QLayout * layout) {

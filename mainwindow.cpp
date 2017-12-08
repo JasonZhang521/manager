@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     model->setSorting(QDir::DirsFirst | QDir::IgnoreCase | QDir::Name);
     ui.treeView->setModel(model);
 
-//    QApplication::setQuitOnLastWindowClosed(false);
+    //    QApplication::setQuitOnLastWindowClosed(false);
     QApplication::setActiveWindow(this);
     createCircleBar();
     QButtonGroup *group1=new QButtonGroup(ui.horizontalLayout_29);
@@ -64,10 +64,22 @@ MainWindow::MainWindow(QWidget *parent)
 
     setupStyleSheet();
 
+    current_user_label.setText("当前用户: ");
+    current_state_label.setText("  当前状态: ");
+
+    QWidget *spacerWidget = new QWidget(this);
+    spacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    spacerWidget->setVisible(true);
     ui.toolBar->addAction(ui.action_connect);
     ui.toolBar->addSeparator();
     ui.toolBar->addAction(ui.action_disconnect);
     ui.toolBar->addAction(ui.action_changeUser);
+    ui.toolBar->addSeparator();
+    ui.toolBar->addWidget(spacerWidget);
+    ui.toolBar->addWidget(&current_user_label);
+    ui.toolBar->addWidget(&current_user_label_show);
+    ui.toolBar->addWidget(&current_state_label);
+    ui.toolBar->addWidget(&current_state_label_show);
     this->move(QApplication::desktop()->screen()->rect().center()-this->rect().center());
 
 
@@ -99,7 +111,7 @@ void MainWindow::setCPUHistoryPlotStyle()
 
     ui.plot_cpuHistory->addGraph();
     ui.plot_cpuHistory->graph(0)->setPen(pen);
-//    ui.plot_cpuHistory->graph(0)->setLineStyle(QCPGraph::lsLine);
+    //    ui.plot_cpuHistory->graph(0)->setLineStyle(QCPGraph::lsLine);
     ui.plot_cpuHistory->graph(0)->setData(x,y);
     ui.plot_cpuHistory->xAxis->setLabel("");
     ui.plot_cpuHistory->yAxis->setLabel("");
@@ -152,7 +164,7 @@ void MainWindow::setCPUPlotCustomizeStyle()
     //custimize cpuusage plot
     ui.plot_cpuUsage->yAxis->setRange(0,100);
     ui.plot_cpuUsage->yAxis->setPadding(1); // a bit more space to the left border
-//    ui.plot_cpuUsage->yAxis->setLabel("");
+    //    ui.plot_cpuUsage->yAxis->setLabel("");
     ui.plot_cpuUsage->yAxis->setBasePen(QPen(Qt::white));
     ui.plot_cpuUsage->yAxis->setTickPen(QPen(Qt::white));
     ui.plot_cpuUsage->yAxis->setSubTickPen(QPen(Qt::white));
@@ -182,7 +194,7 @@ void MainWindow::setRamPlotCustomizeStyle()
     //custimize ram usage plot
     ui.plot_ramUsage->yAxis->setRange(0,100);
     ui.plot_ramUsage->yAxis->setPadding(1); // a bit more space to the left border
-//    ui.plot_ramUsage->yAxis->setLabel("cpu usage");
+    //    ui.plot_ramUsage->yAxis->setLabel("cpu usage");
     ui.plot_ramUsage->yAxis->setBasePen(QPen(Qt::white));
     ui.plot_ramUsage->yAxis->setTickPen(QPen(Qt::white));
     ui.plot_ramUsage->yAxis->setSubTickPen(QPen(Qt::white));
@@ -208,6 +220,7 @@ void MainWindow::setRamPlotCustomizeStyle()
 
 void MainWindow::setRamPlotData(int input)
 {
+    int temp = input;
     // prepare x axis with  labels:
     QVector<double> ticks;
     QVector<QString> labels;
@@ -380,7 +393,7 @@ void MainWindow::setupStyleSheet()
                                                                  "alternate-background-color: #D5EAFF;");
     ui.treeWidget_nodeViewer->horizontalScrollBar()->setStyleSheet("background-color: #ffd39b;"
                                                                    "alternate-background-color: #D5EAFF;");
-//    ui.pushButton_job_kill->setStyleSheet("QPushButton { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: rbg(140,140,198);}" "QPushButton:checked {background-color: pink;}");
+    //    ui.pushButton_job_kill->setStyleSheet("QPushButton { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: rbg(140,140,198);}" "QPushButton:checked {background-color: pink;}");
 }
 
 MainWindow::~MainWindow()
@@ -399,11 +412,11 @@ MainWindow::~MainWindow()
 void MainWindow::closeSshClientSession()
 {
 
-        client->shutdownShell();
-        client->shutdownSftp();
-        client->shutdown();
-        ssh_disconnect(session);
-        ssh_free(session);
+    client->shutdownShell();
+    client->shutdownSftp();
+    client->shutdown();
+    ssh_disconnect(session);
+    ssh_free(session);
 
 
 }
@@ -497,6 +510,7 @@ void MainWindow::setupThreads(SshConfigure configure){
     /****************************************************************************/
     /*************************************shell***************************************/
     //connect
+    connect(shellWorker,SIGNAL(hostTempratureFinished(int)),this,SLOT(updateHostTempGUI(int)));
     connect(shellWorker,SIGNAL(cpuFinished(QString)),this,SLOT(updateCPUGUI(QString)));
     connect(shellWorker,SIGNAL(ramFinished(QString)),this,SLOT(updateRAMGUI(QString)));
     connect(shellWorker,SIGNAL(diskFinished(QString)),this,SLOT(updateDISKGUI(QString)));
@@ -565,6 +579,9 @@ void MainWindow::setupClient(SshConfigure configure)
     client->setup();
     client->startShell();
     client->startSftp();
+    client->executeShellCommand("sudo dmidecode",outputString);
+    qDebug()<<"@12345654321";
+    qDebug()<<QString::fromStdString(outputString);
 }
 
 void MainWindow::setupMac()
@@ -684,15 +701,15 @@ void MainWindow::setupStorageDisplay()
                 ui.label_sizeShowRow1_4->setText(storageInfoList[i].split(QRegExp("[\\s]+"))[0]);
                 ui.progressBar_distShowRow1_4->setValue(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt());
                 if(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt()>=80)
-                    {
-//                        if(update_flag_s1 == true)
-//                        {
-                            updateEventMessage(DISK,"管理节点","/ 目录存储空间不足");
-                            ui.label_2->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
-//                            update_flag_s1 = false;
-//                        }
+                {
+                    //                        if(update_flag_s1 == true)
+                    //                        {
+                    updateEventMessage(DISK,"管理节点","/ 目录存储空间不足");
+                    ui.pushButton_disk->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+                    //                            update_flag_s1 = false;
+                    //                        }
 
-                    }
+                }
 
             }
             if(QString::compare(storageInfoList[i].split(QRegExp("[\\s]+"))[4],"/boot",Qt::CaseInsensitive)==0){
@@ -701,12 +718,12 @@ void MainWindow::setupStorageDisplay()
                 ui.progressBar_diskShowRow2_4->setValue(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt());
                 if(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt()>=80)
                 {
-//                    if(update_flag_s1 == true)
-//                    {
-                        updateEventMessage(DISK,"管理节点","/boot 目录存储空间不足");
-                        ui.label_2->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
-//                        update_flag_s1 = false;
-//                    }
+                    //                    if(update_flag_s1 == true)
+                    //                    {
+                    updateEventMessage(DISK,"管理节点","/boot 目录存储空间不足");
+                    ui.pushButton_disk->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+                    //                        update_flag_s1 = false;
+                    //                    }
 
                 }
             }
@@ -716,17 +733,17 @@ void MainWindow::setupStorageDisplay()
                 ui.progressBar_diskShowRow3_4->setValue(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt());
                 if(storageInfoList[i].split(QRegExp("[\\s]+"))[3].replace("%","").toInt()>=80)
                 {
-//                    if(update_flag_s1 == true)
-//                    {
-                        updateEventMessage(DISK,"管理节点","/home 目录存储空间不足");
-                        ui.label_2->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
-//                        update_flag_s1 = false;
-//                    }
+                    //                    if(update_flag_s1 == true)
+                    //                    {
+                    updateEventMessage(DISK,"管理节点","/home 目录存储空间不足");
+                    ui.pushButton_disk->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+                    //                        update_flag_s1 = false;
+                    //                    }
 
                 }
             }
 
-//            update_flag_s1 = false;
+            //            update_flag_s1 = false;
         }
 
     }
@@ -865,7 +882,7 @@ void MainWindow::setupNodesDisplay()
                 nodeItem->setBackgroundColor("#A6FFA6");
             }
 
-           else if(nodesList[i][1].split(" = ")[1]=="down")
+            else if(nodesList[i][1].split(" = ")[1]=="down")
             {
 
                 nodeItem->setBackgroundColor("#FF5809");
@@ -898,8 +915,8 @@ void MainWindow::setupCPUInfo()
         cpuCores=QString::fromStdString(outputString).remove("\n").toInt();
         ui.label_CPUCoreShow->setText(QString::number(cpuCores));
     }
-        client->executeShellCommand("cat /proc/cpuinfo | grep 'model name' | awk -F: '{print $2}'",outputString);
-        ui.label_CPUTypeShow->setText(QString::fromStdString(outputString).split("\n")[0]);
+    client->executeShellCommand("cat /proc/cpuinfo | grep 'model name' | awk -F: '{print $2}'",outputString);
+    ui.label_CPUTypeShow->setText(QString::fromStdString(outputString).split("\n")[0]);
 
 }
 
@@ -938,9 +955,10 @@ void MainWindow::setupMessageUpdateTimer()
 
 void MainWindow::updateMessageUpdateTimerFlag()
 {
-    update_flag_s1 = true;
-    update_flag_s2 = true;
-    update_flag_s3 = true;
+//    update_flag_s1 = true;
+//    update_flag_s2 = true;
+//    update_flag_s3 = true;
+//    update_flag_s4 = true;
 }
 
 void MainWindow::updateStatusTracer()
@@ -955,13 +973,17 @@ void MainWindow::updateStatusTracer()
     else if(temp == status_increment_indicator)
     {
         isOnline = false;
-        ui.label_connection_indicator->setText("offline");
+        //        ui.label_connection_indicator->setText("offline");
+        current_state_label_show.setText("  offline");
+        current_state_label_show.setStyleSheet("color:red;");
     }
 
 }
 void MainWindow::setupCurrentUser(QString input)
 {
-    ui.label_current_user->setText(input);
+    //    ui.label_current_user->setText(input);
+    current_user_label_show.setText(input);
+
 }
 
 void MainWindow::setupSSHConfigureInfo(SshConfigure configure)
@@ -1032,6 +1054,7 @@ void MainWindow::updateGetHardwareInfo()
 {
     qDebug()<<"hardware get info updated";
     QString temp_str;
+    QString temp_sysinfo;
     while (process.messageReceived())
     {
         std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
@@ -1040,11 +1063,36 @@ void MainWindow::updateGetHardwareInfo()
         SystemMonitorMessage::ComputerNodeInfoReport* resp =
                 dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
 
-        std::cout << "-----------------------" << std::endl;
-        //             std::cout << *msg << std::endl;
-        std::cout << resp->getHostName()<<std::endl;
+        //comuter i need you to extract each message's temprature information for me so as to judge if any nodes are beyond alert temprature
 
         temp_str = QString::fromStdString(resp->getHostName());
+        std::stringstream str_sysInfoBriefly;
+        str_sysInfoBriefly << resp->getSystemInfoBriefly();
+        temp_sysinfo = QString::fromStdString(str_sysInfoBriefly.str());
+
+        QString raw_temprature;
+        QRegularExpression re6("temprature=..");
+        QRegularExpressionMatch match_selectedNode_temprature =re6.match(temp_sysinfo);
+        if(match_selectedNode_temprature.hasMatch())
+        {
+            raw_temprature = match_selectedNode_temprature.captured(0);
+        }
+
+        if(raw_temprature.contains("="))
+        {
+            int temp_nodeTemprature;
+            temp_nodeTemprature = raw_temprature.split("=")[1].toInt();
+            if(temp_nodeTemprature>=70&&update_flag_s4==true)
+            {
+                updateEventMessage(ALERT,temp_str,"节点温度超过70度！");
+                ui.pushButton_temprature->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+
+                update_flag_s4 = false;
+            }
+        }
+
+
+
         QString cpu_usage;
         std::stringstream str_cpuUsageInfo;//raw cpu usage data
         str_cpuUsageInfo << resp->getCpuUsageInfo();
@@ -1055,8 +1103,6 @@ void MainWindow::updateGetHardwareInfo()
             cpu_usage = match_cpu_total.captured(0);
         }
 
-        //computer i need you to put this message item in that list.
-       // but before that , i need you to check if this item already exist in that list
         QStringList temp_strList;
         temp_strList.append(temp_str);
         temp_strList.append(cpu_usage);
@@ -1081,14 +1127,14 @@ void MainWindow::updateGetHardwareInfo()
         }
         qDebug()<<hardware_hostname_list;
 
-//        if(!hardware_hostname_list.contains(temp_str))
-//        {
-//            hardware_hostname_list.append(temp_str);
-//        }
+        //        if(!hardware_hostname_list.contains(temp_str))
+        //        {
+        //            hardware_hostname_list.append(temp_str);
+        //        }
         std::cout << "-----------------------" << std::endl;
         if(resp->getHostName().compare(activated_node.toStdString())==0)
         {
-           updateHardwareGUI(resp);
+            updateHardwareGUI(resp);
         }
     }
     makeHardwareNodesButtons(hardware_hostname_list);
@@ -1103,6 +1149,7 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
 
     std::stringstream str_stream;//raw system information for debug only
     str_stream << resp->getSystemInfoBriefly();//retrieve system info
+    qDebug()<<"@777888";
     qDebug()<<QString::fromStdString(str_stream.str());//for debug use only
 
     std::stringstream str_process;//raw system info for display usage
@@ -1163,16 +1210,16 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     foreach(QString each,processList_cpu)
     {
         QStringList temp_str=each.split(",");
-                 if(temp_str.size()>=maximumPropertySize)
-                 {
-                     QTreeWidgetItem* item = new QTreeWidgetItem(ui.cpu_process);
-                     item->setText(0,temp_str[0].split("=")[1]);
-                     item->setData(1,Qt::EditRole,temp_str[1].split("=")[1].toInt());
-                     item->setText(2,temp_str[2].split("=")[1]);
-                     item->setData(3,Qt::EditRole,temp_str[3].split("=")[1].toInt());
-                     item->setData(4,Qt::EditRole,temp_str[4].split("=")[1].toDouble());
+        if(temp_str.size()>=maximumPropertySize)
+        {
+            QTreeWidgetItem* item = new QTreeWidgetItem(ui.cpu_process);
+            item->setText(0,temp_str[0].split("=")[1]);
+            item->setData(1,Qt::EditRole,temp_str[1].split("=")[1].toInt());
+            item->setText(2,temp_str[2].split("=")[1]);
+            item->setData(3,Qt::EditRole,temp_str[3].split("=")[1].toInt());
+            item->setData(4,Qt::EditRole,temp_str[4].split("=")[1].toDouble());
 
-                 }
+        }
 
 
     }
@@ -1196,16 +1243,16 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     foreach(QString each,processList_mem)
     {
         QStringList temp_str=each.split(",");
-                 if(temp_str.size()>=maximumPropertySize)
-                 {
-                     QTreeWidgetItem* item = new QTreeWidgetItem(ui.ram_process);
-                     item->setText(0,temp_str[0].split("=")[1]);
-                     item->setData(1,Qt::EditRole,temp_str[1].split("=")[1].toInt());
-                     item->setText(2,temp_str[2].split("=")[1]);
-                     item->setData(3,Qt::EditRole,temp_str[3].split("=")[1].toInt());
-                     item->setData(4,Qt::EditRole,temp_str[4].split("=")[1].toInt());
+        if(temp_str.size()>=maximumPropertySize)
+        {
+            QTreeWidgetItem* item = new QTreeWidgetItem(ui.ram_process);
+            item->setText(0,temp_str[0].split("=")[1]);
+            item->setData(1,Qt::EditRole,temp_str[1].split("=")[1].toInt());
+            item->setText(2,temp_str[2].split("=")[1]);
+            item->setData(3,Qt::EditRole,temp_str[3].split("=")[1].toInt());
+            item->setData(4,Qt::EditRole,temp_str[4].split("=")[1].toInt());
 
-                 }
+        }
 
 
     }
@@ -1232,6 +1279,25 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     ui.plot_ramUsageHistory->replot();
     increamter+=1;
     //----------------------------------------------------------------//
+
+
+    //--------------------------------show selected node's tempreature-----------------//
+    //computer, i want you to extract that information for me, you know.
+    QString raw_temprature;
+    QRegularExpression re6("temprature=..");
+    QRegularExpressionMatch match_selectedNode_temprature =re6.match(temp_sys);
+    if(match_selectedNode_temprature.hasMatch())
+    {
+        raw_temprature = match_selectedNode_temprature.captured(0);
+    }
+
+    qDebug()<<"@991";
+    qDebug()<<raw_temprature;
+    if(raw_temprature.contains("="))
+    {
+        ui.label_selectedNodes_hardware_temprature->setText("温度:\n"+raw_temprature.split("=")[1]);
+
+    }
 
 
     //--------------------------------process GPU informations-----------------------//
@@ -1262,7 +1328,7 @@ void MainWindow::makeHardwareNodesButtons(QList<QStringList> list)
         QListWidgetItem* item = new QListWidgetItem(ui.listWidget_nodes_hardware);
         item->setText(each.at(0));
         if(each.at(1).toInt()<10)
-        item->setBackground(Qt::green);
+            item->setBackground(Qt::green);
         else if(each.at(1).toInt()>=10&&each.at(1).toInt()<80)
             item->setBackground(Qt::blue);
         else if(each.at(1).toInt()>=80)
@@ -1273,7 +1339,7 @@ void MainWindow::makeHardwareNodesButtons(QList<QStringList> list)
 
 void MainWindow::setupIPCClient(SshConfigure configure)
 {
-
+    SshConfigure temp = configure;
     process.start();
     timer_hardware_getInfo = new QTimer;
     timer_hardware_getInfo->setInterval(500);
@@ -1307,8 +1373,8 @@ void MainWindow::on_pushButton_monitor_node_clicked()
     ui.stackedWidget_monior->setCurrentIndex(0);
     ui.pushButton_monitor_node->setChecked(true);
     ui.pushButton_monitor_jobs->setChecked(false);
-    ui.pushButton_monitor_GPU->setChecked(false);
-    ui.pushButton_monitor_IBCard->setChecked(false);
+//    ui.pushButton_monitor_GPU->setChecked(false);
+//    ui.pushButton_monitor_IBCard->setChecked(false);
 
 }
 void MainWindow::on_pushButton_monitor_jobs_clicked()
@@ -1316,26 +1382,10 @@ void MainWindow::on_pushButton_monitor_jobs_clicked()
     ui.stackedWidget_monior->setCurrentIndex(1);
     ui.pushButton_monitor_node->setChecked(false);
     ui.pushButton_monitor_jobs->setChecked(true);
-    ui.pushButton_monitor_GPU->setChecked(false);
-    ui.pushButton_monitor_IBCard->setChecked(false);
-}
-void MainWindow::on_pushButton_monitor_GPU_clicked()
-{
-    ui.stackedWidget_monior->setCurrentIndex(2);
-    ui.pushButton_monitor_node->setChecked(false);
-    ui.pushButton_monitor_jobs->setChecked(false);
-    ui.pushButton_monitor_GPU->setChecked(true);
-    ui.pushButton_monitor_IBCard->setChecked(false);
+//    ui.pushButton_monitor_GPU->setChecked(false);
+//    ui.pushButton_monitor_IBCard->setChecked(false);
 }
 
-void MainWindow::on_pushButton_monitor_IBCard_clicked()
-{
-    ui.stackedWidget_monior->setCurrentIndex(3);
-    ui.pushButton_monitor_node->setChecked(false);
-    ui.pushButton_monitor_jobs->setChecked(false);
-    ui.pushButton_monitor_GPU->setChecked(false);
-    ui.pushButton_monitor_IBCard->setChecked(true);
-}
 
 void MainWindow::on_pushButton_control_shutdownpage_clicked()
 {
@@ -1728,13 +1778,17 @@ void MainWindow::processFtpDownloadFinishEvent(){
 void MainWindow::processConnectionFailedEvent()
 {
 
-    ui.label_connection_indicator->setText("offline");
+    //    ui.label_connection_indicator->setText("offline");
+    current_state_label_show.setText("offline");
+    current_state_label_show.setStyleSheet("color:red;");
 }
 
 void MainWindow::processConnectionSuccessEvent()
 {
 
-    ui.label_connection_indicator->setText("online");
+    //    ui.label_connection_indicator->setText("online");
+    current_state_label_show.setText("online");
+    current_state_label_show.setStyleSheet("color:green;");
 }
 //process ftp upload finish event
 void MainWindow::processFtpUploadFinishEvent(){
@@ -1757,7 +1811,7 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
     case 1: {
         ui.treeWidget_jobsubmitfile->clear();
         if(m_list.size()>1){
-            for(unsigned int i =1;i<m_list.size();i++){//iterate filelist
+            for( int i =1;i<m_list.size();i++){//iterate filelist
                 QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget_jobsubmitfile);
                 if(m_list[i][1].compare("1")==0)
                 {
@@ -1791,7 +1845,7 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
     case 2:{
         ui.treeWidget_job_file->clear();
         if(m_list.size()>1){
-            for(unsigned int i =1;i<m_list.size();i++){//iterate filelist
+            for( int i =1;i<m_list.size();i++){//iterate filelist
                 QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget_job_file);
                 if(m_list[i][1].compare("1")==0)
                 {
@@ -1825,7 +1879,7 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
         begin = clock();
         ui.treeWidget->clear();
         if(m_list.size()>1){
-            for(unsigned int i =1;i<m_list.size();i++){//iterate filelist
+            for( int i =1;i<m_list.size();i++){//iterate filelist
                 QTreeWidgetItem *file = new QTreeWidgetItem(ui.treeWidget);
                 if(m_list[i][1].compare("1")==0)
                 {
@@ -2285,17 +2339,18 @@ void MainWindow::on_pushButton_job_submit_selectRemote_clicked()
         temp_ptr = each;
     }
     cachePathRemote = currentPathRemote+"/"+ui.treeWidget_jobsubmitfile->currentItem()->text(0).toStdString();
+    on_pushButton_job_submit_edit_clicked();
 
 }
 
 
 void MainWindow::changeUserSlot(){
-//    emit changeUserSignal();
-//    closeSshClientSession();
-//    closeThreads();
-//    this->hide();
+    //    emit changeUserSignal();
+    //    closeSshClientSession();
+    //    closeThreads();
+    //    this->hide();
     qApp->closeAllWindows();
-        QProcess::startDetached(qApp->applicationFilePath(), QStringList());
+    QProcess::startDetached(qApp->applicationFilePath(), QStringList());
 
 }
 
@@ -2546,6 +2601,25 @@ void MainWindow::updateCPUGUI(QString output){
 
 
 }
+
+void MainWindow::updateHostTempGUI(int t)
+{
+    ui.label_host_temprature->setText(QString::number(t));
+    if(t>70)
+    {
+        ui.label_host_temprature->setStyleSheet("color: rgb(255, 0, 0);");
+        if(update_flag_s1 == true)
+        {
+            updateEventMessage(ALERT,"control node","管理节点cpu温度过高！");
+            ui.pushButton_temprature->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+
+        }
+
+    }
+    else
+        ui.label_host_temprature->setStyleSheet("color: rgb(0, 255, 0)");
+
+}
 //ram
 void MainWindow::updateRAMGUI(QString output){
     ui.widget_rambar->setValue(output.toFloat());
@@ -2716,7 +2790,7 @@ void MainWindow::updateNODESGUI(QString output){
                     nodeItem->setBackgroundColor("#A6FFA6");
                 }
 
-               else if(nodesList[i][1].split(" = ")[1]=="down")
+                else if(nodesList[i][1].split(" = ")[1]=="down")
                 {
 
 
@@ -2724,10 +2798,11 @@ void MainWindow::updateNODESGUI(QString output){
                     if(update_flag_s2 == true)
                     {
                         updateEventMessage(ERR,nodesList[i][0],"节点无响应");
-//                        update_flag_s2 = false;
+                        //                        update_flag_s2 = false;
 
                     }
-                    ui.label_3->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+//                    ui.label_3->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+                    ui.pushButton_error->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
                     downNodes++;
                 }
                 else
@@ -2735,9 +2810,9 @@ void MainWindow::updateNODESGUI(QString output){
                     nodeItem->setBackgroundColor("#97CBFF");
 
                 }
-//                if(nodesList[i][1].split(" = ")[1].compare("down")==0){
+                //                if(nodesList[i][1].split(" = ")[1].compare("down")==0){
 
-//                }
+                //                }
             }
 
         }
@@ -2960,8 +3035,8 @@ void MainWindow::on_treeWidget_job_file_itemActivated(QTreeWidgetItem *item, int
     }
 
 
-        item->setBackground(0,Qt::red);
-        temp_ptr2 = item;
+    item->setBackground(0,Qt::red);
+    temp_ptr2 = item;
 
     //get file name
     if(item->isDisabled())return;
@@ -3629,9 +3704,11 @@ void MainWindow::on_action_disconnect_triggered()
 {
 
 
-    if(ui.label_connection_indicator->text().compare("online")==0)
+    if(current_state_label_show.text().compare("online")==0)
     {
-        ui.label_connection_indicator->setText("offline");
+        //        ui.label_connection_indicator->setText("offline");
+        current_state_label_show.setText("offline");
+        current_state_label_show.setStyleSheet("color: red;");
         closeSshClientSession();
         closeThreads();
     }
@@ -3646,9 +3723,11 @@ void MainWindow::on_action_disconnect_triggered()
 
 void MainWindow::on_action_connect_triggered()
 {
-    if(ui.label_connection_indicator->text().compare("offline")==0)
+    if(current_state_label_show.text().compare("offline")==0)
     {
-        ui.label_connection_indicator->setText("online");
+        //        ui.label_connection_indicator->setText("online");
+        current_state_label_show.setText("online");
+        current_state_label_show.setStyleSheet("color:green;");
         reconnect();
 
     }
@@ -3670,6 +3749,44 @@ void MainWindow::on_action_ChangeUser_triggered()
 void MainWindow::on_action_changeUser_triggered()
 {
     qApp->closeAllWindows();
-        QProcess::startDetached(qApp->applicationFilePath(), QStringList());
+    QProcess::startDetached(qApp->applicationFilePath(), QStringList());
 
+}
+
+void MainWindow::on_pushButton_monitor_CPU_clicked()
+{
+    ui.stackedWidget->setCurrentIndex(0);
+    ui.pushButton_monitor_CPU->setChecked(true);
+    ui.pushButton_monitor_GPU_2->setChecked(false);
+    ui.pushButton_monitor_IBCard_2->setChecked(false);
+}
+
+void MainWindow::on_pushButton_monitor_GPU_2_clicked()
+{
+
+    ui.stackedWidget->setCurrentIndex(1);
+    ui.pushButton_monitor_CPU->setChecked(false);
+    ui.pushButton_monitor_GPU_2->setChecked(true);
+    ui.pushButton_monitor_IBCard_2->setChecked(false);
+}
+
+void MainWindow::on_pushButton_monitor_IBCard_2_clicked()
+{
+
+    ui.stackedWidget->setCurrentIndex(2);
+    ui.pushButton_monitor_CPU->setChecked(false);
+    ui.pushButton_monitor_GPU_2->setChecked(false);
+    ui.pushButton_monitor_IBCard_2->setChecked(true);
+}
+
+
+
+void MainWindow::on_pushButton_error_clicked()
+{
+    update_flag_s2 = true;
+}
+
+void MainWindow::on_pushButton_temprature_clicked()
+{
+    update_flag_s1 = true;
 }

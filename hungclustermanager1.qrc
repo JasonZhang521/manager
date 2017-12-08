@@ -101,5 +101,6 @@
         <file>Resources/temp/managerview.png</file>
         <file>Resources/temp/gpu.png</file>
         <file>Resources/temp/机柜.png</file>
+        <file>Resources/temp/设备 .png</file>
     </qresource>
 </RCC>

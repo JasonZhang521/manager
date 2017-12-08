@@ -16,6 +16,7 @@
 #include <QSplashScreen>
 #include <QMouseEvent>
 #include <QRegion>
+#include <QTimer>
 
 namespace Ui {
 class LoginPageII;
@@ -60,6 +61,12 @@ private slots:
     void on_scrollArea_customContextMenuRequested(const QPoint &pos);
 
     void editAccountInfo();
+
+
+    void testSingleClick();
+    void testDoubleClick();
+    void processButtonSelectionEvent();
+    void processEditButtonClicked();
 private:
     Ui::LoginPageII *ui;
     //ssh related variables
@@ -70,6 +77,7 @@ private:
     SshClientSession *clientSession;
     ISshClient *client;
 
+    QTimer* double_click_timer;
     bool isValideUser = false;
 
     MainWindow *w;

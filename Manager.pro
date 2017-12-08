@@ -182,7 +182,8 @@ SOURCES += \
     sourceCode/ShellCommandMessage/ShellCommandResponse.cpp \
     sourceCode/Environment/ShellCommandGenericOutput.cpp \
     sourceCode/Configure/SystemEnvironmentConfigure.cpp \
-    sourceCode/PlatformWrapper/SystemApi.cpp
+    sourceCode/PlatformWrapper/SystemApi.cpp \
+    doubleclickedbutton.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -379,7 +380,8 @@ HEADERS += \
     sourceCode/TraceLog/TraceBuf.h \
     sourceCode/TraceLog/TraceConsole.h \
     sourceCode/TraceLog/TraceFile.h \
-    sourceCode/PlatformWrapper/SystemApi.h
+    sourceCode/PlatformWrapper/SystemApi.h \
+    doubleclickedbutton.h
 
 
 

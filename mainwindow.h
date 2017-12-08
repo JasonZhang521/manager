@@ -54,7 +54,6 @@ private slots:
 
     void on_pushButton_monitor_node_clicked();
     void on_pushButton_monitor_jobs_clicked();
-    void on_pushButton_monitor_GPU_clicked();
     void on_pushButton_control_shutdownpage_clicked();
     void on_pushButton_control_userpage_clicked();
     void on_pushButton_control_queuepage_clicked();
@@ -157,7 +156,6 @@ private slots:
     void updateGetHardwareInfo();
     void on_listWidget_nodes_hardware_itemClicked(QListWidgetItem *item);
 
-    void on_pushButton_monitor_IBCard_clicked();
 
     void on_treeWidget_bottomMessage_customContextMenuRequested(const QPoint &pos);
 
@@ -171,6 +169,16 @@ private slots:
     void on_action_changeUser_triggered();
 
     void updateMessageUpdateTimerFlag();
+    void on_pushButton_monitor_CPU_clicked();
+
+    void on_pushButton_monitor_GPU_2_clicked();
+
+    void on_pushButton_monitor_IBCard_2_clicked();
+
+    void on_pushButton_error_clicked();
+
+    void on_pushButton_temprature_clicked();
+
 public slots:
     void processFtpUploadFinishEvent();//process after upload finished signal
     void processFtpDownloadFinishEvent();//process after recieve download finished signal
@@ -187,9 +195,15 @@ public slots:
     void processConnectionSuccessEvent();
     void updatePlotHeatBeat();
     void closeSession();
+    void updateHostTempGUI(int t);
 private:
     Ui::MainWindow ui;
     void createCircleBar();
+
+    QLabel current_state_label;
+    QLabel current_state_label_show;
+    QLabel current_user_label;
+    QLabel current_user_label_show;
 
     QTreeWidgetItem * temp_ptr;
     QTreeWidgetItem * temp_ptr2=nullptr;
@@ -197,7 +211,10 @@ private:
     bool update_flag_s1 = true;
     bool update_flag_s2 = true;
     bool update_flag_s3 = true;
+    bool update_flag_s4 = true;//for son node temprature
     QTimer* message_update_timer;
+
+    QTimer* double_click_timer;
 
     Highlighter *highLighter;
     Highlighter *highLighter2;
