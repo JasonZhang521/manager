@@ -74,7 +74,7 @@ void ShellWorker::update(){
 
     }
     process();
-//    this->deleteLater();
+    //    this->deleteLater();
 
 
 }
@@ -94,23 +94,72 @@ void ShellWorker::getHostTemprature()
 //cpu
 void ShellWorker::getCPU(){
 
-    int hostCoreNum;float cpuUsage;float loadavg;
-    client->executeShellCommand("nproc",outputString);
-    if(outputString!=""){//return is not empty
-        hostCoreNum=QString::fromStdString(outputString).remove("\n").toInt();//parse to int of host corenum
+    //    int hostCoreNum;float cpuUsage;float loadavg;
+    //    client->executeShellCommand("nproc",outputString);
+    //    if(outputString!=""){//return is not empty
+    //        hostCoreNum=QString::fromStdString(outputString).remove("\n").toInt();//parse to int of host corenum
+
+    //    }
+
+    //    //get load average
+    //    client->executeShellCommand("cat /proc/loadavg | awk '{print $1}'",outputString);
+    //    if(outputString!=""){//return is not empty
+    //        loadavg = QString::fromStdString(outputString).remove("\n").toFloat();//parse to float of loadavg
+
+    //        if(hostCoreNum!=0)
+    //            cpuUsage = loadavg/hostCoreNum;//calculate cpu usage
+    //        emit cpuFinished(QString::number(cpuUsage*100));
+    //    }
+
+    double cpuUsage;
+    cpuUsage = getCPUByCalculation();
+//    qDebug()<<QString::number(cpuUsage);
+    emit cpuFinished(QString::number(cpuUsage));
+
+}
+
+double ShellWorker::getCPUByCalculation()
+{
+    double return_value;
+    client->executeShellCommand("cat /proc/stat | grep \"cpu \"",outputString);
+    QString temp_outputString = QString::fromStdString(outputString);
+    QStringList temp_outputStr_list = temp_outputString.split(QRegExp("[\\s]+"));
+
+    //get work
+    proCpuWork = temp_outputStr_list[1].toInt()+temp_outputStr_list[2].toInt()+temp_outputStr_list[3].toInt();
+
+    //get total
+    proCpuTotal=0;
+    for(int i =1;i<=7;i++)
+    {
+        proCpuTotal+=temp_outputStr_list[i].toInt();
 
     }
 
-    //get load average
-    client->executeShellCommand("cat /proc/loadavg | awk '{print $1}'",outputString);
-    if(outputString!=""){//return is not empty
-        loadavg = QString::fromStdString(outputString).remove("\n").toFloat();//parse to float of loadavg
 
-        if(hostCoreNum!=0)
-            cpuUsage = loadavg/hostCoreNum;//calculate cpu usage
-        emit cpuFinished(QString::number(cpuUsage*100));
+    //work_over_period = pro - pre = 68
+    //total_over_period = pro - pre = 1106
+    //computer,
+    //get work over period
+    int work_over_period = proCpuWork-preCpuWork;
+
+    int total_over_period = proCpuTotal-preCpuTotal;
+
+    preCpuWork = proCpuWork;
+    preCpuTotal = proCpuTotal;
+
+    if(preCpuTotal > 0 )
+    {
+         return_value = (double)work_over_period / (double)total_over_period * 100;
+
+        qDebug()<<work_over_period;
+        qDebug()<<total_over_period;
+
     }
 
+    else
+        return_value = 0;
+    return return_value;
 
 }
 //ram
@@ -128,9 +177,9 @@ void ShellWorker::getRAM(){
             }
 
         }
-      client->executeShellCommand("free | grep buffers/cache | awk '{print $4}'",outputString);
-      usedRam =totalRam - QString::fromStdString(outputString).toFloat();
-      
+        client->executeShellCommand("free | grep buffers/cache | awk '{print $4}'",outputString);
+        usedRam =totalRam - QString::fromStdString(outputString).toFloat();
+
 
         if(totalRam!=0)
             ramUsage = usedRam/totalRam;

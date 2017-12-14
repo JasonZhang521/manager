@@ -179,6 +179,7 @@ private slots:
 
     void on_pushButton_temprature_clicked();
 
+    void refreshNodesList();
 public slots:
     void processFtpUploadFinishEvent();//process after upload finished signal
     void processFtpDownloadFinishEvent();//process after recieve download finished signal
@@ -278,6 +279,7 @@ private:
     QThread* manageThread;
     ManageWorker* manageWorker;
 
+    QString host_cores_freq_cache;
     //declare ipc thread and worker
     QThread* ipcThread;
     IPCWorker* ipcWorker;
@@ -382,6 +384,7 @@ private:
     void closeThreads();
     void reconnect();
     void setupMessageUpdateTimer();
+    void getHostCpuFreqCache();
 public:
     void setupSessionConfigure(SshConfigure configure);
 signals:

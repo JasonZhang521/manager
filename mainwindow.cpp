@@ -917,8 +917,11 @@ void MainWindow::setupCPUInfo()
     }
     client->executeShellCommand("cat /proc/cpuinfo | grep 'model name' | awk -F: '{print $2}'",outputString);
     ui.label_CPUTypeShow->setText(QString::fromStdString(outputString).split("\n")[0]);
+    ui.label_CPUFreqShow->setText(QString::fromStdString(outputString).split("\n")[0].split(" ").last());
 
 }
+
+
 
 void MainWindow::setupRamInfo()
 {
@@ -942,7 +945,7 @@ void MainWindow::setupStatusTracer()
     temp = status_increment_indicator;
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateStatusTracer()));
-    timer->start(30000);
+    timer->start(20000);
 
 }
 
@@ -978,6 +981,9 @@ void MainWindow::updateStatusTracer()
         current_state_label_show.setStyleSheet("color:red;");
     }
 
+    getHostCpuFreqCache();
+    ui.label_CPUFreqShow->setToolTip(host_cores_freq_cache);
+
 }
 void MainWindow::setupCurrentUser(QString input)
 {
@@ -989,6 +995,12 @@ void MainWindow::setupCurrentUser(QString input)
 void MainWindow::setupSSHConfigureInfo(SshConfigure configure)
 {
     m_configure = configure;
+}
+
+void MainWindow::getHostCpuFreqCache()
+{
+    client->executeShellCommand("cat /proc/cpuinfo | grep 'cpu MHz'",outputString);
+    host_cores_freq_cache = QString::fromStdString(outputString);
 }
 //setup ssh client session and initilizations
 void MainWindow::setupSessionConfigure(SshConfigure configure)
@@ -1014,12 +1026,17 @@ void MainWindow::setupSessionConfigure(SshConfigure configure)
     setupMessageUpdateTimer();
     // //display control tab node list
     updatorThread->start();//start shellTHread
+
+    getHostCpuFreqCache();
+    ui.label_CPUFreqShow->setToolTip(host_cores_freq_cache);
+
+
     emit manageGetAllUserStart();
     emit getLimitedQueuesStart();
     emit getAllQueueInfosStart();
 
     //setup ipc client
-    setupIPCClient(configure);
+//    setupIPCClient(configure);
 }
 
 void MainWindow::reconnect()
@@ -1050,94 +1067,98 @@ void MainWindow::closeSession()
 
 }
 
+void MainWindow::refreshNodesList()
+{
+    hardware_hostname_list.clear();
+}
 void MainWindow::updateGetHardwareInfo()
 {
-    qDebug()<<"hardware get info updated";
-    QString temp_str;
-    QString temp_sysinfo;
-    while (process.messageReceived())
-    {
-        std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
-        SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
-                dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
-        SystemMonitorMessage::ComputerNodeInfoReport* resp =
-                dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
+//    qDebug()<<"hardware get info updated";
+//    QString temp_str;
+//    QString temp_sysinfo;
+//    while (process.messageReceived())
+//    {
+//        std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
+//        SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
+//                dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
+//        SystemMonitorMessage::ComputerNodeInfoReport* resp =
+//                dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
 
-        //comuter i need you to extract each message's temprature information for me so as to judge if any nodes are beyond alert temprature
+//        //comuter i need you to extract each message's temprature information for me so as to judge if any nodes are beyond alert temprature
 
-        temp_str = QString::fromStdString(resp->getHostName());
-        std::stringstream str_sysInfoBriefly;
-        str_sysInfoBriefly << resp->getSystemInfoBriefly();
-        temp_sysinfo = QString::fromStdString(str_sysInfoBriefly.str());
+//        temp_str = QString::fromStdString(resp->getHostName());
+//        std::stringstream str_sysInfoBriefly;
+//        str_sysInfoBriefly << resp->getSystemInfoBriefly();
+//        temp_sysinfo = QString::fromStdString(str_sysInfoBriefly.str());
 
-        QString raw_temprature;
-        QRegularExpression re6("temprature=..");
-        QRegularExpressionMatch match_selectedNode_temprature =re6.match(temp_sysinfo);
-        if(match_selectedNode_temprature.hasMatch())
-        {
-            raw_temprature = match_selectedNode_temprature.captured(0);
-        }
+//        QString raw_temprature;
+//        QRegularExpression re6("temprature=..");
+//        QRegularExpressionMatch match_selectedNode_temprature =re6.match(temp_sysinfo);
+//        if(match_selectedNode_temprature.hasMatch())
+//        {
+//            raw_temprature = match_selectedNode_temprature.captured(0);
+//        }
 
-        if(raw_temprature.contains("="))
-        {
-            int temp_nodeTemprature;
-            temp_nodeTemprature = raw_temprature.split("=")[1].toInt();
-            if(temp_nodeTemprature>=70&&update_flag_s4==true)
-            {
-                updateEventMessage(ALERT,temp_str,"节点温度超过70度！");
-                ui.pushButton_temprature->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+//        if(raw_temprature.contains("="))
+//        {
+//            int temp_nodeTemprature;
+//            temp_nodeTemprature = raw_temprature.split("=")[1].toInt();
+//            if(temp_nodeTemprature>=70&&update_flag_s4==true)
+//            {
+//                updateEventMessage(ALERT,temp_str,"节点温度超过70度！");
+//                ui.pushButton_temprature->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
 
-                update_flag_s4 = false;
-            }
-        }
+//                update_flag_s4 = false;
+//            }
+//        }
 
 
 
-        QString cpu_usage;
-        std::stringstream str_cpuUsageInfo;//raw cpu usage data
-        str_cpuUsageInfo << resp->getCpuUsageInfo();
-        QString temp_cpuInfo = QString::fromStdString(str_cpuUsageInfo.str());
-        QRegularExpression re("(?<=total=)[\\d]+");
-        QRegularExpressionMatch match_cpu_total = re.match(temp_cpuInfo);
-        if(match_cpu_total.hasMatch()){
-            cpu_usage = match_cpu_total.captured(0);
-        }
+//        QString cpu_usage;
+//        std::stringstream str_cpuUsageInfo;//raw cpu usage data
+//        str_cpuUsageInfo << resp->getCpuUsageInfo();
+//        QString temp_cpuInfo = QString::fromStdString(str_cpuUsageInfo.str());
+//        QRegularExpression re("(?<=total=)[\\d]+");
+//        QRegularExpressionMatch match_cpu_total = re.match(temp_cpuInfo);
+//        if(match_cpu_total.hasMatch()){
+//            cpu_usage = match_cpu_total.captured(0);
+//        }
 
-        QStringList temp_strList;
-        temp_strList.append(temp_str);
-        temp_strList.append(cpu_usage);
-        if(hardware_hostname_list.isEmpty())
-        {
-            hardware_hostname_list.append(temp_strList);
-        }
-        bool temp_signal = false;
-        foreach(QStringList each,hardware_hostname_list)
-        {
-            if(each.at(0).compare(temp_str)==0)
-            {
-                temp_signal = true;
-                break;
-            }
+//        QStringList temp_strList;
+//        temp_strList.append(temp_str);
+//        temp_strList.append(cpu_usage);
+//        if(hardware_hostname_list.isEmpty())
+//        {
+//            hardware_hostname_list.append(temp_strList);
+//        }
+//        bool temp_signal = false;
+//        foreach(QStringList each,hardware_hostname_list)
+//        {
+//            if(each.at(0).compare(temp_str)==0)
+//            {
+//                temp_signal = true;
+//                break;
+//            }
 
-        }
+//        }
 
-        if(temp_signal==false)
-        {
-            hardware_hostname_list.append(temp_strList);
-        }
-        qDebug()<<hardware_hostname_list;
+//        if(temp_signal==false)
+//        {
+//            hardware_hostname_list.append(temp_strList);
+//        }
+//        qDebug()<<hardware_hostname_list;
 
-        //        if(!hardware_hostname_list.contains(temp_str))
-        //        {
-        //            hardware_hostname_list.append(temp_str);
-        //        }
-        std::cout << "-----------------------" << std::endl;
-        if(resp->getHostName().compare(activated_node.toStdString())==0)
-        {
-            updateHardwareGUI(resp);
-        }
-    }
-    makeHardwareNodesButtons(hardware_hostname_list);
+//        //        if(!hardware_hostname_list.contains(temp_str))
+//        //        {
+//        //            hardware_hostname_list.append(temp_str);
+//        //        }
+//        std::cout << "-----------------------" << std::endl;
+//        if(resp->getHostName().compare(activated_node.toStdString())==0)
+//        {
+////            updateHardwareGUI(resp);
+//        }
+//    }
+//    makeHardwareNodesButtons(hardware_hostname_list);
 
 
 }
@@ -1320,8 +1341,6 @@ void MainWindow::plotHistoryRangeReset()
 
 void MainWindow::makeHardwareNodesButtons(QList<QStringList> list)
 {
-    qDebug()<<list;
-    qDebug()<<"@123";
     ui.listWidget_nodes_hardware->clear();
     foreach(QStringList each,list)
     {
@@ -1339,7 +1358,7 @@ void MainWindow::makeHardwareNodesButtons(QList<QStringList> list)
 
 void MainWindow::setupIPCClient(SshConfigure configure)
 {
-    SshConfigure temp = configure;
+//    SshConfigure temp = configure;
     process.start();
     timer_hardware_getInfo = new QTimer;
     timer_hardware_getInfo->setInterval(500);
@@ -3021,7 +3040,7 @@ void MainWindow::on_tabWidget_tabBarClicked(int index)
     }
     case 7:
     {
-        ui.label_title->setText("硬件");
+        ui.label_title->setText("设备");
         break;
     }
     }

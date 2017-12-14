@@ -55,6 +55,11 @@ private:
     ISshClient *client;
     std::string outputString;//declare outputString
 
+    int preCpuTotal=0;
+    int preCpuWork=0;
+    int proCpuTotal=0;
+    int proCpuWork=0;
+
     bool isConnectionFailed = false;
 
     void getCPU();
@@ -80,6 +85,7 @@ private:
     void getJOBS2();
 
     void getHostTemprature();
+    double getCPUByCalculation();
 public:
     bool canceled_flag = false;
 };
