@@ -201,6 +201,8 @@ private:
     Ui::MainWindow ui;
     void createCircleBar();
 
+
+    int activated_process_count = 32;
     QLabel current_state_label;
     QLabel current_state_label_show;
     QLabel current_user_label;

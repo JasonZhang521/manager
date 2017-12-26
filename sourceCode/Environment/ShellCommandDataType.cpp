@@ -2,9 +2,10 @@
 namespace Environment {
 
 const std::string ShellCommandString::DiskUsageDf("df");
-const std::string ShellCommandString::DiskUsageDuHome("du -s /home");
-const std::string ShellCommandString::PsTop10CpuUsage("ps -Ao user,uid,comm,pid,pcpu --sort=-pcpu | head -n 10");
-const std::string ShellCommandString::PsTop10MemoryUsage("ps -Ao user,uid,comm,pid,size --sort=-size | head -n 10");
+//const std::string ShellCommandString::DiskUsageDuHome("du -s /home");
+const std::string ShellCommandString::DiskUsageDuHome("");
+const std::string ShellCommandString::PsTop10CpuUsage("ps -Ao user,uid,comm,pid,pcpu --sort=-pcpu | head -n 64");
+const std::string ShellCommandString::PsTop10MemoryUsage("ps -Ao user,uid,comm,pid,size --sort=-size | head -n 64");
 const std::string ShellCommandString::NvidiaSmiGpu("nvidia-smi -q");
 const std::string ShellCommandString::InfiniBandStat("ibstat");
 const std::string ShellCommandString::Shutdown("shutdown");

@@ -9,6 +9,9 @@
 #include "Environment.h"
 #include "ShellCommandThread.h"
 #include "NetworkConfig.h"
+#include "CoredumpConfig.h"
+#include "Configure.h"
+#include "AppConst.h"
 
 namespace ClusterManagement {
 ClusterManagementProcess::ClusterManagementProcess()
@@ -18,6 +21,9 @@ ClusterManagementProcess::ClusterManagementProcess()
 
 void ClusterManagementProcess::process()
 {
+    CoredumpConfig::LimitSet();
+    Configure::getInstance().setTraceLogFilePath("/opt/HongClusterMgt/log/ClusterManagement.message.log");
+
     // create the Cluster mananger control
     std::shared_ptr<IClusterMgtController> clusterMgtController(new ClusterMgtController());
 
@@ -55,12 +61,12 @@ void ClusterManagementProcess::process()
     // register the commands
     {
         Environment::IShellCommand* commandDf =
-                new Environment::ShellCommandThread(Environment::ShellCommand::getCmdString(Environment::ShellCommandType::DiskUsageDf), 600000);
+                new Environment::ShellCommandThread(Environment::ShellCommand::getCmdString(Environment::ShellCommandType::DiskUsageDf), DfCommandPeriod);
         Environment::Environment::instance().registerShellCmd(Environment::ShellCommandType::DiskUsageDf, commandDf);
 
-        Environment::IShellCommand* commandDuHome =
-                new Environment::ShellCommandThread(Environment::ShellCommand::getCmdString(Environment::ShellCommandType::DiskUsageDuHome), 1200000);
-        Environment::Environment::instance().registerShellCmd(Environment::ShellCommandType::DiskUsageDuHome, commandDuHome);
+        //Environment::IShellCommand* commandDuHome =
+          //      new Environment::ShellCommandThread(Environment::ShellCommand::getCmdString(Environment::ShellCommandType::DiskUsageDuHome), DuCommandPeriod);
+     //   Environment::Environment::instance().registerShellCmd(Environment::ShellCommandType::DiskUsageDuHome, commandDuHome);
     }
     // run
     Core::LoopMain::instance().loopStart();

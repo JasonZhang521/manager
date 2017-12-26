@@ -17,6 +17,9 @@
 #include "ShellCommandThread.h"
 #include "NetworkConfig.h"
 #include "RemoveCharacter.h"
+#include "CoredumpConfig.h"
+#include "Configure.h"
+#include "AppConst.h"
 #include <memory>
 #include <iostream>
 #include <fstream>
@@ -29,6 +32,9 @@ SystemMonitorProcess::SystemMonitorProcess()
 
 void SystemMonitorProcess::process()
 {
+    CoredumpConfig::LimitSet();
+    Configure::getInstance().setTraceLogFilePath("/opt/HongClusterMgt/log/SystemMonitor.message.log");
+
     std::vector<std::string> nodeServerIpPorts = ConfigureManagement::NetworkConfig::getNodeServerIpPort();
     // Local and remote endpoint.
     Network::IpSocketEndpoint localEndpoint("0.0.0.0:0");
@@ -64,12 +70,12 @@ void SystemMonitorProcess::process()
     // register the commands
     {
         Environment::IShellCommand* commandDf =
-                new Environment::ShellCommandThread(Environment::ShellCommand::getCmdString(Environment::ShellCommandType::DiskUsageDf), 3600000);
+                new Environment::ShellCommandThread(Environment::ShellCommand::getCmdString(Environment::ShellCommandType::DiskUsageDf), DfCommandPeriod);
         Environment::Environment::instance().registerShellCmd(Environment::ShellCommandType::DiskUsageDf, commandDf);
 
-        Environment::IShellCommand* commandDuHome =
-                new Environment::ShellCommandThread(Environment::ShellCommand::getCmdString(Environment::ShellCommandType::DiskUsageDuHome), 72000000);
-        Environment::Environment::instance().registerShellCmd(Environment::ShellCommandType::DiskUsageDuHome, commandDuHome);
+     //   Environment::IShellCommand* commandDuHome =
+       //         new Environment::ShellCommandThread(Environment::ShellCommand::getCmdString(Environment::ShellCommandType::DiskUsageDuHome), DuCommandPeriod);
+      //  Environment::Environment::instance().registerShellCmd(Environment::ShellCommandType::DiskUsageDuHome, commandDuHome);
 
         Environment::IShellCommand* commandPsTop10CpuUsage =
                 new Environment::ShellCommandThread(Environment::ShellCommand::getCmdString(Environment::ShellCommandType::PsTop10CpuUsage), 5000);

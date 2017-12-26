@@ -34,7 +34,7 @@
 #include "Sleep.h"
 #include "Trace.h"
 #include <memory>
-
+#include <QtCore>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -899,7 +899,10 @@ void MainWindow::setupNodesDisplay()
 
 void MainWindow::setupFtp()
 {
-
+    // QToolBar* toolBar_ftp_A = new QToolBar(ui.frame_local);
+    // QToolBar* toolBar_ftp_B = new QToolBar(ui.frame_remote);
+    // toolBar_ftp_A->addAction(ui.actionupload);
+    // toolBar_ftp_B->addAction(ui.actiondownload);
     updateFileList(ui.treeWidget,3);
     updateFileList(ui.treeWidget_jobsubmitfile,1);
     updateFileList(ui.treeWidget_job_file,2);
@@ -1036,7 +1039,7 @@ void MainWindow::setupSessionConfigure(SshConfigure configure)
     emit getAllQueueInfosStart();
 
     //setup ipc client
-//    setupIPCClient(configure);
+    setupIPCClient(configure);
 }
 
 void MainWindow::reconnect()
@@ -1073,92 +1076,92 @@ void MainWindow::refreshNodesList()
 }
 void MainWindow::updateGetHardwareInfo()
 {
-//    qDebug()<<"hardware get info updated";
-//    QString temp_str;
-//    QString temp_sysinfo;
-//    while (process.messageReceived())
-//    {
-//        std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
-//        SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
-//                dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
-//        SystemMonitorMessage::ComputerNodeInfoReport* resp =
-//                dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
+    qDebug()<<"hardware get info updated";
+    QString temp_str;
+    QString temp_sysinfo;
+    while (process.messageReceived())
+    {
+        std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
+        SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
+                dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
+        SystemMonitorMessage::ComputerNodeInfoReport* resp =
+                dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
 
-//        //comuter i need you to extract each message's temprature information for me so as to judge if any nodes are beyond alert temprature
+        //comuter i need you to extract each message's temprature information for me so as to judge if any nodes are beyond alert temprature
 
-//        temp_str = QString::fromStdString(resp->getHostName());
-//        std::stringstream str_sysInfoBriefly;
-//        str_sysInfoBriefly << resp->getSystemInfoBriefly();
-//        temp_sysinfo = QString::fromStdString(str_sysInfoBriefly.str());
+        temp_str = QString::fromStdString(resp->getHostName());
+        std::stringstream str_sysInfoBriefly;
+        str_sysInfoBriefly << resp->getSystemInfoBriefly();
+        temp_sysinfo = QString::fromStdString(str_sysInfoBriefly.str());
 
-//        QString raw_temprature;
-//        QRegularExpression re6("temprature=..");
-//        QRegularExpressionMatch match_selectedNode_temprature =re6.match(temp_sysinfo);
-//        if(match_selectedNode_temprature.hasMatch())
-//        {
-//            raw_temprature = match_selectedNode_temprature.captured(0);
-//        }
+        QString raw_temprature;
+        QRegularExpression re6("temprature=..");
+        QRegularExpressionMatch match_selectedNode_temprature =re6.match(temp_sysinfo);
+        if(match_selectedNode_temprature.hasMatch())
+        {
+            raw_temprature = match_selectedNode_temprature.captured(0);
+        }
 
-//        if(raw_temprature.contains("="))
-//        {
-//            int temp_nodeTemprature;
-//            temp_nodeTemprature = raw_temprature.split("=")[1].toInt();
-//            if(temp_nodeTemprature>=70&&update_flag_s4==true)
-//            {
-//                updateEventMessage(ALERT,temp_str,"节点温度超过70度！");
-//                ui.pushButton_temprature->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+        if(raw_temprature.contains("="))
+        {
+            int temp_nodeTemprature;
+            temp_nodeTemprature = raw_temprature.split("=")[1].toInt();
+            if(temp_nodeTemprature>=70&&update_flag_s4==true)
+            {
+                updateEventMessage(ALERT,temp_str,"节点温度超过70度！");
+                ui.pushButton_temprature->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
 
-//                update_flag_s4 = false;
-//            }
-//        }
+                update_flag_s4 = false;
+            }
+        }
 
 
 
-//        QString cpu_usage;
-//        std::stringstream str_cpuUsageInfo;//raw cpu usage data
-//        str_cpuUsageInfo << resp->getCpuUsageInfo();
-//        QString temp_cpuInfo = QString::fromStdString(str_cpuUsageInfo.str());
-//        QRegularExpression re("(?<=total=)[\\d]+");
-//        QRegularExpressionMatch match_cpu_total = re.match(temp_cpuInfo);
-//        if(match_cpu_total.hasMatch()){
-//            cpu_usage = match_cpu_total.captured(0);
-//        }
+        QString cpu_usage;
+        std::stringstream str_cpuUsageInfo;//raw cpu usage data
+        str_cpuUsageInfo << resp->getCpuUsageInfo();
+        QString temp_cpuInfo = QString::fromStdString(str_cpuUsageInfo.str());
+        QRegularExpression re("(?<=total=)[\\d]+");
+        QRegularExpressionMatch match_cpu_total = re.match(temp_cpuInfo);
+        if(match_cpu_total.hasMatch()){
+            cpu_usage = match_cpu_total.captured(0);
+        }
 
-//        QStringList temp_strList;
-//        temp_strList.append(temp_str);
-//        temp_strList.append(cpu_usage);
-//        if(hardware_hostname_list.isEmpty())
-//        {
-//            hardware_hostname_list.append(temp_strList);
-//        }
-//        bool temp_signal = false;
-//        foreach(QStringList each,hardware_hostname_list)
-//        {
-//            if(each.at(0).compare(temp_str)==0)
-//            {
-//                temp_signal = true;
-//                break;
-//            }
+        QStringList temp_strList;
+        temp_strList.append(temp_str);
+        temp_strList.append(cpu_usage);
+        if(hardware_hostname_list.isEmpty())
+        {
+            hardware_hostname_list.append(temp_strList);
+        }
+        bool temp_signal = false;
+        foreach(QStringList each,hardware_hostname_list)
+        {
+            if(each.at(0).compare(temp_str)==0)
+            {
+                temp_signal = true;
+                break;
+            }
 
-//        }
+        }
 
-//        if(temp_signal==false)
-//        {
-//            hardware_hostname_list.append(temp_strList);
-//        }
-//        qDebug()<<hardware_hostname_list;
+        if(temp_signal==false)
+        {
+            hardware_hostname_list.append(temp_strList);
+        }
+        qDebug()<<hardware_hostname_list;
 
-//        //        if(!hardware_hostname_list.contains(temp_str))
-//        //        {
-//        //            hardware_hostname_list.append(temp_str);
-//        //        }
-//        std::cout << "-----------------------" << std::endl;
-//        if(resp->getHostName().compare(activated_node.toStdString())==0)
-//        {
-////            updateHardwareGUI(resp);
-//        }
-//    }
-//    makeHardwareNodesButtons(hardware_hostname_list);
+        //        if(!hardware_hostname_list.contains(temp_str))
+        //        {
+        //            hardware_hostname_list.append(temp_str);
+        //        }
+        std::cout << "-----------------------" << std::endl;
+        if(resp->getHostName().compare(activated_node.toStdString())==0)
+        {
+            updateHardwareGUI(resp);
+        }
+    }
+    makeHardwareNodesButtons(hardware_hostname_list);
 
 
 }
@@ -1228,22 +1231,37 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     qDebug()<<temp_process_cpu.remove("[").remove("]").split("\n");
     QStringList processList_cpu = temp_process_cpu.remove("[").remove("]").split("\n");
     int maximumPropertySize = 5;
-    foreach(QString each,processList_cpu)
+    for(int i = 0;i < activated_process_count;i++)
     {
-        QStringList temp_str=each.split(",");
+        QStringList temp_str=processList_cpu[i].split(",");
         if(temp_str.size()>=maximumPropertySize)
         {
+
             QTreeWidgetItem* item = new QTreeWidgetItem(ui.cpu_process);
             item->setText(0,temp_str[0].split("=")[1]);
             item->setData(1,Qt::EditRole,temp_str[1].split("=")[1].toInt());
             item->setText(2,temp_str[2].split("=")[1]);
             item->setData(3,Qt::EditRole,temp_str[3].split("=")[1].toInt());
             item->setData(4,Qt::EditRole,temp_str[4].split("=")[1].toDouble());
-
         }
-
-
     }
+
+//    foreach(QString each,processList_cpu)
+//    {
+//        QStringList temp_str=each.split(",");
+//        if(temp_str.size()>=maximumPropertySize)
+//        {
+//            QTreeWidgetItem* item = new QTreeWidgetItem(ui.cpu_process);
+//            item->setText(0,temp_str[0].split("=")[1]);
+//            item->setData(1,Qt::EditRole,temp_str[1].split("=")[1].toInt());
+//            item->setText(2,temp_str[2].split("=")[1]);
+//            item->setData(3,Qt::EditRole,temp_str[3].split("=")[1].toInt());
+//            item->setData(4,Qt::EditRole,temp_str[4].split("=")[1].toDouble());
+
+//        }
+
+
+//    }
 
     //-------------------------------------------------------------------//
 
@@ -1317,6 +1335,7 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     if(raw_temprature.contains("="))
     {
         ui.label_selectedNodes_hardware_temprature->setText("温度:\n"+raw_temprature.split("=")[1]);
+        ui.label_selectedNodes_hardware_temprature->setStyleSheet("color: rgb(0, 0, 255);");
 
     }
 
@@ -1908,6 +1927,17 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
                 {
                     file->setIcon(0,QIcon(":/Resources/dir.png"));
                 }
+
+//                //get system icon
+//                QFileInfo fi(m_list[i][8]);
+//                QString name = fi.fileName();
+//                qDebug()<<"@hookerhereok";
+//                qDebug()<<name;
+//                QFileIconProvider iconSource;
+//                QIcon icon = iconSource.icon(fi);
+//                file->setIcon(0,icon);
+
+
                 file->setText(0,m_list[i][8]);
                 if(m_list[i][4].toInt()>=1048576){file->setText(1,QString::number(m_list[i][4].toInt()/1048576)+QString(" MB"));}
                 else if(m_list[i][4].toInt()<1048576 && m_list[i][4].toInt()>=1024){file->setText(1,QString::number(m_list[i][4].toInt()/1024)+QString(" KB"));}

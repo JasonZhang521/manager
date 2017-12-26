@@ -15,6 +15,7 @@ class DiskUsageInfo
 {
     ShellCommandDfOutput rootDirUsage_;
     ShellCommandDfOutput bootInitDirUsage_;
+    ShellCommandDfOutput dfHomeDirUsage_;
     uint64_t homeDirUsage_;
 public:
     DiskUsageInfo();
@@ -26,10 +27,15 @@ public:
 	void setRootDirUsage(const ShellCommandDfOutput& output);
     const ShellCommandDfOutput& getBootInitDirUsage() const;
 	void setBootInitDirUsage(const ShellCommandDfOutput& output);
+    const ShellCommandDfOutput& getDfHomeDirUsage() const;
+    void setDfHomeDirUsage(const ShellCommandDfOutput& output);
+    uint64_t getHomeDirUsage() const;
+    void setHomeDirUsage(uint64_t usage);
+
     void update();
 
 private:
-    void updateRootAndBootInitDirUsage();
+    void updateDfCommandDirUsage();
     void updateHomeDirUsage();
 public:
      GETCLASSNAME(NetworkInfo)

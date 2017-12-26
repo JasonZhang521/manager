@@ -3399,7 +3399,7 @@ border:1.5px solid #008080;</string>
                    <number>0</number>
                   </property>
                   <property name="currentIndex">
-                   <number>1</number>
+                   <number>0</number>
                   </property>
                   <widget class="QWidget" name="node_2">
                    <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -3586,7 +3586,7 @@ border:1.5px solid #008080;</string>
                        <property name="geometry">
                         <rect>
                          <x>0</x>
-                         <y>0</y>
+                         <y>-164</y>
                          <width>577</width>
                          <height>633</height>
                         </rect>
@@ -5854,7 +5854,7 @@ font: 7pt &quot;黑体&quot;;</string>
                    <number>1</number>
                   </property>
                   <property name="currentIndex">
-                   <number>1</number>
+                   <number>0</number>
                   </property>
                   <widget class="QWidget" name="shutdownpage_stack">
                    <layout class="QVBoxLayout" name="verticalLayout_22">
@@ -5955,7 +5955,7 @@ QTabBar::tab:selected {
 }</string>
                       </property>
                       <property name="currentIndex">
-                       <number>1</number>
+                       <number>0</number>
                       </property>
                       <widget class="QWidget" name="tab_control_user_1">
                        <attribute name="title">
@@ -6202,8 +6202,8 @@ QTabBar::tab:selected {
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>831</width>
-                                 <height>427</height>
+                                 <width>638</width>
+                                 <height>197</height>
                                 </rect>
                                </property>
                                <layout class="QHBoxLayout" name="horizontalLayout_36">
@@ -6628,7 +6628,7 @@ QTabBar::tab:selected {
 }</string>
                       </property>
                       <property name="currentIndex">
-                       <number>1</number>
+                       <number>0</number>
                       </property>
                       <widget class="QWidget" name="view">
                        <attribute name="title">
@@ -7195,7 +7195,7 @@ QTabBar::tab:selected {
                <widget class="QWidget" name="layoutWidget">
                 <layout class="QVBoxLayout" name="verticalLayout_11">
                  <item>
-                  <widget class="QFrame" name="frame_13">
+                  <widget class="QFrame" name="frame_local">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -7312,7 +7312,7 @@ QTabBar::tab:selected {
                  <item>
                   <widget class="QPushButton" name="pushButton_3">
                    <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
@@ -7327,7 +7327,7 @@ QTabBar::tab:selected {
                <widget class="QWidget" name="layoutWidget">
                 <layout class="QVBoxLayout" name="verticalLayout_29">
                  <item>
-                  <widget class="QFrame" name="frame_9">
+                  <widget class="QFrame" name="frame_remote">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -7525,7 +7525,7 @@ QTabBar::tab:selected {
                  <item>
                   <widget class="QPushButton" name="pushButton">
                    <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
@@ -8990,6 +8990,16 @@ border:0px solid #008080;
    </property>
    <property name="shortcut">
     <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="actionupload">
+   <property name="text">
+    <string>upload</string>
+   </property>
+  </action>
+  <action name="actiondownload">
+   <property name="text">
+    <string>download</string>
    </property>
   </action>
  </widget>

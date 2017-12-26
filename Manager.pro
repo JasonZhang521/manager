@@ -13,7 +13,7 @@ QMAKE_CXXFLAGS_RELEASE += -O0
 
 CONFIG += c++11
 
-TARGET = HungClusterManager
+TARGET = UiClient
 CONFIG -= app_bundle
 
 TEMPLATE = app
@@ -408,7 +408,7 @@ FORMS += \
 RESOURCES += \
     hungclustermanager1.qrc
 
-#win32:RC_ICONS += ./Resources/applicationIcon.ico
+win32:RC_ICONS += ./Resources/applicationIcon.ico
 win32:RC_ICONS += ./Resources/ico.ico
 
 DISTFILES += \

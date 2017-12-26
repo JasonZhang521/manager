@@ -22,7 +22,11 @@ std::string FilePathHandler::getFileName(const std::string& fullPath)
     }
     else
     {
-        return fullPath.substr(pos);
+		if (pos == fullPath.size())
+		{
+			return "";
+		}
+        return fullPath.substr(pos + 1);
     }
 }
 

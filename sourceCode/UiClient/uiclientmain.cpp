@@ -22,17 +22,17 @@ int main(int argc, char**argv)
         while (process.messageReceived())
         {
             std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
-            //std::cout << "-----------------------" << std::endl;
-            //std::cout << *msg << std::endl;
-            //std::cout << "-----------------------" << std::endl;
-            //std::cout.flush();
+            std::cout << "-----------------------" << std::endl;
+            std::cout << *msg << std::endl;
+            std::cout << "-----------------------" << std::endl;
+            std::cout.flush();
             TRACE_NOTICE(*msg);
         }
-        System::Sleep(5000);
-        std::unique_ptr<IpcMessage::IIpcMessage>
-                controlNodeBrieflyInfoRequest(new SystemMonitorMessage::ControlNodeBrieflyInfoRequest);
-        process.sendMessage(std::move(controlNodeBrieflyInfoRequest));
-        System::Sleep(1000);
+//        System::Sleep(5000);
+//        std::unique_ptr<IpcMessage::IIpcMessage>
+//                controlNodeBrieflyInfoRequest(new SystemMonitorMessage::ControlNodeBrieflyInfoRequest);
+//        process.sendMessage(std::move(controlNodeBrieflyInfoRequest));
+//        System::Sleep(1000);
     }
     return 0;
 }
