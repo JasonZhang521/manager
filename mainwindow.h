@@ -28,6 +28,10 @@
 #include "thirdPartyLib/qcustomplot/qcustomplot.h"
 #include "ipcworker.h"
 
+#include "ftpdownloaddialog.h"
+#include "ftpuploaddialog.h"
+
+
 //uiclient related headers
 #include "UiClientProcess.h"
 #include "ControlNodeBrieflyInfoRequest.h"
@@ -37,6 +41,8 @@
 #include "Sleep.h"
 #include "Trace.h"
 #include <memory>
+//#include "alphanum.h"
+
 
 
 using namespace SshWrapper;
@@ -180,6 +186,13 @@ private slots:
     void on_pushButton_temprature_clicked();
 
     void refreshNodesList();
+
+    void on_action_Quit_triggered();
+
+    void on_pushButton_29_clicked();
+
+    void displayCurrentFileSize(qint64 currentSize);
+    void displayFullFileSize(qint64 fullFileSize);
 public slots:
     void processFtpUploadFinishEvent();//process after upload finished signal
     void processFtpDownloadFinishEvent();//process after recieve download finished signal
@@ -197,6 +210,11 @@ public slots:
     void updatePlotHeatBeat();
     void closeSession();
     void updateHostTempGUI(int t);
+    void ftpStopGetFile();
+    void ftpStopPutFile();
+    void displayDownloadSpeed2(int speed, qint64 percent);
+    void displayUploadSpeed2(int speed, qint64 percent);
+    void displayCurrentFileSizeUp(qint64 currentSize);
 private:
     Ui::MainWindow ui;
     void createCircleBar();
@@ -233,6 +251,8 @@ private:
     QWindow *m_window;
     QVBoxLayout* layout=nullptr;
     QWidget* container;
+
+    FtpDownloadDialog f;
 
     QString v1,v2,v3,v4,v5;
     QString script;
@@ -272,6 +292,12 @@ private:
     QStringList queueList;
     QList<QStringList> queueContentList;
 
+//    typedef std::map<std::string, int, doj::alphanum_less<std::string> > m_t;
+//    m_t m;
+
+    FtpDownloadDialog * m_f;
+    FtpUploadDialog * m_fu;
+
     QThread* ftpThread;//ftp thread
     FtpWorker* ftpWorker;//ftp worker
     QThread* updatorThread;//shell thread
@@ -290,7 +316,7 @@ private:
     enum E_TYPE  {ALERT,EVENT,DISK,RAM,TEMP,MESSAGE,ERR};
 
 
-     UiClient::UiClientProcess process;
+    UiClient::UiClientProcess process;
     // static IPCWorker ipcWorker;
     QString activated_node;//node name for hardware display.
     QTimer * timer_hardware_getInfo;
@@ -387,6 +413,7 @@ private:
     void reconnect();
     void setupMessageUpdateTimer();
     void getHostCpuFreqCache();
+    void executeFtpUpload(QStringList fileName_list, FtpUploadDialog *m_fu);
 public:
     void setupSessionConfigure(SshConfigure configure);
 signals:
@@ -399,6 +426,9 @@ signals:
     void closedWindow();
     void uploadSpeedMonitingStart(QString,QString,qint64);
     void downloadSpeedMonitingStart(QString,QString,QString);
+
+    void ftpDownloadPauseSignal();
+    void ftpDownloadRestartSignal();
 
     void manageGetAllUserStart();
     void getQueueOfUserStart(QString s);

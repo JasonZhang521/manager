@@ -69,7 +69,9 @@ void UiClientProcess::process()
     Network::IpSocketEndpoint localEndpoint("0.0.0.0:0");
     //Network::IpSocketEndpoint remoteEndpoint(std::string("127.0.0.1:23833"));
 //    Network::IpSocketEndpoint remoteEndpoint(std::string("192.168.5.138:23833"));
-    Network::IpSocketEndpoint remoteEndpoint(std::string("116.236.169.100:23833"));
+//    Network::IpSocketEndpoint remoteEndpoint(std::string("116.236.169.100:23833"));
+        Network::IpSocketEndpoint remoteEndpoint(address);
+
     // SystemMonitorHandler
     UiClientHandler* uiClientHandlerPtr = new UiClientHandler();
     std::shared_ptr<IUiClientHandler> uiClientHandler(uiClientHandlerPtr);
@@ -95,5 +97,10 @@ void UiClientProcess::process()
     // run
     Core::LoopMain::instance().loopStart();
     TRACE_NOTICE("Ui Client has ended!");
+}
+
+void UiClientProcess::setAddress(const std::string &value)
+{
+    address = value;
 }
 }

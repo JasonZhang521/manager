@@ -36,6 +36,8 @@
 #include <memory>
 #include <QtCore>
 
+//##include "alphanum.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -49,7 +51,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     //    QApplication::setQuitOnLastWindowClosed(false);
     QApplication::setActiveWindow(this);
-    createCircleBar();
     QButtonGroup *group1=new QButtonGroup(ui.horizontalLayout_29);
     QButtonGroup *group2=new QButtonGroup(ui.horizontalLayout_40);
     group1->addButton(ui.radioButton_parameter_by_nodenum);
@@ -63,6 +64,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->setFocusPolicy( Qt::StrongFocus);
 
     setupStyleSheet();
+    createCircleBar();
+
 
     current_user_label.setText("当前用户: ");
     current_state_label.setText("  当前状态: ");
@@ -81,7 +84,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui.toolBar->addWidget(&current_state_label);
     ui.toolBar->addWidget(&current_state_label_show);
     this->move(QApplication::desktop()->screen()->rect().center()-this->rect().center());
-
 
     highLighter = new Highlighter(ui.textBrowser_job_submit_show->document());
     highLighter2 = new Highlighter(ui.textBrowser_job_submit_show_2->document());
@@ -310,7 +312,7 @@ void MainWindow::setupStyleSheet()
                         "QTabBar::tab {padding-bottom: 10 px; background-color: #FFD39B/*rgba(211, 255, 211, 255)*/;} "
                         "QTabBar::tab:hover {background-color: rgb(28, 67, 255);}"
                         "QProgressBar {border: 0px solid grey; border-radius: 5px;}"
-                        "QProgressBar::chunk {background-color: #05B8CC;width: 20px;margin: 0.5px;}"
+                        "QProgressBar::chunk {background-color: #05B8CC;width: 5px;margin: 0.5px;} "
                         "QScrollArea::verticalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
                         "QScrollArea::horizontalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
                         "QTreeWidget::verticalScrollBar {background-color: #ffd39b;alternate-background-color: #D5EAFF;}"
@@ -329,6 +331,8 @@ void MainWindow::setupStyleSheet()
                         "QToolBar::item {spacing: 3px; /* spacing between menu bar items */padding: 1px 4px;background: transparent;border-radius: 4px;}"
                         "QToolBar::item:selected { /* when selected using mouse or keyboard */background: #f0fff0;}"
                         "QToolBar::item:pressed {background: #888888;}"
+                        "QRoundProgressBar {}"
+                        "QWidget {}"
 
                         );
     ui.scrollArea->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
@@ -438,19 +442,15 @@ void MainWindow::closeThreads()
 
 //create cpu ram indicator
 void MainWindow::createCircleBar(){
-    QGradientStops gradientPoints;
-    gradientPoints << QGradientStop(0, Qt::green) << QGradientStop(0.5, Qt::yellow) << QGradientStop(1, Qt::red);
     QPalette p1;
-    p1.setBrush(QPalette::AlternateBase, Qt::black);
-    p1.setColor(QPalette::Text, Qt::yellow);
-    QPalette p2(p1);
-    p2.setBrush(QPalette::Base, Qt::lightGray);
-    p2.setColor(QPalette::Text, Qt::magenta);
-    p2.setColor(QPalette::Shadow, Qt::green);
+    p1.setColor(QPalette::Text, Qt::black);
+    p1.setColor(QPalette::Base, Qt::blue);
+    p1.setColor(QPalette::Highlight, Qt::red);
+    p1.setColor(QPalette::Window, QColor(240,255,240,255));
     ui.widget_cpubar->setValue(0);
     ui.widget_cpubar->setPalette(p1);
     ui.widget_rambar->setValue(0);
-    ui.widget_rambar->setPalette(p2);
+    ui.widget_rambar->setPalette(p1);
 }
 
 void MainWindow::updateEventMessage(E_TYPE type,QString node_name,QString message)
@@ -495,6 +495,7 @@ void MainWindow::setupThreads(SshConfigure configure){
     connect(this,SIGNAL(ftpListDirStart(QString,int)),ftpWorker,SLOT(processListDirect(QString,int)));
     connect(this,SIGNAL(ftpRemoveFileStart(QString)),ftpWorker,SLOT(processRMFile(QString)));
     connect(this,SIGNAL(ftpMkDirStart(QString,QString)),ftpWorker,SLOT(processMkDir(QString,QString)));
+    connect(this,SIGNAL(ftpDownloadPauseSignal()),ftpWorker,SLOT(pauseDownload()));
     //connect thread finish signal to main process slot
     connect(ftpWorker, SIGNAL(finishDownload()), this, SLOT(processFtpDownloadFinishEvent()));
     connect(ftpWorker, SIGNAL(finishUpload()), this, SLOT(processFtpUploadFinishEvent()));
@@ -579,9 +580,6 @@ void MainWindow::setupClient(SshConfigure configure)
     client->setup();
     client->startShell();
     client->startSftp();
-    client->executeShellCommand("sudo dmidecode",outputString);
-    qDebug()<<"@12345654321";
-    qDebug()<<QString::fromStdString(outputString);
 }
 
 void MainWindow::setupMac()
@@ -961,10 +959,10 @@ void MainWindow::setupMessageUpdateTimer()
 
 void MainWindow::updateMessageUpdateTimerFlag()
 {
-//    update_flag_s1 = true;
-//    update_flag_s2 = true;
-//    update_flag_s3 = true;
-//    update_flag_s4 = true;
+    //    update_flag_s1 = true;
+    //    update_flag_s2 = true;
+    //    update_flag_s3 = true;
+    //    update_flag_s4 = true;
 }
 
 void MainWindow::updateStatusTracer()
@@ -1039,6 +1037,7 @@ void MainWindow::setupSessionConfigure(SshConfigure configure)
     emit getAllQueueInfosStart();
 
     //setup ipc client
+
     setupIPCClient(configure);
 }
 
@@ -1089,7 +1088,7 @@ void MainWindow::updateGetHardwareInfo()
 
         //comuter i need you to extract each message's temprature information for me so as to judge if any nodes are beyond alert temprature
 
-        temp_str = QString::fromStdString(resp->getHostName());
+        temp_str = QString::fromStdString(resp->getHostName());//key
         std::stringstream str_sysInfoBriefly;
         str_sysInfoBriefly << resp->getSystemInfoBriefly();
         temp_sysinfo = QString::fromStdString(str_sysInfoBriefly.str());
@@ -1124,8 +1123,12 @@ void MainWindow::updateGetHardwareInfo()
         QRegularExpression re("(?<=total=)[\\d]+");
         QRegularExpressionMatch match_cpu_total = re.match(temp_cpuInfo);
         if(match_cpu_total.hasMatch()){
-            cpu_usage = match_cpu_total.captured(0);
+            cpu_usage = match_cpu_total.captured(0);//value
         }
+        //        m[temp_str.toLocal8Bit().constData()]=cpu_usage;//map
+        //        for(m_t::iterator i=m.begin(); i!=m.end(); ++i)
+        //          std::cout << i->first << '\t' << i->second << std::endl;
+
 
         QStringList temp_strList;
         temp_strList.append(temp_str);
@@ -1149,13 +1152,12 @@ void MainWindow::updateGetHardwareInfo()
         {
             hardware_hostname_list.append(temp_strList);
         }
-        qDebug()<<hardware_hostname_list;
 
         //        if(!hardware_hostname_list.contains(temp_str))
         //        {
         //            hardware_hostname_list.append(temp_str);
         //        }
-        std::cout << "-----------------------" << std::endl;
+        //        std::cout << "-----------------------" << std::endl;
         if(resp->getHostName().compare(activated_node.toStdString())==0)
         {
             updateHardwareGUI(resp);
@@ -1246,22 +1248,22 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
         }
     }
 
-//    foreach(QString each,processList_cpu)
-//    {
-//        QStringList temp_str=each.split(",");
-//        if(temp_str.size()>=maximumPropertySize)
-//        {
-//            QTreeWidgetItem* item = new QTreeWidgetItem(ui.cpu_process);
-//            item->setText(0,temp_str[0].split("=")[1]);
-//            item->setData(1,Qt::EditRole,temp_str[1].split("=")[1].toInt());
-//            item->setText(2,temp_str[2].split("=")[1]);
-//            item->setData(3,Qt::EditRole,temp_str[3].split("=")[1].toInt());
-//            item->setData(4,Qt::EditRole,temp_str[4].split("=")[1].toDouble());
+    //    foreach(QString each,processList_cpu)
+    //    {
+    //        QStringList temp_str=each.split(",");
+    //        if(temp_str.size()>=maximumPropertySize)
+    //        {
+    //            QTreeWidgetItem* item = new QTreeWidgetItem(ui.cpu_process);
+    //            item->setText(0,temp_str[0].split("=")[1]);
+    //            item->setData(1,Qt::EditRole,temp_str[1].split("=")[1].toInt());
+    //            item->setText(2,temp_str[2].split("=")[1]);
+    //            item->setData(3,Qt::EditRole,temp_str[3].split("=")[1].toInt());
+    //            item->setData(4,Qt::EditRole,temp_str[4].split("=")[1].toDouble());
 
-//        }
+    //        }
 
 
-//    }
+    //    }
 
     //-------------------------------------------------------------------//
 
@@ -1336,6 +1338,7 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     {
         ui.label_selectedNodes_hardware_temprature->setText("温度:\n"+raw_temprature.split("=")[1]);
         ui.label_selectedNodes_hardware_temprature->setStyleSheet("color: rgb(0, 0, 255);");
+        ui.progressBar_temprature1->setValue(raw_temprature.split("=")[1].toInt());
 
     }
 
@@ -1377,10 +1380,11 @@ void MainWindow::makeHardwareNodesButtons(QList<QStringList> list)
 
 void MainWindow::setupIPCClient(SshConfigure configure)
 {
-//    SshConfigure temp = configure;
+
+    process.setAddress(configure.host+std::string(":")+std::string("23833"));
     process.start();
     timer_hardware_getInfo = new QTimer;
-    timer_hardware_getInfo->setInterval(500);
+    timer_hardware_getInfo->setInterval(2000);
     connect(timer_hardware_getInfo,SIGNAL(timeout()),this,SLOT(updateGetHardwareInfo()));
     timer_hardware_getInfo->start();
 
@@ -1411,8 +1415,8 @@ void MainWindow::on_pushButton_monitor_node_clicked()
     ui.stackedWidget_monior->setCurrentIndex(0);
     ui.pushButton_monitor_node->setChecked(true);
     ui.pushButton_monitor_jobs->setChecked(false);
-//    ui.pushButton_monitor_GPU->setChecked(false);
-//    ui.pushButton_monitor_IBCard->setChecked(false);
+    //    ui.pushButton_monitor_GPU->setChecked(false);
+    //    ui.pushButton_monitor_IBCard->setChecked(false);
 
 }
 void MainWindow::on_pushButton_monitor_jobs_clicked()
@@ -1420,8 +1424,8 @@ void MainWindow::on_pushButton_monitor_jobs_clicked()
     ui.stackedWidget_monior->setCurrentIndex(1);
     ui.pushButton_monitor_node->setChecked(false);
     ui.pushButton_monitor_jobs->setChecked(true);
-//    ui.pushButton_monitor_GPU->setChecked(false);
-//    ui.pushButton_monitor_IBCard->setChecked(false);
+    //    ui.pushButton_monitor_GPU->setChecked(false);
+    //    ui.pushButton_monitor_IBCard->setChecked(false);
 }
 
 
@@ -1763,6 +1767,18 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
 //ftp download
 void MainWindow::on_pushButton_clicked()
 {
+    //    //remote path currentPathRemote; localpath filePathLocal; ui.treeWidget->currentItem()->text(0)
+    m_f = new FtpDownloadDialog;
+    QStringList name_list;
+    name_list.append(ui.treeWidget->currentItem()->text(0));
+    m_f->setDestination(filePathLocal);
+    m_f->setFileName(name_list);
+    m_f->show();
+    m_f->update();
+
+    connect(m_f,SIGNAL(canceledSignal()),this,SLOT(ftpStopGetFile()));
+
+
     //clacify if an item is selected
     if(!ui.treeWidget->currentItem()->text(0).toStdString().empty()&&!filePathLocal.isEmpty()){
         if(!isDir(ui.treeWidget->currentItem()->text(0)))
@@ -1771,15 +1787,22 @@ void MainWindow::on_pushButton_clicked()
             speedWorker = new SpeedCalculator(0,m_configure);
             speedWorker->moveToThread(speedCalculatorThread);
             connect(ftpWorker, SIGNAL(finishDownload()), speedWorker, SLOT(process()));
+            connect(ftpWorker, SIGNAL(finishDownload()), m_f, SLOT(close()));
+
             //connect start signal to process slot
             connect(this,SIGNAL(downloadSpeedMonitingStart(QString,QString,QString)),speedWorker,SLOT(processDownloadSpeed(QString,QString,QString)));
             //connect worker  signal to main process slot
-            connect(speedWorker,SIGNAL(getDownloadSpeedSignal(int,qint64)),this,SLOT(displayDownloadSpeed(int,qint64)));
+            //            connect(speedWorker,SIGNAL(getDownloadSpeedSignal(int,qint64)),this,SLOT(displayDownloadSpeed(int,qint64)));
+            connect(speedWorker,SIGNAL(getDownloadSpeedSignal(int,qint64)),this,SLOT(displayDownloadSpeed2(int,qint64)));
+            connect(speedWorker,SIGNAL(getCurrentFileSizeSignal(qint64)),this,SLOT(displayCurrentFileSize(qint64)));
+            connect(speedWorker,SIGNAL(getFullFileSizeSignal(qint64)),this,SLOT(displayFullFileSize(qint64)));
+
             //deal with destroy signals
             connect(speedCalculatorThread,SIGNAL(destroyed()),speedWorker,SLOT(process()));
             connect(speedWorker,SIGNAL(finished()),speedCalculatorThread,SLOT(quit()));
             connect(speedWorker,SIGNAL(finished()),speedWorker,SLOT(deleteLater()));
             connect(speedCalculatorThread,SIGNAL(finished()),speedCalculatorThread,SLOT(deleteLater()));
+
             speedCalculatorThread->start();
 
             emit ftpDownloadStart(QString::fromStdString(currentPathRemote)+"/"+ui.treeWidget->currentItem()->text(0),filePathLocal);//fire download start signal
@@ -1796,8 +1819,33 @@ void MainWindow::on_pushButton_clicked()
 
     }
 
+}
 
+void MainWindow::displayCurrentFileSizeUp(qint64 currentSize)
+{
+    m_fu->setCurrentSize(QString::number(currentSize));
+}
+void MainWindow::displayCurrentFileSize(qint64 currentSize)
+{
+    m_f->setCurrentSize(QString::number(currentSize));
+}
 
+void MainWindow::displayUploadSpeed2(int speed, qint64 percent)
+{
+    m_fu->setDownloadSpeed(QString::number(speed/1024)+"KB/S");
+    m_fu->setPercent(int(percent));
+    m_fu->update();
+}
+
+void MainWindow::displayFullFileSize(qint64 fullFileSize)
+{
+    //    m_f->setRemainTime();
+}
+void MainWindow::displayDownloadSpeed2(int speed, qint64 percent)
+{
+    m_f->setDownloadSpeed(QString::number(speed/1024)+"KB/S");
+    m_f->setPercent(int(percent));
+    m_f->update();
 }
 
 void MainWindow::displayDownloadSpeed(int speed, qint64 percent)
@@ -1928,14 +1976,14 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
                     file->setIcon(0,QIcon(":/Resources/dir.png"));
                 }
 
-//                //get system icon
-//                QFileInfo fi(m_list[i][8]);
-//                QString name = fi.fileName();
-//                qDebug()<<"@hookerhereok";
-//                qDebug()<<name;
-//                QFileIconProvider iconSource;
-//                QIcon icon = iconSource.icon(fi);
-//                file->setIcon(0,icon);
+                //                //get system icon
+                //                QFileInfo fi(m_list[i][8]);
+                //                QString name = fi.fileName();
+                //                qDebug()<<"@hookerhereok";
+                //                qDebug()<<name;
+                //                QFileIconProvider iconSource;
+                //                QIcon icon = iconSource.icon(fi);
+                //                file->setIcon(0,icon);
 
 
                 file->setText(0,m_list[i][8]);
@@ -2138,11 +2186,54 @@ void MainWindow::setQueueState(QTreeWidgetItem *item,int i,QList<QStringList> qu
 
 }
 
+void MainWindow::executeFtpUpload(QStringList fileName_list,FtpUploadDialog* m_fu)
+{
+    QFile file(fileInfo.absoluteFilePath());
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        fileSize = file.size();
+    }
+    file.close();
+    fileName_list.append(fileInfo.fileName());
+
+    m_fu->setFileName(fileName_list);
+    m_fu->setDestination(QString::fromStdString(currentPathRemote));
+    m_fu->show();
+
+
+    speedCalculatorThread = new QThread;
+    speedWorker = new SpeedCalculator(0,m_configure);
+    speedWorker->moveToThread(speedCalculatorThread);
+    connect(ftpWorker, SIGNAL(finishUpload()), speedWorker, SLOT(process()));
+    connect(ftpWorker, SIGNAL(finishUpload()),m_fu,SLOT(close()));
+    //connect start signal to process slot
+    connect(this,SIGNAL(uploadSpeedMonitingStart(QString,QString,qint64)),speedWorker,SLOT(processUploadSpeed(QString,QString,qint64)));
+    //connect worker  signal to main process slot
+//                connect(speedWorker,SIGNAL(getUploadSpeedSignal(int,qint64)),this,SLOT(displayUpdateSpeed(int,qint64)));
+    connect(speedWorker,SIGNAL(getUploadSpeedSignal(int,qint64)),this,SLOT(displayUploadSpeed2(int,qint64)));
+    connect(speedWorker,SIGNAL(getCurrentFileSizeSignalUpload(qint64)),this,SLOT(displayCurrentFileSizeUp(qint64)));
+//                connect(speedWorker,SIGNAL(getFullFileSizeSignalUpload(qint64)),this,SLOT(displayFullFileSize(qint64)));
+
+    //deal with destroy signals
+    connect(speedCalculatorThread,SIGNAL(destroyed()),speedWorker,SLOT(process()));
+    connect(speedWorker,SIGNAL(finished()),speedCalculatorThread,SLOT(quit()));
+    connect(speedWorker,SIGNAL(finished()),speedWorker,SLOT(deleteLater()));
+    connect(speedCalculatorThread,SIGNAL(finished()),speedCalculatorThread,SLOT(deleteLater()));
+    speedCalculatorThread->start();
+    emit ftpUploadStart(fileInfo.absoluteFilePath(),QString::fromStdString(currentPathRemote));
+    emit uploadSpeedMonitingStart(QString::fromStdString(currentPathRemote),fileInfo.fileName(),fileSize);
+    ui.pushButton_3->setText("上传中...");//close button
+    ui.pushButton_3->setEnabled(false);//close button
+}
+
 //ftp upload
 void MainWindow::on_pushButton_3_clicked()
 {
-    //judge if file selected
-    if(!filePathLocal.isEmpty()){
+    QStringList fileName_list;
+    m_fu = new FtpUploadDialog;
+    connect(m_fu,SIGNAL(canceledSignal()),this,SLOT(ftpStopPutFile()));
+            //judge if file selected
+            if(!filePathLocal.isEmpty()){
         client->executeShellCommand("cd "+currentPathRemote+" && ls -l | awk '/"+fileInfo.fileName().toStdString()+"$/'",outputString);
         if(outputString!=""){
             QMessageBox::StandardButton resBtn = QMessageBox::question( this, "HusterM",
@@ -2159,15 +2250,27 @@ void MainWindow::on_pushButton_3_clicked()
                     fileSize = file.size();
                 }
                 file.close();
+                fileName_list.append(fileInfo.fileName());
+
+                m_fu->setFileName(fileName_list);
+                m_fu->setDestination(QString::fromStdString(currentPathRemote));
+                m_fu->show();
+
+
 
                 speedCalculatorThread = new QThread;
                 speedWorker = new SpeedCalculator(0,m_configure);
                 speedWorker->moveToThread(speedCalculatorThread);
                 connect(ftpWorker, SIGNAL(finishUpload()), speedWorker, SLOT(process()));
+                connect(ftpWorker, SIGNAL(finishUpload()),m_fu,SLOT(close()));
                 //connect start signal to process slot
                 connect(this,SIGNAL(uploadSpeedMonitingStart(QString,QString,qint64)),speedWorker,SLOT(processUploadSpeed(QString,QString,qint64)));
                 //connect worker  signal to main process slot
-                connect(speedWorker,SIGNAL(getUploadSpeedSignal(int,qint64)),this,SLOT(displayUpdateSpeed(int,qint64)));
+//                connect(speedWorker,SIGNAL(getUploadSpeedSignal(int,qint64)),this,SLOT(displayUpdateSpeed(int,qint64)));
+                connect(speedWorker,SIGNAL(getUploadSpeedSignal(int,qint64)),this,SLOT(displayUploadSpeed2(int,qint64)));
+                connect(speedWorker,SIGNAL(getCurrentFileSizeSignalUpload(qint64)),this,SLOT(displayCurrentFileSizeUp(qint64)));
+//                connect(speedWorker,SIGNAL(getFullFileSizeSignalUpload(qint64)),this,SLOT(displayFullFileSize(qint64)));
+
                 //deal with destroy signals
                 connect(speedCalculatorThread,SIGNAL(destroyed()),speedWorker,SLOT(process()));
                 connect(speedWorker,SIGNAL(finished()),speedCalculatorThread,SLOT(quit()));
@@ -2182,31 +2285,32 @@ void MainWindow::on_pushButton_3_clicked()
         }
         else
         {
-            QFile file(fileInfo.absoluteFilePath());
-            if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-            {
-                fileSize = file.size();
-            }
-            file.close();
+//            QFile file(fileInfo.absoluteFilePath());
+//            if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+//            {
+//                fileSize = file.size();
+//            }
+//            file.close();
 
-            speedCalculatorThread = new QThread;
-            speedWorker = new SpeedCalculator(0,m_configure);
-            speedWorker->moveToThread(speedCalculatorThread);
-            connect(ftpWorker, SIGNAL(finishUpload()), speedWorker, SLOT(process()));
-            //connect start signal to process slot
-            connect(this,SIGNAL(uploadSpeedMonitingStart(QString,QString,qint64)),speedWorker,SLOT(processUploadSpeed(QString,QString,qint64)));
-            //connect worker  signal to main process slot
-            connect(speedWorker,SIGNAL(getUploadSpeedSignal(int,qint64)),this,SLOT(displayUpdateSpeed(int,qint64)));
-            //deal with destroy signals
-            connect(speedCalculatorThread,SIGNAL(destroyed()),speedWorker,SLOT(process()));
-            connect(speedWorker,SIGNAL(finished()),speedCalculatorThread,SLOT(quit()));
-            connect(speedWorker,SIGNAL(finished()),speedWorker,SLOT(deleteLater()));
-            connect(speedCalculatorThread,SIGNAL(finished()),speedCalculatorThread,SLOT(deleteLater()));
-            speedCalculatorThread->start();
-            emit ftpUploadStart(fileInfo.absoluteFilePath(),QString::fromStdString(currentPathRemote));
-            emit uploadSpeedMonitingStart(QString::fromStdString(currentPathRemote),fileInfo.fileName(),fileSize);
-            ui.pushButton_3->setText("上传中...");//close button
-            ui.pushButton_3->setEnabled(false);//close button
+//            speedCalculatorThread = new QThread;
+//            speedWorker = new SpeedCalculator(0,m_configure);
+//            speedWorker->moveToThread(speedCalculatorThread);
+//            connect(ftpWorker, SIGNAL(finishUpload()), speedWorker, SLOT(process()));
+//            //connect start signal to process slot
+//            connect(this,SIGNAL(uploadSpeedMonitingStart(QString,QString,qint64)),speedWorker,SLOT(processUploadSpeed(QString,QString,qint64)));
+//            //connect worker  signal to main process slot
+//            connect(speedWorker,SIGNAL(getUploadSpeedSignal(int,qint64)),this,SLOT(displayUpdateSpeed(int,qint64)));
+//            //deal with destroy signals
+//            connect(speedCalculatorThread,SIGNAL(destroyed()),speedWorker,SLOT(process()));
+//            connect(speedWorker,SIGNAL(finished()),speedCalculatorThread,SLOT(quit()));
+//            connect(speedWorker,SIGNAL(finished()),speedWorker,SLOT(deleteLater()));
+//            connect(speedCalculatorThread,SIGNAL(finished()),speedCalculatorThread,SLOT(deleteLater()));
+//            speedCalculatorThread->start();
+//            emit ftpUploadStart(fileInfo.absoluteFilePath(),QString::fromStdString(currentPathRemote));
+//            emit uploadSpeedMonitingStart(QString::fromStdString(currentPathRemote),fileInfo.fileName(),fileSize);
+//            ui.pushButton_3->setText("上传中...");//close button
+//            ui.pushButton_3->setEnabled(false);//close button
+            executeFtpUpload(fileName_list,m_fu);
 
         }
 
@@ -2568,16 +2672,16 @@ void MainWindow::on_pushButton_cdToParentDir_clicked()
 
 void MainWindow::closeEvent (QCloseEvent *event)
 {
-    QMessageBox::StandardButton resBtn = QMessageBox::question( this, "HusterM",
-                                                                tr("确定退出吗?\n"),
-                                                                QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
-                                                                QMessageBox::Yes);
-    if (resBtn != QMessageBox::Yes) {
-        event->ignore();
-    } else {
-        emit closedWindow();
-        event->accept();
-    }
+    //    QMessageBox::StandardButton resBtn = QMessageBox::question( this, "HusterM",
+    //                                                                tr("确定退出吗?\n"),
+    //                                                                QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
+    //                                                                QMessageBox::Yes);
+    //    if (resBtn != QMessageBox::Yes) {
+    //        event->ignore();
+    //    } else {
+    //        emit closedWindow();
+    //        event->accept();
+    //    }
 }
 
 void MainWindow::on_treeWidget_jobsubmitfile_itemActivated(QTreeWidgetItem *item, int column)
@@ -2646,6 +2750,8 @@ void MainWindow::updateCPUGUI(QString output){
         status_increment_indicator++;
     else
         status_increment_indicator=0;
+    //    qDebug()<<"@111222111222";
+    //    qDebug()<<output;
     ui.widget_cpubar->setValue(output.toFloat());
 
 
@@ -2653,25 +2759,48 @@ void MainWindow::updateCPUGUI(QString output){
 
 void MainWindow::updateHostTempGUI(int t)
 {
-    ui.label_host_temprature->setText(QString::number(t));
+    if(t > 0)
+    {
+        //        ui.label_host_temprature->setText(QString::number(t));
+        ui.progressBar_tempMain->setValue(t);
+        ui.progressBar_tempMain->setToolTip(QString::number(t));
+    }
+    else
+    {
+        //        ui.label_host_temprature->setText("null");
+        ui.progressBar_tempMain->setValue(0);
+        ui.progressBar_tempMain->setToolTip(QString::number(t));
+
+
+    }
+
     if(t>70)
     {
-        ui.label_host_temprature->setStyleSheet("color: rgb(255, 0, 0);");
+        //        qApp->setStyleSheet("QProgressBar#progressBar_tempMain::chunk {background-color: #FF0000;width: 5px;margin: 0.5px;}");
+        ui.progressBar_tempMain->setStyleSheet("QProgressBar#progressBar_tempMain::chunk {background-color: #FF0000;width: 5px;margin: 0.5px;}");
+        //        ui.label_host_temprature->setStyleSheet("color: rgb(255, 0, 0);");
+        ui.pushButton_temprature->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+
         if(update_flag_s1 == true)
         {
             updateEventMessage(ALERT,"control node","管理节点cpu温度过高！");
-            ui.pushButton_temprature->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
 
         }
 
     }
     else
-        ui.label_host_temprature->setStyleSheet("color: rgb(0, 255, 0)");
+        ui.progressBar_tempMain->setStyleSheet("QProgressBar#progressBar_tempMain::chunk {background-color: #00FF00;width: 5px;margin: 0.5px;}");
 
+    //        qApp->setStyleSheet("QProgressBar#progressBar_tempMain::chunk {background-color: #00FF00;width: 5px;margin: 0.5px;}");
+    //        ui.label_host_temprature->setStyleSheet("color: rgb(0, 255, 0)");
 }
 //ram
 void MainWindow::updateRAMGUI(QString output){
-    ui.widget_rambar->setValue(output.toFloat());
+    if(!output.isEmpty())
+    {
+        ui.widget_rambar->setValue(output.toFloat());
+
+    }
 
 }
 //disk
@@ -2850,7 +2979,7 @@ void MainWindow::updateNODESGUI(QString output){
                         //                        update_flag_s2 = false;
 
                     }
-//                    ui.label_3->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+                    //                    ui.label_3->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
                     ui.pushButton_error->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
                     downNodes++;
                 }
@@ -3829,7 +3958,6 @@ void MainWindow::on_pushButton_monitor_IBCard_2_clicked()
 }
 
 
-
 void MainWindow::on_pushButton_error_clicked()
 {
     update_flag_s2 = true;
@@ -3839,3 +3967,28 @@ void MainWindow::on_pushButton_temprature_clicked()
 {
     update_flag_s1 = true;
 }
+
+
+void MainWindow::on_action_Quit_triggered()
+{
+    qApp->quit();
+}
+
+void MainWindow::on_pushButton_29_clicked()
+{
+    //    ftpWorker->client->stopGetFile();
+    ftpStopGetFile();
+}
+
+void MainWindow::ftpStopGetFile()
+{
+    ftpWorker->client->stopGetFile();
+    speedWorker->_isStoped = true;
+}
+
+void MainWindow::ftpStopPutFile()
+{
+    ftpWorker->client->stopPutFile();
+    speedWorker->_isStoped = true;
+}
+

@@ -16,6 +16,8 @@
 #include "contactinfoform.h"
 #include <QGraphicsDropShadowEffect>
 #include "doubleclickedbutton.h"
+#include "yunwei.h"
+#include "productpage.h"
 
 LoginPageII::LoginPageII(QWidget *parent) :
     QWidget(parent),
@@ -197,16 +199,16 @@ void LoginPageII::changeUserSlot(){
 }
 void LoginPageII::closeEvent (QCloseEvent *event)
 {
-    QMessageBox::StandardButton resBtn = QMessageBox::question( this, "HusterM",
-                                                                tr("确定退出吗?\n"),
-                                                                QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
-                                                                QMessageBox::Yes);
-    if (resBtn != QMessageBox::Yes) {
-        event->ignore();
-    } else {
-        emit closedWindow();
-        event->accept();
-    }
+//    QMessageBox::StandardButton resBtn = QMessageBox::question( this, "HusterM",
+//                                                                tr("确定退出吗?\n"),
+//                                                                QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
+//                                                                QMessageBox::Yes);
+//    if (resBtn != QMessageBox::Yes) {
+//        event->ignore();
+//    } else {
+//        emit closedWindow();
+//        event->accept();
+//    }
 }
 void LoginPageII::showLoginPage(){
     this->show();
@@ -488,5 +490,18 @@ void LoginPageII::editAccountInfo()
     ServerWindow * server_window = new ServerWindow;
     server_window->show();
     connect(server_window,SIGNAL(updateLoginServerWidgetSignal()),this,SLOT(updateServerWidges()));
+
+}
+
+void LoginPageII::on_pushButton_3_clicked()
+{
+    YunWei * y = new YunWei(this);
+    y->show();
+}
+
+void LoginPageII::on_pushButton_4_clicked()
+{
+    ProductPage *p = new ProductPage;
+    p->show();
 
 }

@@ -67,7 +67,7 @@ void SpeedCalculator::processUploadSpeed(QString filePathRemote,QString fileName
     filePathRemote_=filePathRemote;
     fileName_=fileName;
     //    timer->start(UPDATE_INTERVAL);
-    while(1){
+    while(1&&_isStoped ==false){
         begin = clock();
         Delay(0.4*1000);
         //update current file size
@@ -84,6 +84,8 @@ void SpeedCalculator::processUploadSpeed(QString filePathRemote,QString fileName
             percentage = currentSize*100/fullFileSize;
             emit getUploadSpeedSignal(speed,percentage);
 
+            emit getCurrentFileSizeSignalUpload(currentSize);
+            emit getFullFileSizeSignalUpload(fullFileSize);
 
 
         }
@@ -120,7 +122,7 @@ void SpeedCalculator::processDownloadSpeed(QString currentPathRemote,QString loc
 
     }
     now = clock();
-    while(1)
+    while(1&&_isStoped==false)
     {
         begin = clock();
         Delay(0.5*1000);
@@ -132,6 +134,8 @@ void SpeedCalculator::processDownloadSpeed(QString currentPathRemote,QString loc
         speed = (currentSize-preSize)/seconds;
         percentage = currentSize*100/fullFileSize;
         emit getDownloadSpeedSignal(speed,percentage);
+        emit getCurrentFileSizeSignal(currentSize);
+        emit getFullFileSizeSignal(fullFileSize);
         if(currentSize==fullFileSize)break;
 
     }

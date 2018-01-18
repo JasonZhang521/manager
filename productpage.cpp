@@ -12,3 +12,8 @@ ProductPage::~ProductPage()
 {
     delete ui;
 }
+
+void ProductPage::on_pushButton_next_clicked()
+{
+    ui->stackedWidget->setCurrentIndex((ui->stackedWidget->currentIndex()+1)%5);
+}

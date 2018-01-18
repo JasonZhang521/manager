@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>登录</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -482,8 +482,7 @@ border-color: rgb(255, 255, 222);</string>
                 </size>
                </property>
                <property name="styleSheet">
-                <string notr="true">
-</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>清除历史</string>

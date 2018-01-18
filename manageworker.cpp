@@ -49,8 +49,6 @@ void ManageWorker::getAllUser()
     QList<QStringList> t = parseUserInfo(outputString);
     emit finishGetAllUser(t);
 
-
-
 }
 
 void ManageWorker::getAllQueueNameByUser(QString username)

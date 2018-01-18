@@ -9,6 +9,8 @@
 #include "ui_contactinfoform.h"
 #include <thirdPartyLib/src/SmtpMime>
 #include <QMessageBox>
+#include <QSplashScreen>
+#include <QPixmap>
 
 ContactInfoForm::ContactInfoForm(QWidget *parent) :
     QWidget(parent),
@@ -29,12 +31,15 @@ void ContactInfoForm::on_pushButton_submit_clicked()
     QString m_contact;
     QString m_type;
     QString m_message;
+    QPixmap pixmap(":/Resources/loadbg.png");
+    QSplashScreen splashscreen(pixmap);
+
 
     m_name = ui->lineEdit_name->text();
     m_contact = ui->lineEdit_contact->text();
     m_type = ui->comboBox_category->currentText();
     m_message = ui->textEdit_message->toPlainText();
-
+qDebug()<<"1";
     SmtpClient smtp("smtp.qq.com", 465, SmtpClient::SslConnection);
 //    smtp.setUser("hungclustermanager@163.com");
     smtp.setUser("728670667@qq.com");
@@ -54,7 +59,10 @@ void ContactInfoForm::on_pushButton_submit_clicked()
     text.setText("发件人: \n"+m_name+"\n\n"+"联系方式: \n"+m_contact+"\n\n"+m_message);
 
     message.addPart(&text);
-
+qDebug()<<"2";
+    splashscreen.show();
+    splashscreen.showMessage("正在发送，请稍候...");
+    qApp->processEvents();
     if (!smtp.connectToHost()) {
         qDebug() << "Failed to connect to host!" << endl;
 
@@ -68,15 +76,17 @@ void ContactInfoForm::on_pushButton_submit_clicked()
         msg.setText("发送失败");
         msg.exec();
         ui->pushButton_submit->setEnabled(true);
+        splashscreen.finish(this);
+
     }
     else
     {
         QMessageBox msg;
         msg.setText("发送成功");
         msg.exec();
+        smtp.quit();
+        splashscreen.finish(this);
         this->close();
     }
-
-    smtp.quit();
 
 }

@@ -29,6 +29,9 @@ signals:
     void finishMkDir();
     void getUploadSpeedSignal(int);
     void findFileExistanceSignal(bool);
+    void finishDownloadPauseSignal();
+    void finishUploadPauseSignal();
+
 
 
 public slots:
@@ -41,18 +44,21 @@ public slots:
     void processMkDir(QString filePathRemote, QString fileName);
     void processMkFile();
     void processRenameFile();
+    void pauseDownload();
+    void pauseUpload();
 private:
     SshConfigure configure;
     ssh_session session;
     SshShellChannel *channel;
     SshClientSession *clientSession;
-    ISshClient *client;
 
     int preSize=0, currentSize=0;
     std::string outputString;
     QTimer *timer;
     QString filePathRemote_;
     QString fileName_;
+public:
+    ISshClient *client;
 
 
 };

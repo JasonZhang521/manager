@@ -102,5 +102,14 @@
         <file>Resources/temp/gpu.png</file>
         <file>Resources/temp/机柜.png</file>
         <file>Resources/temp/设备 .png</file>
+        <file>Resources/gif-icons-menu-transition-animations-send-mail.gif</file>
+        <file>Resources/product2.png</file>
+        <file>Resources/product8.png</file>
+        <file>Resources/product7.png</file>
+        <file>Resources/product6.png</file>
+        <file>Resources/product5.png</file>
+        <file>Resources/product4.png</file>
+        <file>Resources/product3.png</file>
+        <file>Resources/product1.png</file>
     </qresource>
 </RCC>

@@ -183,7 +183,11 @@ SOURCES += \
     sourceCode/Environment/ShellCommandGenericOutput.cpp \
     sourceCode/Configure/SystemEnvironmentConfigure.cpp \
     sourceCode/PlatformWrapper/SystemApi.cpp \
-    doubleclickedbutton.cpp
+    doubleclickedbutton.cpp \
+    ftpdownloaddialog.cpp \
+    formfortest.cpp \
+    yunwei.cpp \
+    ftpuploaddialog.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -381,7 +385,12 @@ HEADERS += \
     sourceCode/TraceLog/TraceConsole.h \
     sourceCode/TraceLog/TraceFile.h \
     sourceCode/PlatformWrapper/SystemApi.h \
-    doubleclickedbutton.h
+    doubleclickedbutton.h \
+    ftpdownloaddialog.h \
+    alphanum.h \
+    formfortest.h \
+    yunwei.h \
+    ftpuploaddialog.h
 
 
 
@@ -403,7 +412,11 @@ FORMS += \
     productpage.ui \
     loginpageii.ui \
     monitorwindow.ui \
-    m.ui
+    m.ui \
+    ftpdownloaddialog.ui \
+    formfortest.ui \
+    yunwei.ui \
+    ftpuploaddialog.ui
 
 RESOURCES += \
     hungclustermanager1.qrc

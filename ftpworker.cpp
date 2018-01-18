@@ -46,10 +46,25 @@ void FtpWorker::processDownload(QString filePathRemote,QString filePathLocal){
     client->getFile(filePathRemote.toStdString(),filePathLocal.toStdString());
     emit finishDownload();
 }
+
+//pause download
+void FtpWorker::pauseDownload()
+{
+    qDebug()<<"pasue download executed";
+    client->stopGetFile();
+    emit finishDownloadPauseSignal();
+}
+
 // process upload
 void FtpWorker::processUpload(QString filePathLocal,QString filePathRemote){
     client->putFile(filePathLocal.toStdString(),filePathRemote.toStdString());
     emit finishUpload();
+}
+
+void FtpWorker::pauseUpload()
+{
+    client->stopPutFile();
+    emit finishUploadPauseSignal();
 }
 
 // list dir
@@ -57,6 +72,8 @@ void FtpWorker::processListDirect(QString filePathRemote,int i){
     int i_ = i;
     QList<QStringList> out;
     client->executeShellCommand("cd "+filePathRemote.toStdString()+" && ls -l -t",outputString);
+    qDebug()<<"@123123123123";
+    qDebug()<<QString::fromStdString(outputString);
     foreach(QString each,QString::fromStdString(outputString).split("\n"))
     {
        if(!each.isEmpty()&&!each.split(QRegExp("[\\s]+")).isEmpty())

@@ -83,7 +83,7 @@ void ShellWorker::update(){
 void ShellWorker::getHostTemprature()
 {
     //computer i need you to get host temprature and send this info through signal
-    int temprature_Host;
+    int temprature_Host=0;
     client->executeShellCommand("cat /sys/class/hwmon/hwmon0/device/temp1_input",outputString);
     temprature_Host = QString::fromStdString(outputString).toInt()/1000;
     emit hostTempratureFinished(temprature_Host);
@@ -93,72 +93,91 @@ void ShellWorker::getHostTemprature()
 
 //cpu
 void ShellWorker::getCPU(){
+//[1]
+//        int hostCoreNum;float cpuUsage;float loadavg;
+//        client->executeShellCommand("nproc",outputString);
+//        if(outputString!=""){//return is not empty
+//            hostCoreNum=QString::fromStdString(outputString).remove("\n").toInt();//parse to int of host corenum
 
-    //    int hostCoreNum;float cpuUsage;float loadavg;
-    //    client->executeShellCommand("nproc",outputString);
-    //    if(outputString!=""){//return is not empty
-    //        hostCoreNum=QString::fromStdString(outputString).remove("\n").toInt();//parse to int of host corenum
+//        }
 
-    //    }
+//        //get load average
+//        client->executeShellCommand("cat /proc/loadavg | awk '{print $1}'",outputString);
+//        if(outputString!=""){//return is not empty
+//            loadavg = QString::fromStdString(outputString).remove("\n").toFloat();//parse to float of loadavg
 
-    //    //get load average
-    //    client->executeShellCommand("cat /proc/loadavg | awk '{print $1}'",outputString);
-    //    if(outputString!=""){//return is not empty
-    //        loadavg = QString::fromStdString(outputString).remove("\n").toFloat();//parse to float of loadavg
+//            if(hostCoreNum!=0)
+//                cpuUsage = loadavg/hostCoreNum;//calculate cpu usage
+//            emit cpuFinished(QString::number(cpuUsage*100));
+//        }
 
-    //        if(hostCoreNum!=0)
-    //            cpuUsage = loadavg/hostCoreNum;//calculate cpu usage
-    //        emit cpuFinished(QString::number(cpuUsage*100));
-    //    }
+    //[2]
+//    double cpuUsage;
+//    cpuUsage = getCPUByCalculation();
+//    //    qDebug()<<QString::number(cpuUsage);
+//    emit cpuFinished(QString::number(cpuUsage));
 
-    double cpuUsage;
-    cpuUsage = getCPUByCalculation();
-//    qDebug()<<QString::number(cpuUsage);
-    emit cpuFinished(QString::number(cpuUsage));
-
+    //[3]
+    client->executeShellCommand("grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage}'",outputString);
+   if(!outputString.empty())
+    emit cpuFinished(QString::fromStdString(outputString));
 }
 
 double ShellWorker::getCPUByCalculation()
 {
-    double return_value;
-    client->executeShellCommand("cat /proc/stat | grep \"cpu \"",outputString);
-    QString temp_outputString = QString::fromStdString(outputString);
-    QStringList temp_outputStr_list = temp_outputString.split(QRegExp("[\\s]+"));
-
-    //get work
-    proCpuWork = temp_outputStr_list[1].toInt()+temp_outputStr_list[2].toInt()+temp_outputStr_list[3].toInt();
-
-    //get total
-    proCpuTotal=0;
-    for(int i =1;i<=7;i++)
+    double return_value =0;
+    client->executeShellCommand("cat /proc/stat | grep \"cpu \" | head -n1",outputString);
+    if(!outputString.empty())
     {
-        proCpuTotal+=temp_outputStr_list[i].toInt();
+
+        QString temp_outputString = QString::fromStdString(outputString);
+        QStringList temp_outputStr_list = temp_outputString.split(QRegExp("[\\s]+"));
+        qDebug()<<"@cpu list";
+        qDebug()<<temp_outputStr_list;
+
+        //get work
+        if(temp_outputStr_list.size()>=4)
+        proCpuWork = temp_outputStr_list[1].toInt()+temp_outputStr_list[2].toInt()+temp_outputStr_list[3].toInt();
+
+        //get total
+        proCpuTotal=0;
+        if(temp_outputStr_list.size()>=8)
+        {
+            for(int i =1;i<=7;i++)
+            {
+                proCpuTotal+=temp_outputStr_list[i].toInt();
+
+            }
+        }
+
+
+
+        //work_over_period = pro - pre = 68
+        //total_over_period = pro - pre = 1106
+        //computer,
+        //get work over period
+        double work_over_period;
+        double total_over_period;
+        if(preCpuTotal != proCpuTotal && preCpuWork != proCpuWork)
+        {
+            work_over_period = proCpuWork - preCpuWork;
+            total_over_period = proCpuTotal - preCpuTotal;
+        }
+
+        preCpuWork = proCpuWork;
+        preCpuTotal = proCpuTotal;
+
+        //    if(preCpuTotal > 0 )
+        //    {
+        return_value = work_over_period / total_over_period * 100;
+
+        //    }
+
+        //    else
+        //        return_value = 0;
+
 
     }
-
-
-    //work_over_period = pro - pre = 68
-    //total_over_period = pro - pre = 1106
-    //computer,
-    //get work over period
-    int work_over_period = proCpuWork-preCpuWork;
-
-    int total_over_period = proCpuTotal-preCpuTotal;
-
-    preCpuWork = proCpuWork;
-    preCpuTotal = proCpuTotal;
-
-    if(preCpuTotal > 0 )
-    {
-         return_value = (double)work_over_period / (double)total_over_period * 100;
-
-        qDebug()<<work_over_period;
-        qDebug()<<total_over_period;
-
-    }
-
-    else
-        return_value = 0;
     return return_value;
 
 }
@@ -272,6 +291,7 @@ void ShellWorker::getJOBS2(){
         emit jobsShowjobsFinished(temp,nodesList);
 
 }
+
 void ShellWorker::Delay(int time)//time*1000为秒数
 {
     clock_t  now  =  clock();

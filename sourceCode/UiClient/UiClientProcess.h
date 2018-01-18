@@ -28,8 +28,10 @@ public:
     void sendMessage(std::unique_ptr<IpcMessage::IIpcMessage> msg);
 private:
     void process();
+    std::string address = "0.0.0.0:0";
 public:
      GETCLASSNAME(UiClientProcess)
+     void setAddress(const std::string &value);
 };
 }
 #endif // UICLIENTPROCESS_H

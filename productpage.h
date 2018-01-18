@@ -15,6 +15,9 @@ public:
     explicit ProductPage(QWidget *parent = 0);
     ~ProductPage();
 
+private slots:
+    void on_pushButton_next_clicked();
+
 private:
     Ui::ProductPage *ui;
 };

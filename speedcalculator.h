@@ -22,6 +22,13 @@ signals:
      void getUploadSpeedSignal(int i,qint64 percentage);
      void getDownloadSpeedSignal(int i,qint64 percentage);
 
+     void getCurrentFileSizeSignal(qint64 currentSize);
+     void getFullFileSizeSignal(qint64 fullFileSize);
+
+
+     void getCurrentFileSizeSignalUpload(qint64 currentSize);
+     void getFullFileSizeSignalUpload(qint64 fullFileSize);
+
 public slots:
      void process();
      void processUploadSpeed(QString filePathRemote, QString fileName, qint64 fullFileSize);
@@ -42,6 +49,8 @@ private:
      QTimer *timer;
      QString filePathRemote_;
      QString fileName_;
+public:
+     bool _isStoped = false;
 };
 
 #endif // SPEEDCALCULATOR_H

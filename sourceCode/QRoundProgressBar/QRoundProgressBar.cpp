@@ -369,6 +369,3 @@ void QRoundProgressBar::rebuildDataBrushIfNeeded()
         setPalette(p);
     }
 }
-
-
-

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1274</width>
+    <width>1632</width>
     <height>924</height>
    </rect>
   </property>
@@ -353,7 +353,7 @@ font: 20pt &quot;黑体&quot;;</string>
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>891</width>
+                  <width>1175</width>
                   <height>542</height>
                  </rect>
                 </property>
@@ -2276,35 +2276,7 @@ font: 7pt &quot;黑体&quot;;</string>
 </string>
                           </property>
                           <layout class="QGridLayout" name="gridLayout_7">
-                           <item row="1" column="1">
-                            <widget class="QLabel" name="label_host_temprature">
-                             <property name="sizePolicy">
-                              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                               <horstretch>0</horstretch>
-                               <verstretch>0</verstretch>
-                              </sizepolicy>
-                             </property>
-                             <property name="font">
-                              <font>
-                               <family>黑体</family>
-                               <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
-                              </font>
-                             </property>
-                             <property name="styleSheet">
-                              <string notr="true">color: rgb(0, 0, 255);</string>
-                             </property>
-                             <property name="text">
-                              <string>null</string>
-                             </property>
-                             <property name="alignment">
-                              <set>Qt::AlignCenter</set>
-                             </property>
-                            </widget>
-                           </item>
-                           <item row="1" column="0">
+                           <item row="0" column="0">
                             <widget class="QLabel" name="label_RamType_3">
                              <property name="sizePolicy">
                               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -2329,7 +2301,60 @@ font: 7pt &quot;黑体&quot;;</string>
                              </property>
                             </widget>
                            </item>
-                           <item row="3" column="0">
+                           <item row="1" column="0">
+                            <widget class="QLabel" name="label_RamType">
+                             <property name="sizePolicy">
+                              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                               <horstretch>0</horstretch>
+                               <verstretch>0</verstretch>
+                              </sizepolicy>
+                             </property>
+                             <property name="font">
+                              <font>
+                               <family>黑体</family>
+                               <pointsize>10</pointsize>
+                               <weight>50</weight>
+                               <italic>false</italic>
+                               <bold>false</bold>
+                              </font>
+                             </property>
+                             <property name="text">
+                              <string>内存型号：</string>
+                             </property>
+                             <property name="alignment">
+                              <set>Qt::AlignCenter</set>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="1">
+                            <widget class="QLabel" name="label_RamTypeShow">
+                             <property name="sizePolicy">
+                              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                               <horstretch>0</horstretch>
+                               <verstretch>0</verstretch>
+                              </sizepolicy>
+                             </property>
+                             <property name="font">
+                              <font>
+                               <family>黑体</family>
+                               <pointsize>10</pointsize>
+                               <weight>50</weight>
+                               <italic>false</italic>
+                               <bold>false</bold>
+                              </font>
+                             </property>
+                             <property name="styleSheet">
+                              <string notr="true">color: rgb(0, 0, 255);</string>
+                             </property>
+                             <property name="text">
+                              <string>GDDR</string>
+                             </property>
+                             <property name="alignment">
+                              <set>Qt::AlignCenter</set>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="0">
                             <widget class="QLabel" name="label_RamSize">
                              <property name="sizePolicy">
                               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -2354,7 +2379,7 @@ font: 7pt &quot;黑体&quot;;</string>
                              </property>
                             </widget>
                            </item>
-                           <item row="3" column="1">
+                           <item row="2" column="1">
                             <widget class="QLabel" name="label_RamSizeShow">
                              <property name="sizePolicy">
                               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -2382,38 +2407,25 @@ font: 7pt &quot;黑体&quot;;</string>
                              </property>
                             </widget>
                            </item>
-                           <item row="2" column="0">
-                            <widget class="QLabel" name="label_RamType">
+                           <item row="0" column="1">
+                            <widget class="QProgressBar" name="progressBar_tempMain">
                              <property name="sizePolicy">
-                              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                                <horstretch>0</horstretch>
                                <verstretch>0</verstretch>
                               </sizepolicy>
                              </property>
-                             <property name="font">
-                              <font>
-                               <family>黑体</family>
-                               <pointsize>10</pointsize>
-                               <weight>50</weight>
-                               <italic>false</italic>
-                               <bold>false</bold>
-                              </font>
+                             <property name="minimumSize">
+                              <size>
+                               <width>100</width>
+                               <height>20</height>
+                              </size>
                              </property>
-                             <property name="text">
-                              <string>内存型号：</string>
-                             </property>
-                             <property name="alignment">
-                              <set>Qt::AlignCenter</set>
-                             </property>
-                            </widget>
-                           </item>
-                           <item row="2" column="1">
-                            <widget class="QLabel" name="label_RamTypeShow">
-                             <property name="sizePolicy">
-                              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                               <horstretch>0</horstretch>
-                               <verstretch>0</verstretch>
-                              </sizepolicy>
+                             <property name="maximumSize">
+                              <size>
+                               <width>16777215</width>
+                               <height>20</height>
+                              </size>
                              </property>
                              <property name="font">
                               <font>
@@ -2425,13 +2437,19 @@ font: 7pt &quot;黑体&quot;;</string>
                               </font>
                              </property>
                              <property name="styleSheet">
-                              <string notr="true">color: rgb(0, 0, 255);</string>
+                              <string notr="true">border:1 px;
+QProgressBar {border: 1px solid grey; border-radius: 5px;};
+QProgressBar::chunk {background-color: #00FF00;width: 5px;margin: 0.5px;}
+                        </string>
                              </property>
-                             <property name="text">
-                              <string>GDDR</string>
+                             <property name="value">
+                              <number>0</number>
                              </property>
                              <property name="alignment">
-                              <set>Qt::AlignCenter</set>
+                              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                             </property>
+                             <property name="textVisible">
+                              <bool>false</bool>
                              </property>
                             </widget>
                            </item>
@@ -3074,7 +3092,8 @@ color: rgb(0, 0, 255);</string>
                       <widget class="QFrame" name="frame_18">
                        <property name="styleSheet">
                         <string notr="true">background-color: #f0fff0;
-border:1.5px solid #008080;</string>
+border:1.5px solid #008080;
+</string>
                        </property>
                        <property name="frameShape">
                         <enum>QFrame::NoFrame</enum>
@@ -3127,7 +3146,8 @@ border:1.5px solid #008080;</string>
                            </size>
                           </property>
                           <property name="styleSheet">
-                           <string notr="true">border:0px;</string>
+                           <string notr="true">/*border:0px;
+*/</string>
                           </property>
                          </widget>
                         </item>
@@ -3197,7 +3217,8 @@ border:1.5px solid #008080;</string>
                            </size>
                           </property>
                           <property name="styleSheet">
-                           <string notr="true">border:0px;</string>
+                           <string notr="true">/*border:0px;
+background-color: rgb(255, 0, 0);*/</string>
                           </property>
                          </widget>
                         </item>
@@ -3586,7 +3607,7 @@ border:1.5px solid #008080;</string>
                        <property name="geometry">
                         <rect>
                          <x>0</x>
-                         <y>-164</y>
+                         <y>0</y>
                          <width>577</width>
                          <height>633</height>
                         </rect>
@@ -7186,7 +7207,7 @@ QTabBar::tab:selected {
             <attribute name="title">
              <string/>
             </attribute>
-            <layout class="QHBoxLayout" name="horizontalLayout_45">
+            <layout class="QVBoxLayout" name="verticalLayout_65">
              <item>
               <widget class="QSplitter" name="splitter">
                <property name="orientation">
@@ -7255,7 +7276,7 @@ QTabBar::tab:selected {
                     <item>
                      <widget class="QPushButton" name="pushButton_localFile_reset">
                       <property name="text">
-                       <string>/</string>
+                       <string>根目录</string>
                       </property>
                      </widget>
                     </item>
@@ -7263,6 +7284,13 @@ QTabBar::tab:selected {
                      <widget class="QPushButton" name="pushButton_localFileUp">
                       <property name="text">
                        <string>返回上级</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_14">
+                      <property name="text">
+                       <string>刷新</string>
                       </property>
                      </widget>
                     </item>
@@ -7310,17 +7338,78 @@ QTabBar::tab:selected {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton_3">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>上传</string>
-                   </property>
-                  </widget>
+                  <layout class="QHBoxLayout" name="horizontalLayout_63">
+                   <item>
+                    <widget class="QLabel" name="label_2">
+                     <property name="text">
+                      <string>0B/241MB</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_5">
+                     <property name="text">
+                      <string>,0/16</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_45">
+                   <item>
+                    <widget class="QPushButton" name="pushButton_3">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>上传</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="pushButton_17">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>编辑</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="pushButton_20">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>属性</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_10">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
                  </item>
                 </layout>
                </widget>
@@ -7366,34 +7455,6 @@ QTabBar::tab:selected {
                      <number>1</number>
                     </property>
                     <item>
-                     <widget class="QLabel" name="label_ftp_remotePath">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>黑体</family>
-                        <pointsize>10</pointsize>
-                        <weight>50</weight>
-                        <italic>false</italic>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>当前路径:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
                      <widget class="QLineEdit" name="lineEdit_ftp_remotePath">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -7409,6 +7470,27 @@ QTabBar::tab:selected {
                         <italic>false</italic>
                         <bold>false</bold>
                        </font>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_15">
+                      <property name="text">
+                       <string>根目录</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_13">
+                      <property name="text">
+                       <string>用户目录</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_16">
+                      <property name="text">
+                       <string>刷新</string>
                       </property>
                      </widget>
                     </item>
@@ -7523,17 +7605,78 @@ QTabBar::tab:selected {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>下载</string>
-                   </property>
-                  </widget>
+                  <layout class="QHBoxLayout" name="horizontalLayout_64">
+                   <item>
+                    <widget class="QLabel" name="label_3">
+                     <property name="text">
+                      <string>0B/395MB</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_30">
+                     <property name="text">
+                      <string>,0/70</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_58">
+                   <item>
+                    <widget class="QPushButton" name="pushButton">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>下载</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="pushButton_29">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>编辑</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="pushButton_30">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>属性</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_11">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
                  </item>
                 </layout>
                </widget>
@@ -7560,7 +7703,7 @@ QTabBar::tab:selected {
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>874</width>
+                  <width>1158</width>
                   <height>583</height>
                  </rect>
                 </property>
@@ -7618,6 +7761,9 @@ QTabBar::tab:selected {
             <layout class="QVBoxLayout" name="verticalLayout_61">
              <item>
               <widget class="QLabel" name="label_32">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                  <horstretch>0</horstretch>
@@ -7647,6 +7793,9 @@ QTabBar::tab:selected {
              </item>
              <item>
               <widget class="QTextEdit" name="textEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
                  <horstretch>0</horstretch>
@@ -7660,6 +7809,9 @@ QTabBar::tab:selected {
              </item>
              <item>
               <widget class="QPushButton" name="pushButton_12">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -7882,7 +8034,7 @@ QTabBar::tab:selected {
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>870</width>
+                      <width>1140</width>
                       <height>380</height>
                      </rect>
                     </property>
@@ -7894,7 +8046,7 @@ QTabBar::tab:selected {
                          <item>
                           <widget class="QLabel" name="label_selectedNodes_hardware">
                            <property name="sizePolicy">
-                            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                              <horstretch>0</horstretch>
                              <verstretch>0</verstretch>
                             </sizepolicy>
@@ -7911,7 +8063,7 @@ null</string>
                          <item>
                           <widget class="QLabel" name="label_selectedNodes_hardware_temprature">
                            <property name="sizePolicy">
-                            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                              <horstretch>0</horstretch>
                              <verstretch>0</verstretch>
                             </sizepolicy>
@@ -7922,6 +8074,22 @@ null</string>
                            </property>
                            <property name="textFormat">
                             <enum>Qt::PlainText</enum>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QProgressBar" name="progressBar_temprature1">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="value">
+                            <number>24</number>
+                           </property>
+                           <property name="textVisible">
+                            <bool>false</bool>
                            </property>
                           </widget>
                          </item>
@@ -7973,7 +8141,7 @@ null</string>
                        <item>
                         <widget class="QGroupBox" name="groupBox_5">
                          <property name="sizePolicy">
-                          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>
@@ -8027,7 +8195,7 @@ null</string>
                        <item>
                         <widget class="QGroupBox" name="groupBox_8">
                          <property name="sizePolicy">
-                          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>
@@ -8825,7 +8993,7 @@ border:0px solid #008080;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1274</width>
+     <width>1632</width>
      <height>19</height>
     </rect>
    </property>
@@ -9096,8 +9264,6 @@ border:0px solid #008080;
   <tabstop>pushButton_control_time_statics_edit</tabstop>
   <tabstop>pushButton_cdToParentDir</tabstop>
   <tabstop>treeWidget</tabstop>
-  <tabstop>pushButton</tabstop>
-  <tabstop>pushButton_3</tabstop>
   <tabstop>scrollArea_2</tabstop>
   <tabstop>pushButton_4</tabstop>
   <tabstop>pushButton_job_kill</tabstop>

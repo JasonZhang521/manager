@@ -67,6 +67,10 @@ private slots:
     void testDoubleClick();
     void processButtonSelectionEvent();
     void processEditButtonClicked();
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_4_clicked();
+
 private:
     Ui::LoginPageII *ui;
     //ssh related variables
