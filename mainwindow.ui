@@ -308,7 +308,7 @@ font: 20pt &quot;黑体&quot;;</string>
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <property name="iconSize">
             <size>
@@ -3420,7 +3420,7 @@ background-color: rgb(255, 0, 0);*/</string>
                    <number>0</number>
                   </property>
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>1</number>
                   </property>
                   <widget class="QWidget" name="node_2">
                    <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -3608,7 +3608,7 @@ background-color: rgb(255, 0, 0);*/</string>
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>577</width>
+                         <width>796</width>
                          <height>633</height>
                         </rect>
                        </property>

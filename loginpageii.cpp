@@ -66,6 +66,7 @@ LoginPageII::LoginPageII(QWidget *parent) :
 
 
     w = new MainWindow();
+    w->move(10,10);
     w->show();
 }
 
