@@ -193,6 +193,31 @@ private slots:
 
     void displayCurrentFileSize(qint64 currentSize);
     void displayFullFileSize(qint64 fullFileSize);
+
+    void on_pushButton_32_clicked();
+
+    void on_pushButton_22_clicked();
+
+    void on_pushButton_23_clicked();
+
+    void on_pushButton_24_clicked();
+
+    void on_pushButton_25_clicked();
+
+    void on_pushButton_26_clicked();
+
+    void on_pushButton_27_clicked();
+
+    void on_pushButton_28_clicked();
+
+    void on_pushButton_31_clicked();
+
+    void on_pushButton_login_exit_clicked();
+
+    void on_pushButton_18_clicked();
+
+    void on_pushButton_disk_clicked();
+
 public slots:
     void processFtpUploadFinishEvent();//process after upload finished signal
     void processFtpDownloadFinishEvent();//process after recieve download finished signal
@@ -321,6 +346,8 @@ private:
     QString activated_node;//node name for hardware display.
     QTimer * timer_hardware_getInfo;
     QList<QStringList> hardware_hostname_list;
+    QStringList gpu_node_list;
+    QString activated_gpunode="";
 
     QCPBars *regen;
     QCPBars *rengen2;
@@ -346,6 +373,8 @@ private:
     QVector<double> x,y;
     QVector<double> x1,y1;
     double increamter=1;
+
+    int hider_increamter = 0;
 
     bool isOnline=true;
 
@@ -414,6 +443,9 @@ private:
     void setupMessageUpdateTimer();
     void getHostCpuFreqCache();
     void executeFtpUpload(QStringList fileName_list, FtpUploadDialog *m_fu);
+    void closeAllSubButton();
+    void updateGPUInfoPage(SystemMonitorMessage::ComputerNodeInfoReport *resp);
+    int getUsedCore(QString input);
 public:
     void setupSessionConfigure(SshConfigure configure);
 signals:

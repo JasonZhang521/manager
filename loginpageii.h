@@ -100,6 +100,7 @@ private:
 
      void disableButtons();
      void enableButtons();
+     void setPosition();
 signals:
     void closedWindow();
 

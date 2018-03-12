@@ -23,7 +23,7 @@ ShellWorker::ShellWorker(QObject *parent, SshConfigure configure) : QObject(pare
     timer->singleShot(UPDATE_INTERAL,this,SLOT(update()));
     // update();
 
-
+    qDebug()<<"@constructed";
 
 }
 
@@ -47,7 +47,8 @@ void ShellWorker::update(){
     int i =0;
     while(1&&canceled_flag != true){
         client->executeShellCommand("ls /usr",outputString);
-        if(QString::fromStdString(outputString).contains("lib64"))
+        qDebug()<<QString::fromStdString(outputString);
+        if(!QString::fromStdString(outputString).isEmpty())
         {
             emit connectionSuccessSignal();
             getHostTemprature();
@@ -82,9 +83,10 @@ void ShellWorker::update(){
 //temprature
 void ShellWorker::getHostTemprature()
 {
-    //computer i need you to get host temprature and send this info through signal
     int temprature_Host=0;
-    client->executeShellCommand("cat /sys/class/hwmon/hwmon0/device/temp1_input",outputString);
+//    client->executeShellCommand("cat /sys/class/hwmon/hwmon0/device/temp1_input",outputString);
+    client->executeShellCommand("cat  /sys/bus/platform/devices/coretemp.0/temp1_input",outputString);
+
     temprature_Host = QString::fromStdString(outputString).toInt()/1000;
     emit hostTempratureFinished(temprature_Host);
 
@@ -183,7 +185,7 @@ double ShellWorker::getCPUByCalculation()
 }
 //ram
 void ShellWorker::getRAM(){
-
+/*
     client->executeShellCommand("free",outputString);float usedRam,totalRam,ramUsage;
     if(outputString!=""){
         QRegularExpression re("\\b\\d.*");
@@ -204,6 +206,22 @@ void ShellWorker::getRAM(){
             ramUsage = usedRam/totalRam;
         emit ramFinished(QString::number(ramUsage*100));
     }
+*/
+    client->executeShellCommand("cat /proc/meminfo | head -n3",outputString);
+    float usedRam,avaliableRam,totalRam,ramUsage;
+
+    if(!outputString.empty())
+    {
+        totalRam = QString::fromStdString(outputString).split("\n")[0].split(QRegExp("[\\s]+"))[1].toFloat();
+        avaliableRam = QString::fromStdString(outputString).split("\n")[2].split(QRegExp("[\\s]+"))[1].toFloat();
+        usedRam = totalRam - avaliableRam;
+        if(totalRam!=0)
+               ramUsage = usedRam / totalRam;
+
+        emit ramFinished(QString::number(ramUsage*100));
+
+    }
+
 
 }
 //disk
@@ -237,17 +255,27 @@ void ShellWorker::getNODES(){
 //jobs by qsub
 void ShellWorker::getJOBS1(){
     QStringList jobList, nodesList, temp;
-    QRegularExpression re("(?<=Nodes:\\n)[\\W\\w]*(?=IWD)");
+//    QRegularExpression re("(?<=Nodes:\\n)[\\W\\w]*(?=IWD)");
+    QRegularExpression re("(?<=Allocated Nodes:\\n).+");
+
+
     jobList.clear();nodesList.clear();temp.clear();
     client->executeShellCommand("qstat -a", outputString);
     jobList = QString::fromStdString(outputString).split("\n");
+    qDebug()<<jobList;
     if(jobList.size()>=6)
     {
         for(int i=5;i<jobList.size()-1;i++){
             temp.append(jobList[i]);
             client->executeShellCommand("checkjobs "+jobList[i].split(QRegExp("[\\s]+"))[0].split(".")[0].toStdString(),outputString);
+            qDebug()<<QString::fromStdString(outputString);
+//            qDebug()<<"checkjobs "+jobList[i].split(QRegExp("[\\s]+"))[0].split(".")[0];
+
             QRegularExpressionMatch match = re.match(QString::fromStdString(outputString));
             if(match.hasMatch()){
+                qDebug()<<"@nodes list";
+
+                qDebug()<<match.captured(0);
                 nodesList.append(match.captured(0).remove("\n"));
             }
             else

@@ -111,5 +111,47 @@
         <file>Resources/product4.png</file>
         <file>Resources/product3.png</file>
         <file>Resources/product1.png</file>
+        <file>Resources/beautify/login_bg.png</file>
+        <file>Resources/beautify/login_bg2.png</file>
+        <file>Resources/beautify/logo.png</file>
+        <file>Resources/beautify/password_logo.png</file>
+        <file>Resources/beautify/user_logo.png</file>
+        <file>Resources/beautify/light.png</file>
+        <file>Resources/beautify/terminal.png</file>
+        <file>Resources/beautify/control.png</file>
+        <file>Resources/beautify/transfering.png</file>
+        <file>Resources/beautify/overview.png</file>
+        <file>Resources/beautify/monitoring.png</file>
+        <file>Resources/beautify/tasks.png</file>
+        <file>Resources/beautify/device.png</file>
+        <file>Resources/beautify/message.png</file>
+        <file>Resources/beautify/Arrow.png</file>
+        <file>Resources/beautify/down_bg.png</file>
+        <file>Resources/beautify/top_bg.png</file>
+        <file>Resources/beautify/down_bar.png</file>
+        <file>Resources/beautify/up_bar.png</file>
+        <file>Resources/beautify/bar.png</file>
+        <file>Resources/beautify/handle.png</file>
+        <file>Resources/beautify/terminal_frame.png</file>
+        <file>Resources/beautify/redlight.png</file>
+        <file>Resources/beautify/greenlight.png</file>
+        <file>Resources/beautify/verticleline.png</file>
+        <file>Resources/beautify/overview-frame-selected.png</file>
+        <file>Resources/beautify/message-frame.png</file>
+        <file>Resources/beautify/device-frame.png</file>
+        <file>Resources/beautify/job-frame.png</file>
+        <file>Resources/beautify/monitor-frame.png</file>
+        <file>Resources/beautify/passing-frame.png</file>
+        <file>Resources/beautify/manage_frame.png</file>
+        <file>Resources/beautify/subnav_unselected.png</file>
+        <file>Resources/beautify/subnav_selected.png</file>
+        <file>Resources/beautify/device_bg_selected.png</file>
+        <file>Resources/beautify/message_bg_selected.png</file>
+        <file>Resources/beautify/terminal_bg_selected.png</file>
+        <file>Resources/beautify/passing_bg_selected.png</file>
+        <file>Resources/beautify/manager_bg_selected.png</file>
+        <file>Resources/beautify/monitorbutton_selected.png</file>
+        <file>Resources/beautify/job_bg_selected.png</file>
+        <file>Resources/beautify/overview_bg_unselected.png</file>
     </qresource>
 </RCC>

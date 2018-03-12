@@ -24,12 +24,13 @@ LoginPageII::LoginPageII(QWidget *parent) :
     ui(new Ui::LoginPageII)
 {
     ui->setupUi(this);
-    this->setWindowFlags(Qt::WindowTitleHint | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);// | Qt::WindowStaysOnTopHint
-    this->setAttribute(Qt::WA_TranslucentBackground);
+    //    this->setWindowFlags(Qt::WindowTitleHint | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);// | Qt::WindowStaysOnTopHint
+        this->setWindowFlags(Qt::WindowTitleHint | Qt::CustomizeWindowHint | Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint);// | Qt::WindowStaysOnTopHint
+
     //add shadows
     QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
     effect->setBlurRadius(5);
-    ui->widget->setGraphicsEffect(effect);
+//    ui->widget->setGraphicsEffect(effect);
 
     m_setting = new QSettings("servers.ini",QSettings::IniFormat);//initilizing qsettings
     flowLayout=new FlowLayout; //create layout
@@ -37,7 +38,7 @@ LoginPageII::LoginPageII(QWidget *parent) :
 
     updateServerWidges();//
 
-    //setup company information
+    //setup company information registor
     QCoreApplication::setOrganizationName("HzwTech");
     QCoreApplication::setOrganizationDomain("hzwtech.com");
     QCoreApplication::setApplicationName("HusterM");
@@ -53,7 +54,6 @@ LoginPageII::LoginPageII(QWidget *parent) :
     this->setTabOrder(ui->lineEdit_login_password,ui->comboBox_server);
     this->setTabOrder(ui->comboBox_server,ui->pushButton_login_signin);
 
-    //    this->setAttribute(Qt::WA_TranslucentBackground);
     //make login list
     processLoginCache();
     //set default ssh session info
@@ -61,13 +61,18 @@ LoginPageII::LoginPageII(QWidget *parent) :
     configure.verbosity = SSH_LOG_PROTOCOL;
     configure.unknownHostContinue = true;
 
-    ui->frame->setStyleSheet("QFrame {background-color: #f0fff0;border:1.5px solid #008080;}" "QPushButton { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #2198c0, stop: 1 #0d5ca6);}" "QPushButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #0d5ca6, stop: 1 #2198c0);}");
-    ui->frame_3->setStyleSheet("QFrame {background-color: #f0fff0;border:1.5px solid #008080;background: url(:/Resources/0001-01.png) no-repeat left center fixed color #f0fff0;}""QPushButton { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: rbg(140,140,198);}" "QPushButton:pressed {background-color: pink;}");
+//    ui->frame->setStyleSheet("QPushButton { margin: 1px; border-color: #0c457e; border-style: outset;border-radius: 3px;border-width: 1px;color: black;background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #2198c0, stop: 1 #0d5ca6);}" "QPushButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #0d5ca6, stop: 1 #2198c0);}");
+        w = new MainWindow();
+        w->move(0,0);
+        w->setWindowState(Qt::WindowMaximized);
+//        w->showFullScreen();
+       w->show();
+    ui->pushButton_4->setStyleSheet("*:hover {color : red}" "* {color : white}");
+    ui->pushButton_3->setStyleSheet("*:hover {color : red}" "* {color : white}");
+    ui->pushButton->setStyleSheet("*:hover {color : red}" "* {color : white}");
+    ui->pushButton_login_exit->setStyleSheet("*:hover {color : red}" "* {color : white}");
 
-
-    w = new MainWindow();
-    w->move(10,10);
-    w->show();
+    this->setMinimumSize(800,600);
 }
 
 LoginPageII::~LoginPageII()
@@ -177,6 +182,7 @@ void LoginPageII::runValidation(){
         qApp->processEvents();
 
         w->setupSessionConfigure(configure);
+        // w->show();
         splash.finish(w);
 
     }
@@ -200,16 +206,16 @@ void LoginPageII::changeUserSlot(){
 }
 void LoginPageII::closeEvent (QCloseEvent *event)
 {
-//    QMessageBox::StandardButton resBtn = QMessageBox::question( this, "HusterM",
-//                                                                tr("确定退出吗?\n"),
-//                                                                QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
-//                                                                QMessageBox::Yes);
-//    if (resBtn != QMessageBox::Yes) {
-//        event->ignore();
-//    } else {
-//        emit closedWindow();
-//        event->accept();
-//    }
+    //    QMessageBox::StandardButton resBtn = QMessageBox::question( this, "HusterM",
+    //                                                                tr("确定退出吗?\n"),
+    //                                                                QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
+    //                                                                QMessageBox::Yes);
+    //    if (resBtn != QMessageBox::Yes) {
+    //        event->ignore();
+    //    } else {
+    //        emit closedWindow();
+    //        event->accept();
+    //    }
 }
 void LoginPageII::showLoginPage(){
     this->show();
@@ -220,27 +226,27 @@ void LoginPageII::showLoginPage(){
 
 void LoginPageII::mousePressEvent(QMouseEvent* event)
 {
-    if(event->button() == Qt::LeftButton)
-    {
-        mMoving = true;
-        mLastMousePosition = event->pos();
-    }
+    //    if(event->button() == Qt::LeftButton)
+    //    {
+    //        mMoving = true;
+    //        mLastMousePosition = event->pos();
+    //    }
 }
 
 void LoginPageII::mouseMoveEvent(QMouseEvent* event)
 {
-    if( event->buttons().testFlag(Qt::LeftButton) && mMoving)
-    {
-        this->move(this->pos() + (event->pos() - mLastMousePosition));
-    }
+    //    if( event->buttons().testFlag(Qt::LeftButton) && mMoving)
+    //    {
+    //        this->move(this->pos() + (event->pos() - mLastMousePosition));
+    //    }
 }
 
 void LoginPageII::mouseReleaseEvent(QMouseEvent* event)
 {
-    if(event->button() == Qt::LeftButton)
-    {
-        mMoving = false;
-    }
+    //    if(event->button() == Qt::LeftButton)
+    //    {
+    //        mMoving = false;
+    //    }
 }
 
 void LoginPageII::on_pushButton_login_exit_clicked()
@@ -266,22 +272,22 @@ void LoginPageII::enableButtons()
 }
 
 void LoginPageII::updateServerWidges()
-{    
+{
     clearWidgets(flowLayout);
     QPushButton* m_button = new QPushButton;//create button
     //    m_button->resize(80,80);
-    m_button->setFixedSize(QSize(100,80));
+    m_button->setFixedSize(QSize(70,50));
     m_button->setText("添加");
-    m_button->setStyleSheet("background-color: blue; color: white;");//set button for add
+    m_button->setStyleSheet("background-color: rgb(20,115,203,200); color: white;");//set button for add
     connect(m_button,SIGNAL(clicked()),this,SLOT(addServer_buttonClicked()));//connect add button signal to slot
     flowLayout->addWidget(m_button);//add to layout
 
     QStringList groups = m_setting->childGroups();
     foreach (QString each, groups) {
         DoubleClickedButton* m_button = new DoubleClickedButton;
-        m_button->setFixedSize(QSize(100,80));
+        m_button->setFixedSize(QSize(70,50));
         m_button->setStyleSheet("color: rgb(255, 255, 255);"
-                                "background-color: rgb(36,160,97);");
+                                "background-color: rgb(36,160,97,200);");
         m_button->setText(each);
         connect(m_button,SIGNAL(doubleClicked()),this,SLOT(processConnectEvent()));
         connect(m_button,SIGNAL(singleClicked()),this,SLOT(processButtonSelectionEvent()));
@@ -290,9 +296,9 @@ void LoginPageII::updateServerWidges()
         flowLayout->addWidget(m_button);
     }
     QPushButton* m_button1 = new QPushButton;
-    m_button1->setFixedSize(QSize(100,80));
+    m_button1->setFixedSize(QSize(70,50));
     m_button1->setText("编辑");
-    m_button1->setStyleSheet("background-color: blue; color: white;");
+    m_button1->setStyleSheet("background-color: rgb(20,115,203,200); color: white;");
     connect(m_button1,SIGNAL(clicked()),this,SLOT(processEditButtonClicked()));
     flowLayout->addWidget(m_button1);
 
@@ -333,18 +339,18 @@ void LoginPageII::processButtonSelectionEvent()
     clearWidgets(flowLayout);
     QPushButton* m_button = new QPushButton;//create button
     //    m_button->resize(80,80);
-    m_button->setFixedSize(QSize(100,80));
+    m_button->setFixedSize(QSize(70,50));
     m_button->setText("添加");
-    m_button->setStyleSheet("background-color: blue; color: white;");//set button for add
+    m_button->setStyleSheet("background-color: rgb(20,115,203,200); color: white;");//set button for add
     connect(m_button,SIGNAL(clicked()),this,SLOT(addServer_buttonClicked()));//connect add button signal to slot
     flowLayout->addWidget(m_button);//add to layout
 
     QStringList groups = m_setting->childGroups();
     foreach (QString each, groups) {
         DoubleClickedButton* m_button = new DoubleClickedButton;
-        m_button->setFixedSize(QSize(100,80));
+        m_button->setFixedSize(QSize(70,50));
         m_button->setStyleSheet("color: rgb(255, 255, 255);"
-                                "background-color: rgb(36,160,97);");
+                                "background-color: rgb(36,160,97,200);");
         m_button->setText(each);
         if(each.compare(temp_name)==0)
         {
@@ -358,9 +364,9 @@ void LoginPageII::processButtonSelectionEvent()
         flowLayout->addWidget(m_button);
     }
     QPushButton* m_button1 = new QPushButton;
-    m_button1->setFixedSize(QSize(100,80));
+    m_button1->setFixedSize(QSize(70,50));
     m_button1->setText("编辑");
-    m_button1->setStyleSheet("background-color: blue; color: white;");
+    m_button1->setStyleSheet("background-color: rgb(20,115,203,200); color: white;");
     connect(m_button1,SIGNAL(clicked()),this,SLOT(processEditButtonClicked()));
     flowLayout->addWidget(m_button1);
 
@@ -482,7 +488,7 @@ void LoginPageII::on_scrollArea_customContextMenuRequested(const QPoint &pos)
 {
     QMenu * menu = new QMenu;
     menu->addAction(QString(tr("编辑")),this,SLOT(editAccountInfo()));
-            menu->exec(QCursor::pos());
+    menu->exec(QCursor::pos());
 }
 
 void LoginPageII::editAccountInfo()
@@ -504,5 +510,17 @@ void LoginPageII::on_pushButton_4_clicked()
 {
     ProductPage *p = new ProductPage;
     p->show();
+
+}
+
+void LoginPageII::setPosition()
+{
+    //    int outer_length = this->width();
+    //    int outer_height = this->height();
+    //    int inner_length = ui->widget->width();
+    //    int inner_height = ui->widget->height();
+    //    int pos_x = (outer_length-inner_length)/2;
+    //    int pos_y = (outer_height-inner_height)/2;
+    //    ui->widget->set
 
 }
