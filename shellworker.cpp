@@ -23,13 +23,11 @@ ShellWorker::ShellWorker(QObject *parent, SshConfigure configure) : QObject(pare
     timer->singleShot(UPDATE_INTERAL,this,SLOT(update()));
     // update();
 
-    qDebug()<<"@constructed";
 
 }
 
 ShellWorker::~ShellWorker()
 {
-    qDebug()<<"thread killed";
     client->shutdownShell();
     client->shutdown();
     ssh_disconnect(session);
@@ -39,7 +37,6 @@ ShellWorker::~ShellWorker()
 void ShellWorker::process(){
 
 
-    qDebug()<<"process() executed";
     emit finished();
 }
 
@@ -47,7 +44,6 @@ void ShellWorker::update(){
     int i =0;
     while(1&&canceled_flag != true){
         client->executeShellCommand("ls /usr",outputString);
-        qDebug()<<QString::fromStdString(outputString);
         if(!QString::fromStdString(outputString).isEmpty())
         {
             emit connectionSuccessSignal();
@@ -65,7 +61,6 @@ void ShellWorker::update(){
         {
 
             emit connectionFailedSignal();
-            qDebug()<<"connection failed";
             process();
             break;
         }
@@ -134,8 +129,7 @@ double ShellWorker::getCPUByCalculation()
 
         QString temp_outputString = QString::fromStdString(outputString);
         QStringList temp_outputStr_list = temp_outputString.split(QRegExp("[\\s]+"));
-        qDebug()<<"@cpu list";
-        qDebug()<<temp_outputStr_list;
+
 
         //get work
         if(temp_outputStr_list.size()>=4)
@@ -262,20 +256,15 @@ void ShellWorker::getJOBS1(){
     jobList.clear();nodesList.clear();temp.clear();
     client->executeShellCommand("qstat -a", outputString);
     jobList = QString::fromStdString(outputString).split("\n");
-    qDebug()<<jobList;
     if(jobList.size()>=6)
     {
         for(int i=5;i<jobList.size()-1;i++){
             temp.append(jobList[i]);
             client->executeShellCommand("checkjobs "+jobList[i].split(QRegExp("[\\s]+"))[0].split(".")[0].toStdString(),outputString);
-            qDebug()<<QString::fromStdString(outputString);
-//            qDebug()<<"checkjobs "+jobList[i].split(QRegExp("[\\s]+"))[0].split(".")[0];
 
             QRegularExpressionMatch match = re.match(QString::fromStdString(outputString));
             if(match.hasMatch()){
-                qDebug()<<"@nodes list";
 
-                qDebug()<<match.captured(0);
                 nodesList.append(match.captured(0).remove("\n"));
             }
             else

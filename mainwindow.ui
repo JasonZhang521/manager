@@ -1301,7 +1301,7 @@ font: 12pt &quot;Arial&quot;;</string>
            <enum>QFrame::NoFrame</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>7</number>
           </property>
           <widget class="QWidget" name="stackedWidgetPage1">
            <layout class="QVBoxLayout" name="verticalLayout_52">
@@ -1329,8 +1329,8 @@ background-color: rgb(150,222,150);
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1665</width>
-                 <height>534</height>
+                 <width>531</width>
+                 <height>434</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_53">
@@ -8492,7 +8492,7 @@ QTabBar::tab:selected {
                <string notr="true">background-color:#f0fff0</string>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="page_1">
                <layout class="QVBoxLayout" name="verticalLayout_28">
@@ -8570,8 +8570,8 @@ QTabBar::tab:selected {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>927</width>
-                     <height>388</height>
+                     <width>1647</width>
+                     <height>410</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_62">
@@ -8938,8 +8938,8 @@ null</string>
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>187</width>
-                     <height>262</height>
+                     <width>1647</width>
+                     <height>532</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_27">
@@ -10020,9 +10020,9 @@ font: 75 10pt &quot;Arial&quot;;</string>
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_4"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup_3"/>
  </buttongroups>
 </ui>

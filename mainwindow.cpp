@@ -319,8 +319,7 @@ void MainWindow::updateCPUTotal(int input)
     ui.plot_cpuUsage->xAxis->setTicker(textTicker);
 
     regenData.clear();
-    qDebug()<<"@1";
-    qDebug()<<input;
+
     regenData   << input;
     regen->setData(ticks, regenData);
     ui.plot_cpuUsage->replot();
@@ -1135,7 +1134,6 @@ void MainWindow::refreshNodesList()
 //process ipc message recieved
 void MainWindow::updateGetHardwareInfo()
 {
-    qDebug()<<"hardware get info updated";
     QString temp_str; //containor to store hostname in a message
     QString temp_sysinfo; //containor to store all system infors
     while (process.messageReceived()) //infinite loop to iterate message queue
@@ -1151,11 +1149,19 @@ void MainWindow::updateGetHardwareInfo()
         temp_str = QString::fromStdString(resp->getHostName());//key
 
 
-        qDebug()<<temp_str;
-
         std::stringstream str_sysInfoBriefly; //std stream io container used by ipc ui client
         str_sysInfoBriefly << resp->getSystemInfoBriefly();
         temp_sysinfo = QString::fromStdString(str_sysInfoBriefly.str());
+
+        //-----------debug--------//
+//        qDebug()<<"node name:  "+temp_str;
+//        qDebug()<<temp_sysinfo;
+
+//        qDebug()<<"\n\n\n";
+
+
+
+        ////-------------------////
 
         QString raw_temprature; //container to store temprature
         QRegularExpression re6("temprature=..");
@@ -1227,13 +1233,32 @@ void MainWindow::updateGetHardwareInfo()
 
         //see if node message are gpu node
         bool isGPUNode = false;
+        //1, get gpu comand state
+        QRegularExpression re_gpu("(?<=nvidiaSmiGpuInfo=\\[cmd=)\\w+");
+        QRegularExpressionMatch gpu_match = re_gpu.match(temp_sysinfo);
+        if(gpu_match.hasMatch())
+        {
+            QString capture_str = gpu_match.captured(0);
+            if(capture_str.compare("nvidia")==0)
+            {
+                isGPUNode=true;
+                if(!gpu_node_list.contains(temp_str)){
+                    gpu_node_list.append(temp_str);
+                }
+            }
+
+
+        }
+
+        makeGPUNodesList(gpu_node_list);
+
+
         //-----to be implemented------//
-        if(isGPUNode = true)
+        if(isGPUNode == true && temp_str.compare(activated_gpunode)==0)
         {
             updateGPUInfoPage(resp);
         }
     }
-
 
 
     //update node list in ui
@@ -1242,34 +1267,103 @@ void MainWindow::updateGetHardwareInfo()
 
 }
 
+void MainWindow::makeGPUNodesList(QStringList gpu_node_list)
+{
+    ui.listWidget->clear();
+    foreach(QString each,gpu_node_list)
+    {
+        QListWidgetItem* item = new QListWidgetItem(ui.listWidget);
+        item->setText(each);
+        item->setBackground(Qt::green);
+
+    }
+
+}
+
 void MainWindow::updateGPUInfoPage(SystemMonitorMessage::ComputerNodeInfoReport* resp)
 {
-    //store gpu node name
-    QString hostname_gpu;
-    hostname_gpu = QString::fromStdString(resp->getHostName());//key
 
-    //see if node message are contained in list
-    if(!gpu_node_list.contains(hostname_gpu))
-    {
-        gpu_node_list.append(hostname_gpu);
-    }
+    QString m_sysinfos;
+    std::stringstream strstream;
+    strstream << resp->getSystemInfoBriefly();
+    m_sysinfos = QString::fromStdString(strstream.str());
 
-    //---to be implemented-----//
-    //update gui
+    //1, make containr
+    QString temp_str;
+    QStringList gpuInfos_item;
+    QList<QStringList> gpuInfos;
+    QVector<QStringList> m_vector(7);
 
-    //get activated node gpu infos
-
-    if(activated_gpunode.compare(hostname_gpu))
-    {
-//        QRegularExpression re("(?<=total=)[\\d]+");//reg pattern to get gpu id
-//        QRegularExpressionMatch match_cpu_total = re.match(temp_cpuInfo);
-//        if(match_cpu_total.hasMatch()){
-//            cpu_usage = match_cpu_total.captured(0);//value
-//        }
+    //fan speed
+    QRegularExpression re("Fan Speed [ ]*: (.*?)\\n");
+    QRegularExpressionMatchIterator i = re.globalMatch(m_sysinfos);
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
+        temp_str = match.captured(0).remove("\n").remove(" ").split(":")[1];
+        m_vector[1].append(temp_str);
 
     }
 
+    // gpu official name
+    QRegularExpression re_1("Product Name[ ]*: (.*?)\\n");
+    QRegularExpressionMatchIterator i_1 = re_1.globalMatch(m_sysinfos);
+    while (i_1.hasNext()) {
+        QRegularExpressionMatch match = i_1.next();
+        temp_str = match.captured(0).remove("\n").remove(" ").split(":")[1];
+        m_vector[2].append(temp_str);
+    }
 
+    //temprature
+    QRegularExpression re_2("GPU Current Temp  [ ]*: (.*?)\\n");
+    QRegularExpressionMatchIterator i_2 = re_2.globalMatch(m_sysinfos);
+    while (i_2.hasNext()) {
+        QRegularExpressionMatch match = i_2.next();
+        temp_str=match.captured(0).remove("\n").remove(" ").split(":")[1];
+        m_vector[3].append(temp_str);
+    }
+
+    //power usage
+    QRegularExpression re_3("Power Draw[ ]*: (.*?)\\n");
+    QRegularExpressionMatchIterator i_3 = re_3.globalMatch(m_sysinfos);
+    while (i_3.hasNext()) {
+        QRegularExpressionMatch match = i_3.next();
+        temp_str = match.captured(0).remove("\n").remove(" ").split(":")[1];
+        m_vector[4].append(temp_str);
+    }
+
+    //ram usage
+    QRegularExpression re_4("FB Memory Usage(.*?)Free");
+    QRegularExpressionMatchIterator i_4 = re_4.globalMatch(m_sysinfos);
+    while (i_4.hasNext()) {
+        QRegularExpressionMatch match = i_4.next();
+        temp_str = match.captured(0);
+        m_vector[5].append(temp_str);
+    }
+
+    // processes
+    QRegularExpression re_5("Processes[ ]+:(.*?)\\n");
+    QRegularExpressionMatchIterator i_5 = re_5.globalMatch(m_sysinfos);
+    while (i_5.hasNext()) {
+        QRegularExpressionMatch match = i_5.next();
+        temp_str = match.captured(0).remove("\n").remove(" ").split(":")[1];
+        m_vector[6].append(temp_str);
+    }
+
+    ui.treeWidget_2->clear();
+    for (int i = 0 ;i <m_vector[1].size(); i++)
+    {
+        QTreeWidgetItem* item = new QTreeWidgetItem(ui.treeWidget_2);
+        item->setText(0,QString::number(i));
+        item->setText(1,m_vector[1][i]);
+        item->setText(2,m_vector[2][i]);
+        item->setText(3,m_vector[3][i]);
+        item->setText(4,m_vector[4][i]);
+//        item->setText(5,m_vector[5][i]);
+//        item->setText(6,m_vector[6][i]);
+
+
+
+    }
 
 
 
@@ -1284,8 +1378,6 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
 
     std::stringstream str_stream;//raw system information for debug only
     str_stream << resp->getSystemInfoBriefly();//retrieve system info
-    qDebug()<<"@777888";
-    qDebug()<<QString::fromStdString(str_stream.str());//for debug use only
 
     std::stringstream str_process;//raw system info for display usage
     str_process << resp->getSystemInfoBriefly();//get
@@ -1296,7 +1388,6 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     std::stringstream str_cpuUsageInfo;//raw cpu usage data
     str_cpuUsageInfo << resp->getCpuUsageInfo();
     QString temp_cpuInfo = QString::fromStdString(str_cpuUsageInfo.str());
-    qDebug()<<temp_cpuInfo;
     QRegularExpression re("(?<=total=)[\\d]+");
     QRegularExpressionMatch match_cpu_total = re.match(temp_cpuInfo);
     if(match_cpu_total.hasMatch()){
@@ -1321,8 +1412,7 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     {
         memFree = match4.captured(0).toInt();
     }
-    ram_usage = ((double)memTotal - (double)memFree)/(double)memTotal * 100;qDebug()<<"@2";
-    qDebug()<<ram_usage;
+    ram_usage = ((double)memTotal - (double)memFree)/(double)memTotal * 100;
     updateRamTotal(ram_usage);
 
     //-------------------------------------------------------------------------------//
@@ -1338,8 +1428,6 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
         temp_process_cpu = match_psTop10CpuProcess.captured(0);
 
     }
-    qDebug()<<"@3";
-    qDebug()<<temp_process_cpu.remove("[").remove("]").split("\n");
     QStringList processList_cpu = temp_process_cpu.remove("[").remove("]").split("\n");
     int maximumPropertySize = 5;
     for(int i = 0;i < activated_process_count;i++)
@@ -1387,8 +1475,6 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
         temp_process_mem = match_psTop10RamProcess.captured(0);
 
     }
-    qDebug()<<"@4";
-    qDebug()<<temp_process_mem.remove("[").remove("]").split("\n");
     QStringList processList_mem = temp_process_mem.remove("[").remove("]").split("\n");
     foreach(QString each,processList_mem)
     {
@@ -1441,8 +1527,7 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
         raw_temprature = match_selectedNode_temprature.captured(0);
     }
 
-    qDebug()<<"@991";
-    qDebug()<<raw_temprature;
+
     if(raw_temprature.contains("="))
     {
         ui.label_selectedNodes_hardware_temprature->setText("温度:\n"+raw_temprature.split("=")[1]);
@@ -2097,8 +2182,7 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
                 //                //get system icon
                 //                QFileInfo fi(m_list[i][8]);
                 //                QString name = fi.fileName();
-                //                qDebug()<<"@hookerhereok";
-                //                qDebug()<<name;
+
                 //                QFileIconProvider iconSource;
                 //                QIcon icon = iconSource.icon(fi);
                 //                file->setIcon(0,icon);
@@ -2868,8 +2952,7 @@ void MainWindow::updateCPUGUI(QString output){
         status_increment_indicator++;
     else
         status_increment_indicator=0;
-    //    qDebug()<<"@111222111222";
-    //    qDebug()<<output;
+
     ui.widget_cpubar->setValue(output.toFloat());
 
 
@@ -2991,11 +3074,10 @@ int MainWindow::getUsedCore(QString input)
     QRegularExpressionMatch match = re.match(input);
     if(match.hasMatch())
     {
-        qDebug()<<match.captured(0);
+
         return_value = match.captured(0).toDouble();
     }
-    qDebug()<<"@used core";
-    qDebug()<<return_value;
+
     return (int)return_value;
 
 }
@@ -3061,7 +3143,6 @@ void MainWindow::updateNODESGUI(QString output){
                 //identify busy nodes
                 if(nodesList[i][j].split(" = ")[0].compare("jobs")==0){
 //                    usedCore = nodesList[i][j].split(" = ")[1].split(",").size();//get used cores count
-                    qDebug()<<nodesList[i][7];
                     usedCore = getUsedCore(nodesList[i][7]);
                     availableCore = totalCore -usedCore;//calculate avaliable cores count
                     nodeItem->setText(3,QString::number(usedCore));//show counts
@@ -3739,7 +3820,6 @@ void MainWindow::syncronizeUsers(QString userName, QString userGroup)
     cmd.append(" && echo 'StrictHostKeyChecking no' > config");
     cmd.append(" && chown "+userName.toStdString()+":"+userGroup.toStdString()+" config");
     //chmod 600 ~/.ssh/authorized_keys
-    // qDebug()<<QString::fromStdString(cmd);
     client->executeShellCommand(cmd,outputString);
     //    cmd.append(" ");
 }
@@ -3874,12 +3954,10 @@ void MainWindow::on_treeWidget_monitor_nodes_itemClicked(QTreeWidgetItem *item, 
 
 void MainWindow::displaySonNodeInfo(QString hostname)
 {
-    qDebug()<<"@hostname";
-    qDebug()<<hostname;
+
     ui.label_monitor_showNodeSelected->setText(hostname);
 
     client->executeShellCommand("ssh "+hostname.toStdString()+" \"cat /proc/loadavg && cat /proc/cpuinfo | grep -m 1  'model name' && nproc && cat /proc/loadavg && vmstat -s | grep 'total memory' && free | grep Mem: && df -H | grep '/$' && cat /proc/cpuinfo | grep 'cpu MHz' | awk -F: '{print $2}' | head -n1\"",outputString);
-    qDebug()<<QString::fromStdString(outputString);
     QStringList str_list = QString::fromStdString(outputString).split("\n");
     if(str_list.size()>=7)
     {
@@ -3899,9 +3977,9 @@ void MainWindow::displaySonNodeInfo(QString hostname)
         ui.label_CPUFreqShow_monitor->setText(cpuFreqs);
         ui.CPUprogressBar_monitor->setValue(m_cpuUsage);
 
-        double totalMem = str_list[4].split(QRegExp("[\\s]+"))[1].toDouble()/1024/1024;qDebug()<<str_list[4].split(QRegExp("[\\s]+"))[1].toDouble();qDebug()<<"total";
-        double usedMem = str_list[4].split(QRegExp("[\\s]+"))[1].toDouble() - str_list[5].split(QRegExp("[\\s]+"))[3].toDouble();qDebug()<<str_list[5];qDebug()<<"free";
-        double memUsage = usedMem / str_list[4].split(QRegExp("[\\s]+"))[1].toDouble() * 100;qDebug()<<memUsage;qDebug()<<"usage";
+        double totalMem = str_list[4].split(QRegExp("[\\s]+"))[1].toDouble()/1024/1024;
+        double usedMem = str_list[4].split(QRegExp("[\\s]+"))[1].toDouble() - str_list[5].split(QRegExp("[\\s]+"))[3].toDouble();
+        double memUsage = usedMem / str_list[4].split(QRegExp("[\\s]+"))[1].toDouble() * 100;
 
 
         ui.label_RamTypeShow_monitor->setText("GDDR");
@@ -4404,4 +4482,13 @@ void MainWindow::on_pushButton_18_clicked()
 void MainWindow::on_pushButton_disk_clicked()
 {
     on_pushButton_32_clicked();
+}
+
+void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
+{
+    QList<QListWidgetItem*> items = ui.listWidget->selectedItems();
+    foreach(QListWidgetItem* each, items)
+    {
+        activated_gpunode = each->text();
+    }
 }

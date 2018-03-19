@@ -218,6 +218,8 @@ private slots:
 
     void on_pushButton_disk_clicked();
 
+    void on_listWidget_itemClicked(QListWidgetItem *item);
+
 public slots:
     void processFtpUploadFinishEvent();//process after upload finished signal
     void processFtpDownloadFinishEvent();//process after recieve download finished signal
@@ -446,6 +448,7 @@ private:
     void closeAllSubButton();
     void updateGPUInfoPage(SystemMonitorMessage::ComputerNodeInfoReport *resp);
     int getUsedCore(QString input);
+    void makeGPUNodesList(QStringList gpu_node_list);
 public:
     void setupSessionConfigure(SshConfigure configure);
 signals:
