@@ -25,45 +25,50 @@ int main(int argc, char *argv[])
     MyApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     MyApplication a(argc, argv);
 
-    SimpleCrypt crypto(Q_UINT64_C(0x0c2ad4a4acb9f083)); //some random number
-    crypto.setCompressionMode(SimpleCrypt::CompressionAlways); //always compress the data, see section below
-    crypto.setIntegrityProtectionMode(SimpleCrypt::ProtectionHash); //properly protect the integrity of the data
+//    SimpleCrypt crypto(Q_UINT64_C(0x0c2ad4a4acb9f083)); //some random number
+//    crypto.setCompressionMode(SimpleCrypt::CompressionAlways); //always compress the data, see section below
+//    crypto.setIntegrityProtectionMode(SimpleCrypt::ProtectionHash); //properly protect the integrity of the data
 
-    QString read_mac;
-    QString current_mac;
-    current_mac = getMacAddress().toUpper();
-    QFile file("lic");
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QTextStream in(&file);
-        in >> read_mac;
-        if(crypto.decryptToString(read_mac).toUpper().compare(current_mac)==0)
-        {
-            LoginPageII *l=new LoginPageII();
-            l->show();
-        }
+//    QString read_mac;
+//    QString current_mac;
+//    current_mac = getMacAddress().toUpper();
+//    QFile file("lic");
+//    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+//    {
+//        QTextStream in(&file);
+//        in >> read_mac;
+//        if(crypto.decryptToString(read_mac).toUpper().compare(current_mac)==0)
+//        {
+//            LoginPageII *l=new LoginPageII();
+//            l->show();
+//        }
 
-        else
-        {
-            QMessageBox::information(0,"error","invalid lisence");
-            return a.exec();
-        }
-    }
+//        else
+//        {
+//            QMessageBox::information(0,"error","invalid lisence");
+//            return a.exec();
+//        }
+//    }
 
-    else
-    {
-        QMessageBox::information(0,"error","there is no lisence file!");
-        return a.exec();
-    }
-
-
+//    else
+//    {
+//        QMessageBox::information(0,"error","there is no lisence file!");
+//        return a.exec();
+//    }
 
 
 
-//    FormForTest f;
-//    f.show();
 
-    file.close();
+
+////    FormForTest f;
+////    f.show();
+
+//    file.close();
+    LoginPageII *l=new LoginPageII();
+//    l->showFullScreen();
+    l->setWindowState(Qt::WindowMaximized);
+    l->move(0,0);
+    l->show();
     return a.exec();
 
 

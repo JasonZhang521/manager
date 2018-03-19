@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
     group2->addButton(ui.radioButton_othermpi);
 
 
-    ui.tabWidget->setTabPosition(QTabWidget::West);
+//    ui.tabWidget->setTabPosition(QTabWidget::West);
     this->setFocusPolicy( Qt::StrongFocus);
 
     setupStyleSheet();
@@ -88,6 +88,57 @@ MainWindow::MainWindow(QWidget *parent)
     highLighter = new Highlighter(ui.textBrowser_job_submit_show->document());
     highLighter2 = new Highlighter(ui.textBrowser_job_submit_show_2->document());
     setPlotStyle();
+
+    ui.treeWidget_nodeViewer->setVisible(true);
+    ui.menuBar->setVisible(false);
+    ui.toolBar->setVisible(false);
+    ui.frame_nodetree->setVisible(false);
+    ui.frame_allEvent->setVisible(false);
+    ui.frame_bottom->setVisible(false);
+
+    ui.verticalLayout_52->setMargin(0);
+    ui.scrollArea->setContentsMargins(0,0,0,0);
+    this->setMinimumSize(800,600);
+//    QMenu *job_menu = new QMenu(this);
+//    job_menu->addAction(ui.actionjobkill);
+//    job_menu->addAction(ui.actionjobsubmit);
+//    job_menu->addAction(ui.actionjobfile);
+//    ui.pushButton_23->setMenu(job_menu);
+    ui.pushButton_job_kill->setVisible(false);
+    ui.pushButton_job_submit->setVisible(false);
+    ui.pushButton_job_file->setVisible(false);
+
+    ui.pushButton_monitor_node->setVisible(false);
+    ui.pushButton_monitor_jobs->setVisible(false);
+    ui.pushButton_control_shutdownpage->setVisible(false);
+    ui.pushButton_control_queuepage->setVisible(false);
+    ui.pushButton_control_userpage->setVisible(false);
+    ui.pushButton_control_computingtimepage->setVisible(false);
+    ui.pushButton_monitor_CPU->setVisible(false);
+    ui.pushButton_monitor_GPU_2->setVisible(false);
+    ui.pushButton_monitor_IBCard_2->setVisible(false);
+
+    QMenu *currentUser_menu = new QMenu(this);
+    currentUser_menu->addAction(ui.action_connect);
+    currentUser_menu->addAction(ui.action_disconnect);
+    currentUser_menu->addAction(ui.action_changeUser);
+
+    currentUser_menu->setStyleSheet("* {color: rgb(255,255,255);background-color: rgb(56, 61, 65);border-image: url(:/Resourceected.png);}"
+                                    "*::item:hover {background-color: rbg(22, 159, 92);}"
+                                    );
+    ui.pushButton_currentUser->setMenu(currentUser_menu);
+
+    ui.pushButton_file->setStyleSheet("*:hover {color : red}" "* {color : white}");
+    ui.pushButton_view->setStyleSheet("*:hover {color : red}" "* {color : white}");
+    ui.pushButton_help->setStyleSheet("*:hover {color : red}" "* {color : white}");
+    ui.pushButton_currentUser->setStyleSheet("*:hover {color : red}" "* {color : white}");
+    ui.pushButton_currentState->setStyleSheet("*:hover {color : red}" "* {color : white}");
+
+
+
+
+
+
 
 }
 
@@ -268,8 +319,7 @@ void MainWindow::updateCPUTotal(int input)
     ui.plot_cpuUsage->xAxis->setTicker(textTicker);
 
     regenData.clear();
-    qDebug()<<"@1";
-    qDebug()<<input;
+
     regenData   << input;
     regen->setData(ticks, regenData);
     ui.plot_cpuUsage->replot();
@@ -321,7 +371,7 @@ void MainWindow::setupStyleSheet()
                         "QMenuBar::item {spacing: 3px; /* spacing between menu bar items */padding: 1px 4px;background: transparent;border-radius: 4px;}"
                         "QMenuBar::item:selected { /* when selected using mouse or keyboard */background: #f0fff0;}"
                         "QMenuBar::item:pressed {background: #888888;}"
-                        "QMenu {background-color: white;margin: 2px; /* some spacing around the menu */}"
+                        "QMenu {background-color: white;margin: 2px;border-image: url(:/Resources/beag);/* some spacing around the menu */}"
                         "QMenu::item {padding: 2px 25px 2px 20px;border: 1px solid transparent; /* reserve space for selection border */}"
                         "QMenu::item:selected {border-color: darkblue;background: rgba(100, 100, 100, 150);}"
                         "QMenu::icon:checked { /* appearance of a 'checked' icon */background: gray;border: 1px inset gray;position: absolute;top: 1px;right: 1px;bottom: 1px;left: 1px;}"
@@ -333,6 +383,7 @@ void MainWindow::setupStyleSheet()
                         "QToolBar::item:pressed {background: #888888;}"
                         "QRoundProgressBar {}"
                         "QWidget {}"
+                        //"QLabel {font-size : 20 px}"
 
                         );
     ui.scrollArea->verticalScrollBar()->setStyleSheet("background-color: #ffd39b;"
@@ -443,10 +494,10 @@ void MainWindow::closeThreads()
 //create cpu ram indicator
 void MainWindow::createCircleBar(){
     QPalette p1;
-    p1.setColor(QPalette::Text, Qt::black);
-    p1.setColor(QPalette::Base, Qt::blue);
-    p1.setColor(QPalette::Highlight, Qt::red);
-    p1.setColor(QPalette::Window, QColor(240,255,240,255));
+    p1.setColor(QPalette::Text, QColor(255,170,0,255));
+    p1.setColor(QPalette::Base, Qt::gray);
+    p1.setColor(QPalette::Highlight, Qt::green);
+    p1.setColor(QPalette::Window, QColor(255,255,255,255));
     ui.widget_cpubar->setValue(0);
     ui.widget_cpubar->setPalette(p1);
     ui.widget_rambar->setValue(0);
@@ -585,7 +636,7 @@ void MainWindow::setupClient(SshConfigure configure)
 void MainWindow::setupMac()
 {
     //show mac address
-    client->executeShellCommand("cat /sys/class/net/eth0/address",outputString);
+    client->executeShellCommand("cat /sys/class/net/*/address | head -n1",outputString);
     if(outputString!=""){
         ui.label_macshow->setText(QString::fromStdString(outputString).remove("\n"));
     }
@@ -593,7 +644,10 @@ void MainWindow::setupMac()
 
 void MainWindow::setupSystemVersion()
 {
-    client->executeShellCommand("lsb_release -a | grep Description | awk -F: '{print $2}'",outputString);
+//    client->executeShellCommand("lsb_release -a | grep Description | awk -F: '{print $2}'",outputString);
+
+    client->executeShellCommand("cat /etc/centos-release",outputString);
+
     if(outputString!="")
     {
         QString temp = QString::fromStdString(outputString).remove("\n");
@@ -703,7 +757,7 @@ void MainWindow::setupStorageDisplay()
                     //                        if(update_flag_s1 == true)
                     //                        {
                     updateEventMessage(DISK,"管理节点","/ 目录存储空间不足");
-                    ui.pushButton_disk->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+                    ui.pushButton_disk->setStyleSheet("border-image: url(:/Resources/beautify/redlight.png);border:0px;");
                     //                            update_flag_s1 = false;
                     //                        }
 
@@ -719,7 +773,7 @@ void MainWindow::setupStorageDisplay()
                     //                    if(update_flag_s1 == true)
                     //                    {
                     updateEventMessage(DISK,"管理节点","/boot 目录存储空间不足");
-                    ui.pushButton_disk->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+                    ui.pushButton_disk->setStyleSheet("border-image: url(:/Resources/beautify/redlight.png);border:0px;");
                     //                        update_flag_s1 = false;
                     //                    }
 
@@ -734,7 +788,7 @@ void MainWindow::setupStorageDisplay()
                     //                    if(update_flag_s1 == true)
                     //                    {
                     updateEventMessage(DISK,"管理节点","/home 目录存储空间不足");
-                    ui.pushButton_disk->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+                    ui.pushButton_disk->setStyleSheet("border-image: url(:/Resources/beautify/redlight.png);border:0px;");
                     //                        update_flag_s1 = false;
                     //                    }
 
@@ -980,6 +1034,8 @@ void MainWindow::updateStatusTracer()
         //        ui.label_connection_indicator->setText("offline");
         current_state_label_show.setText("  offline");
         current_state_label_show.setStyleSheet("color:red;");
+        ui.pushButton_currentState->setText("offline");
+        ui.pushButton_currentState->setStyleSheet("color:red;");
     }
 
     getHostCpuFreqCache();
@@ -990,6 +1046,7 @@ void MainWindow::setupCurrentUser(QString input)
 {
     //    ui.label_current_user->setText(input);
     current_user_label_show.setText(input);
+    ui.pushButton_currentUser->setText(input);
 
 }
 
@@ -1073,71 +1130,82 @@ void MainWindow::refreshNodesList()
 {
     hardware_hostname_list.clear();
 }
+
+//process ipc message recieved
 void MainWindow::updateGetHardwareInfo()
 {
-    qDebug()<<"hardware get info updated";
-    QString temp_str;
-    QString temp_sysinfo;
-    while (process.messageReceived())
+    QString temp_str; //containor to store hostname in a message
+    QString temp_sysinfo; //containor to store all system infors
+    while (process.messageReceived()) //infinite loop to iterate message queue
     {
+        //message type down cast
         std::unique_ptr<IpcMessage::IIpcMessage> msg = std::move(process.getOneMessage());
         SystemMonitorMessage::ISystemMonitorMessage* systemMessage =
                 dynamic_cast<SystemMonitorMessage::ISystemMonitorMessage*>(msg.get());
         SystemMonitorMessage::ComputerNodeInfoReport* resp =
                 dynamic_cast<SystemMonitorMessage::ComputerNodeInfoReport *>(systemMessage);
 
-        //comuter i need you to extract each message's temprature information for me so as to judge if any nodes are beyond alert temprature
 
         temp_str = QString::fromStdString(resp->getHostName());//key
-        std::stringstream str_sysInfoBriefly;
+
+
+        std::stringstream str_sysInfoBriefly; //std stream io container used by ipc ui client
         str_sysInfoBriefly << resp->getSystemInfoBriefly();
         temp_sysinfo = QString::fromStdString(str_sysInfoBriefly.str());
 
-        QString raw_temprature;
+        //-----------debug--------//
+//        qDebug()<<"node name:  "+temp_str;
+//        qDebug()<<temp_sysinfo;
+
+//        qDebug()<<"\n\n\n";
+
+
+
+        ////-------------------////
+
+        QString raw_temprature; //container to store temprature
         QRegularExpression re6("temprature=..");
-        QRegularExpressionMatch match_selectedNode_temprature =re6.match(temp_sysinfo);
+        QRegularExpressionMatch match_selectedNode_temprature =re6.match(temp_sysinfo);//rex to match temprature pattern
         if(match_selectedNode_temprature.hasMatch())
         {
             raw_temprature = match_selectedNode_temprature.captured(0);
         }
 
-        if(raw_temprature.contains("="))
+        //process temprature alert message
+        if(raw_temprature.contains("="))//see if temprature are valid data
         {
             int temp_nodeTemprature;
             temp_nodeTemprature = raw_temprature.split("=")[1].toInt();
             if(temp_nodeTemprature>=70&&update_flag_s4==true)
             {
                 updateEventMessage(ALERT,temp_str,"节点温度超过70度！");
-                ui.pushButton_temprature->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
-
+                ui.pushButton_temprature->setStyleSheet("border-image: url(:/Resources/beautify/redlight.png);border:0px;");
                 update_flag_s4 = false;
             }
         }
 
 
 
-        QString cpu_usage;
-        std::stringstream str_cpuUsageInfo;//raw cpu usage data
+        QString cpu_usage; //container to store total cpu usage info
+        std::stringstream str_cpuUsageInfo; //std io stream to store raw cpu usage data
         str_cpuUsageInfo << resp->getCpuUsageInfo();
-        QString temp_cpuInfo = QString::fromStdString(str_cpuUsageInfo.str());
-        QRegularExpression re("(?<=total=)[\\d]+");
+        QString temp_cpuInfo = QString::fromStdString(str_cpuUsageInfo.str());//container to store all core usage info
+        QRegularExpression re("(?<=total=)[\\d]+");//reg pattern to get cpu total usage
         QRegularExpressionMatch match_cpu_total = re.match(temp_cpuInfo);
         if(match_cpu_total.hasMatch()){
             cpu_usage = match_cpu_total.captured(0);//value
         }
-        //        m[temp_str.toLocal8Bit().constData()]=cpu_usage;//map
-        //        for(m_t::iterator i=m.begin(); i!=m.end(); ++i)
-        //          std::cout << i->first << '\t' << i->second << std::endl;
-
 
         QStringList temp_strList;
         temp_strList.append(temp_str);
         temp_strList.append(cpu_usage);
+        //add node cpu temprature pair to node list
         if(hardware_hostname_list.isEmpty())
         {
             hardware_hostname_list.append(temp_strList);
         }
         bool temp_signal = false;
+        //see if node list contain current message name
         foreach(QStringList each,hardware_hostname_list)
         {
             if(each.at(0).compare(temp_str)==0)
@@ -1162,8 +1230,143 @@ void MainWindow::updateGetHardwareInfo()
         {
             updateHardwareGUI(resp);
         }
+
+        //see if node message are gpu node
+        bool isGPUNode = false;
+        //1, get gpu comand state
+        QRegularExpression re_gpu("(?<=nvidiaSmiGpuInfo=\\[cmd=)\\w+");
+        QRegularExpressionMatch gpu_match = re_gpu.match(temp_sysinfo);
+        if(gpu_match.hasMatch())
+        {
+            QString capture_str = gpu_match.captured(0);
+            if(capture_str.compare("nvidia")==0)
+            {
+                isGPUNode=true;
+                if(!gpu_node_list.contains(temp_str)){
+                    gpu_node_list.append(temp_str);
+                }
+            }
+
+
+        }
+
+        makeGPUNodesList(gpu_node_list);
+
+
+        //-----to be implemented------//
+        if(isGPUNode == true && temp_str.compare(activated_gpunode)==0)
+        {
+            updateGPUInfoPage(resp);
+        }
     }
+
+
+    //update node list in ui
     makeHardwareNodesButtons(hardware_hostname_list);
+
+
+}
+
+void MainWindow::makeGPUNodesList(QStringList gpu_node_list)
+{
+    ui.listWidget->clear();
+    foreach(QString each,gpu_node_list)
+    {
+        QListWidgetItem* item = new QListWidgetItem(ui.listWidget);
+        item->setText(each);
+        item->setBackground(Qt::green);
+
+    }
+
+}
+
+void MainWindow::updateGPUInfoPage(SystemMonitorMessage::ComputerNodeInfoReport* resp)
+{
+
+    QString m_sysinfos;
+    std::stringstream strstream;
+    strstream << resp->getSystemInfoBriefly();
+    m_sysinfos = QString::fromStdString(strstream.str());
+
+    //1, make containr
+    QString temp_str;
+    QStringList gpuInfos_item;
+    QList<QStringList> gpuInfos;
+    QVector<QStringList> m_vector(7);
+
+    //fan speed
+    QRegularExpression re("Fan Speed [ ]*: (.*?)\\n");
+    QRegularExpressionMatchIterator i = re.globalMatch(m_sysinfos);
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
+        temp_str = match.captured(0).remove("\n").remove(" ").split(":")[1];
+        m_vector[1].append(temp_str);
+
+    }
+
+    // gpu official name
+    QRegularExpression re_1("Product Name[ ]*: (.*?)\\n");
+    QRegularExpressionMatchIterator i_1 = re_1.globalMatch(m_sysinfos);
+    while (i_1.hasNext()) {
+        QRegularExpressionMatch match = i_1.next();
+        temp_str = match.captured(0).remove("\n").remove(" ").split(":")[1];
+        m_vector[2].append(temp_str);
+    }
+
+    //temprature
+    QRegularExpression re_2("GPU Current Temp  [ ]*: (.*?)\\n");
+    QRegularExpressionMatchIterator i_2 = re_2.globalMatch(m_sysinfos);
+    while (i_2.hasNext()) {
+        QRegularExpressionMatch match = i_2.next();
+        temp_str=match.captured(0).remove("\n").remove(" ").split(":")[1];
+        m_vector[3].append(temp_str);
+    }
+
+    //power usage
+    QRegularExpression re_3("Power Draw[ ]*: (.*?)\\n");
+    QRegularExpressionMatchIterator i_3 = re_3.globalMatch(m_sysinfos);
+    while (i_3.hasNext()) {
+        QRegularExpressionMatch match = i_3.next();
+        temp_str = match.captured(0).remove("\n").remove(" ").split(":")[1];
+        m_vector[4].append(temp_str);
+    }
+
+    //ram usage
+    QRegularExpression re_4("FB Memory Usage(.*?)Free");
+    QRegularExpressionMatchIterator i_4 = re_4.globalMatch(m_sysinfos);
+    while (i_4.hasNext()) {
+        QRegularExpressionMatch match = i_4.next();
+        temp_str = match.captured(0);
+        m_vector[5].append(temp_str);
+    }
+
+    // processes
+    QRegularExpression re_5("Processes[ ]+:(.*?)\\n");
+    QRegularExpressionMatchIterator i_5 = re_5.globalMatch(m_sysinfos);
+    while (i_5.hasNext()) {
+        QRegularExpressionMatch match = i_5.next();
+        temp_str = match.captured(0).remove("\n").remove(" ").split(":")[1];
+        m_vector[6].append(temp_str);
+    }
+
+    ui.treeWidget_2->clear();
+    for (int i = 0 ;i <m_vector[1].size(); i++)
+    {
+        QTreeWidgetItem* item = new QTreeWidgetItem(ui.treeWidget_2);
+        item->setText(0,QString::number(i));
+        item->setText(1,m_vector[1][i]);
+        item->setText(2,m_vector[2][i]);
+        item->setText(3,m_vector[3][i]);
+        item->setText(4,m_vector[4][i]);
+//        item->setText(5,m_vector[5][i]);
+//        item->setText(6,m_vector[6][i]);
+
+
+
+    }
+
+
+
 
 
 }
@@ -1175,8 +1378,6 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
 
     std::stringstream str_stream;//raw system information for debug only
     str_stream << resp->getSystemInfoBriefly();//retrieve system info
-    qDebug()<<"@777888";
-    qDebug()<<QString::fromStdString(str_stream.str());//for debug use only
 
     std::stringstream str_process;//raw system info for display usage
     str_process << resp->getSystemInfoBriefly();//get
@@ -1187,7 +1388,6 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     std::stringstream str_cpuUsageInfo;//raw cpu usage data
     str_cpuUsageInfo << resp->getCpuUsageInfo();
     QString temp_cpuInfo = QString::fromStdString(str_cpuUsageInfo.str());
-    qDebug()<<temp_cpuInfo;
     QRegularExpression re("(?<=total=)[\\d]+");
     QRegularExpressionMatch match_cpu_total = re.match(temp_cpuInfo);
     if(match_cpu_total.hasMatch()){
@@ -1212,8 +1412,7 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
     {
         memFree = match4.captured(0).toInt();
     }
-    ram_usage = ((double)memTotal - (double)memFree)/(double)memTotal * 100;qDebug()<<"@2";
-    qDebug()<<ram_usage;
+    ram_usage = ((double)memTotal - (double)memFree)/(double)memTotal * 100;
     updateRamTotal(ram_usage);
 
     //-------------------------------------------------------------------------------//
@@ -1229,8 +1428,6 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
         temp_process_cpu = match_psTop10CpuProcess.captured(0);
 
     }
-    qDebug()<<"@3";
-    qDebug()<<temp_process_cpu.remove("[").remove("]").split("\n");
     QStringList processList_cpu = temp_process_cpu.remove("[").remove("]").split("\n");
     int maximumPropertySize = 5;
     for(int i = 0;i < activated_process_count;i++)
@@ -1278,8 +1475,6 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
         temp_process_mem = match_psTop10RamProcess.captured(0);
 
     }
-    qDebug()<<"@4";
-    qDebug()<<temp_process_mem.remove("[").remove("]").split("\n");
     QStringList processList_mem = temp_process_mem.remove("[").remove("]").split("\n");
     foreach(QString each,processList_mem)
     {
@@ -1332,8 +1527,7 @@ void MainWindow::updateHardwareGUI(SystemMonitorMessage::ComputerNodeInfoReport*
         raw_temprature = match_selectedNode_temprature.captured(0);
     }
 
-    qDebug()<<"@991";
-    qDebug()<<raw_temprature;
+
     if(raw_temprature.contains("="))
     {
         ui.label_selectedNodes_hardware_temprature->setText("温度:\n"+raw_temprature.split("=")[1]);
@@ -1361,6 +1555,7 @@ void MainWindow::plotHistoryRangeReset()
 
 }
 
+//show all nodes currently recieved
 void MainWindow::makeHardwareNodesButtons(QList<QStringList> list)
 {
     ui.listWidget_nodes_hardware->clear();
@@ -1383,6 +1578,8 @@ void MainWindow::setupIPCClient(SshConfigure configure)
 
     process.setAddress(configure.host+std::string(":")+std::string("23833"));
     process.start();
+
+    //update information regularly
     timer_hardware_getInfo = new QTimer;
     timer_hardware_getInfo->setInterval(2000);
     connect(timer_hardware_getInfo,SIGNAL(timeout()),this,SLOT(updateGetHardwareInfo()));
@@ -1867,6 +2064,9 @@ void MainWindow::processConnectionFailedEvent()
     //    ui.label_connection_indicator->setText("offline");
     current_state_label_show.setText("offline");
     current_state_label_show.setStyleSheet("color:red;");
+
+    ui.pushButton_currentState->setText("offline");
+    ui.pushButton_currentState->setStyleSheet("color:red;");
 }
 
 void MainWindow::processConnectionSuccessEvent()
@@ -1875,6 +2075,9 @@ void MainWindow::processConnectionSuccessEvent()
     //    ui.label_connection_indicator->setText("online");
     current_state_label_show.setText("online");
     current_state_label_show.setStyleSheet("color:green;");
+
+    ui.pushButton_currentState->setText("online");
+    ui.pushButton_currentState->setStyleSheet("color:green;");
 }
 //process ftp upload finish event
 void MainWindow::processFtpUploadFinishEvent(){
@@ -1979,8 +2182,7 @@ void MainWindow::processFtpListDirFinishEvent(QList<QStringList> qlist,int i){
                 //                //get system icon
                 //                QFileInfo fi(m_list[i][8]);
                 //                QString name = fi.fileName();
-                //                qDebug()<<"@hookerhereok";
-                //                qDebug()<<name;
+
                 //                QFileIconProvider iconSource;
                 //                QIcon icon = iconSource.icon(fi);
                 //                file->setIcon(0,icon);
@@ -2750,8 +2952,7 @@ void MainWindow::updateCPUGUI(QString output){
         status_increment_indicator++;
     else
         status_increment_indicator=0;
-    //    qDebug()<<"@111222111222";
-    //    qDebug()<<output;
+
     ui.widget_cpubar->setValue(output.toFloat());
 
 
@@ -2779,7 +2980,7 @@ void MainWindow::updateHostTempGUI(int t)
         //        qApp->setStyleSheet("QProgressBar#progressBar_tempMain::chunk {background-color: #FF0000;width: 5px;margin: 0.5px;}");
         ui.progressBar_tempMain->setStyleSheet("QProgressBar#progressBar_tempMain::chunk {background-color: #FF0000;width: 5px;margin: 0.5px;}");
         //        ui.label_host_temprature->setStyleSheet("color: rgb(255, 0, 0);");
-        ui.pushButton_temprature->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+        ui.pushButton_temprature->setStyleSheet("border-image: url(:/Resources/beautify/redlight.png);border:0px;");
 
         if(update_flag_s1 == true)
         {
@@ -2863,11 +3064,29 @@ void MainWindow::updateUPTIMEGUI(QString output){
 
 
 }
+
+int MainWindow::getUsedCore(QString input)
+{
+    //(?<=loadave=)[\d]+\.[\d]+
+    double return_value;
+
+    QRegularExpression re("(?<=loadave=)[\\d]+\\.[\\d]+");
+    QRegularExpressionMatch match = re.match(input);
+    if(match.hasMatch())
+    {
+
+        return_value = match.captured(0).toDouble();
+    }
+
+    return (int)return_value;
+
+}
+
 //nodes
 void MainWindow::updateNODESGUI(QString output){
-    nodesList.clear();
+    nodesList.clear();//container to store nodes info
     if(output!=""){
-        //store nodes info big string as qstring
+        //container to store nodes info big string as qstring
         nodesinfos = output;
         //iterate all nodes
         for(int i=0;i<nodesinfos.split("\n\n").size();i++)
@@ -2903,8 +3122,8 @@ void MainWindow::updateNODESGUI(QString output){
 
             for(int j=0;j<nodesList[i].size()-1;j++)
             {
-                if(nodesList[i][j].split(" = ")[0].compare("jobs")==1){
-                    isFree = false;
+                if(nodesList[i][j].split(" = ")[0].compare("jobs")!=0){
+                    isFree = true;
                     //                    break;
                 }
             }
@@ -2923,7 +3142,8 @@ void MainWindow::updateNODESGUI(QString output){
             for(int j=0;j<nodesList[i].size()-1;j++){
                 //identify busy nodes
                 if(nodesList[i][j].split(" = ")[0].compare("jobs")==0){
-                    usedCore = nodesList[i][j].split(" = ")[1].split(",").size();//get used cores count
+//                    usedCore = nodesList[i][j].split(" = ")[1].split(",").size();//get used cores count
+                    usedCore = getUsedCore(nodesList[i][7]);
                     availableCore = totalCore -usedCore;//calculate avaliable cores count
                     nodeItem->setText(3,QString::number(usedCore));//show counts
                     nodeItem->setText(4,QString::number(availableCore));
@@ -2979,8 +3199,8 @@ void MainWindow::updateNODESGUI(QString output){
                         //                        update_flag_s2 = false;
 
                     }
-                    //                    ui.label_3->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
-                    ui.pushButton_error->setStyleSheet("background-image: url(:/Resources/redbutton.png);color: rgb(255, 255, 255);border:0px;");
+                    //                    ui.label_3->setStyleSheet("border-image: url(:/Resources/beautify/redlight.png);border:0px;");
+                    ui.pushButton_error->setStyleSheet("border-image: url(:/Resources/beautify/redlight.png);border:0px;");
                     downNodes++;
                 }
                 else
@@ -3250,69 +3470,69 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Tab)
     {
-        ui.tabWidget->setCurrentIndex(2);
+//        ui.tabWidget->setCurrentIndex(2);
     }
 }
 
 
 bool MainWindow::event(QEvent *event)
 {
-    static int currentTabIndex = 0;
+//    static int currentTabIndex = 0;
 
-    if (event->type() == QEvent::KeyPress) {
+//    if (event->type() == QEvent::KeyPress) {
 
-        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+//        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
 
-        if (ke->key() == Qt::Key_Tab) {
-            currentTabIndex=(ui.tabWidget->currentIndex()+1) % ui.tabWidget->count();
-            ui.tabWidget->setCurrentIndex((ui.tabWidget->currentIndex()+1) % ui.tabWidget->count());
-            switch(currentTabIndex){
-            case 0:
-            {
-                ui.label_title->setText("总览");
-                break;
-            }
-            case 1:
-            {
-                ui.label_title->setText("作业");
-                break;
-            }
-            case 2:
-            {
-                ui.label_title->setText("监控");
-                break;
-            }
-            case 3:
-            {
-                ui.label_title->setText("管理");
-                break;
-            }
-            case 4:
-            {
-                ui.label_title->setText("ftp");
-                break;
-            }
-            case 5:
-            {
-                ui.label_title->setText("终端");
-                break;
-            }
-            case 6:
-            {
-                ui.label_title->setText("消息");
-                break;
-            }
-            case 7:
-            {
-                ui.label_title->setText("设备");
-                break;
-            }
-            }
-            return true;
+//        if (ke->key() == Qt::Key_Tab) {
+//            currentTabIndex=(ui.tabWidget->currentIndex()+1) % ui.tabWidget->count();
+//            ui.tabWidget->setCurrentIndex((ui.tabWidget->currentIndex()+1) % ui.tabWidget->count());
+//            switch(currentTabIndex){
+//            case 0:
+//            {
+//                ui.label_title->setText("总览");
+//                break;
+//            }
+//            case 1:
+//            {
+//                ui.label_title->setText("作业");
+//                break;
+//            }
+//            case 2:
+//            {
+//                ui.label_title->setText("监控");
+//                break;
+//            }
+//            case 3:
+//            {
+//                ui.label_title->setText("管理");
+//                break;
+//            }
+//            case 4:
+//            {
+//                ui.label_title->setText("ftp");
+//                break;
+//            }
+//            case 5:
+//            {
+//                ui.label_title->setText("终端");
+//                break;
+//            }
+//            case 6:
+//            {
+//                ui.label_title->setText("消息");
+//                break;
+//            }
+//            case 7:
+//            {
+//                ui.label_title->setText("设备");
+//                break;
+//            }
+//            }
+//            return true;
 
-        }
+//        }
 
-    }
+//    }
 
 
     return QWidget::event(event);
@@ -3600,7 +3820,6 @@ void MainWindow::syncronizeUsers(QString userName, QString userGroup)
     cmd.append(" && echo 'StrictHostKeyChecking no' > config");
     cmd.append(" && chown "+userName.toStdString()+":"+userGroup.toStdString()+" config");
     //chmod 600 ~/.ssh/authorized_keys
-    // qDebug()<<QString::fromStdString(cmd);
     client->executeShellCommand(cmd,outputString);
     //    cmd.append(" ");
 }
@@ -3735,18 +3954,20 @@ void MainWindow::on_treeWidget_monitor_nodes_itemClicked(QTreeWidgetItem *item, 
 
 void MainWindow::displaySonNodeInfo(QString hostname)
 {
+
     ui.label_monitor_showNodeSelected->setText(hostname);
 
-    client->executeShellCommand("ssh "+hostname.toStdString()+" \"cat /proc/cpuinfo | grep -m 1 'cpu MHz' && cat /proc/cpuinfo | grep -m 1  'model name' && nproc && cat /proc/loadavg && vmstat -s | grep 'total memory' && free | grep buffers/cache && df -H | grep '/$'\"",outputString);
-    qDebug()<<QString::fromStdString(outputString);
+    client->executeShellCommand("ssh "+hostname.toStdString()+" \"cat /proc/loadavg && cat /proc/cpuinfo | grep -m 1  'model name' && nproc && cat /proc/loadavg && vmstat -s | grep 'total memory' && free | grep Mem: && df -H | grep '/$' && cat /proc/cpuinfo | grep 'cpu MHz' | awk -F: '{print $2}' | head -n1\"",outputString);
     QStringList str_list = QString::fromStdString(outputString).split("\n");
     if(str_list.size()>=7)
     {
-        QString cpuType = str_list[1].split("\t: ")[1];
-        qDebug()<<cpuType;
-        int cpuCores = str_list[2].toInt();qDebug()<<cpuCores;
-        QString cpuFreqs = str_list[0].split("\t\t: ")[1];qDebug()<<cpuFreqs;
-        double m_cpuUsage = str_list[3].split(" ")[1].toDouble()/cpuCores*100;qDebug()<<m_cpuUsage;
+        QString cpuType = str_list[1].split("\t: ")[1];//container to sotre cpu type
+        int cpuCores = str_list[2].toInt();
+        QString cpuFreqs = str_list[7];
+        QString temp_cpuUsage_raw = str_list[0];
+
+//        double m_cpuUsage = str_list[0].toDouble();
+        double m_cpuUsage = temp_cpuUsage_raw.split(QRegExp("[\\s]+"))[0].toDouble()*100/cpuCores;
         if(m_cpuUsage>100)
             m_cpuUsage=100;
 
@@ -3756,9 +3977,9 @@ void MainWindow::displaySonNodeInfo(QString hostname)
         ui.label_CPUFreqShow_monitor->setText(cpuFreqs);
         ui.CPUprogressBar_monitor->setValue(m_cpuUsage);
 
-        double totalMem = str_list[4].split(QRegExp("[\\s]+"))[1].toDouble()/1024/1024;qDebug()<<str_list[4].split(QRegExp("[\\s]+"))[1].toDouble();qDebug()<<"total";
-        double usedMem = str_list[4].split(QRegExp("[\\s]+"))[1].toDouble() - str_list[5].split(QRegExp("[\\s]+"))[3].toDouble();qDebug()<<str_list[5];qDebug()<<"free";
-        double memUsage = usedMem / str_list[4].split(QRegExp("[\\s]+"))[1].toDouble() * 100;qDebug()<<memUsage;qDebug()<<"usage";
+        double totalMem = str_list[4].split(QRegExp("[\\s]+"))[1].toDouble()/1024/1024;
+        double usedMem = str_list[4].split(QRegExp("[\\s]+"))[1].toDouble() - str_list[5].split(QRegExp("[\\s]+"))[3].toDouble();
+        double memUsage = usedMem / str_list[4].split(QRegExp("[\\s]+"))[1].toDouble() * 100;
 
 
         ui.label_RamTypeShow_monitor->setText("GDDR");
@@ -3882,11 +4103,15 @@ void MainWindow::on_action_disconnect_triggered()
 {
 
 
-    if(current_state_label_show.text().compare("online")==0)
+//    if(current_state_label_show.text().compare("online")==0)
+    if(ui.pushButton_currentState->text().compare("online")==0)
     {
         //        ui.label_connection_indicator->setText("offline");
         current_state_label_show.setText("offline");
         current_state_label_show.setStyleSheet("color: red;");
+
+        ui.pushButton_currentState->setText("offline");
+        ui.pushButton_currentState->setStyleSheet("color:red;");
         closeSshClientSession();
         closeThreads();
     }
@@ -3901,11 +4126,15 @@ void MainWindow::on_action_disconnect_triggered()
 
 void MainWindow::on_action_connect_triggered()
 {
-    if(current_state_label_show.text().compare("offline")==0)
+//    if(current_state_label_show.text().compare("offline")==0)
+    if(ui.pushButton_currentState->text().compare("offline")==0)
     {
         //        ui.label_connection_indicator->setText("online");
         current_state_label_show.setText("online");
         current_state_label_show.setStyleSheet("color:green;");
+
+        ui.pushButton_currentState->setText("online");
+        ui.pushButton_currentState->setStyleSheet("color:green;");
         reconnect();
 
     }
@@ -3933,7 +4162,7 @@ void MainWindow::on_action_changeUser_triggered()
 
 void MainWindow::on_pushButton_monitor_CPU_clicked()
 {
-    ui.stackedWidget->setCurrentIndex(0);
+    ui.stackedWidget_device->setCurrentIndex(0);
     ui.pushButton_monitor_CPU->setChecked(true);
     ui.pushButton_monitor_GPU_2->setChecked(false);
     ui.pushButton_monitor_IBCard_2->setChecked(false);
@@ -3942,7 +4171,7 @@ void MainWindow::on_pushButton_monitor_CPU_clicked()
 void MainWindow::on_pushButton_monitor_GPU_2_clicked()
 {
 
-    ui.stackedWidget->setCurrentIndex(1);
+    ui.stackedWidget_device->setCurrentIndex(1);
     ui.pushButton_monitor_CPU->setChecked(false);
     ui.pushButton_monitor_GPU_2->setChecked(true);
     ui.pushButton_monitor_IBCard_2->setChecked(false);
@@ -3951,7 +4180,7 @@ void MainWindow::on_pushButton_monitor_GPU_2_clicked()
 void MainWindow::on_pushButton_monitor_IBCard_2_clicked()
 {
 
-    ui.stackedWidget->setCurrentIndex(2);
+    ui.stackedWidget_device->setCurrentIndex(2);
     ui.pushButton_monitor_CPU->setChecked(false);
     ui.pushButton_monitor_GPU_2->setChecked(false);
     ui.pushButton_monitor_IBCard_2->setChecked(true);
@@ -3961,11 +4190,15 @@ void MainWindow::on_pushButton_monitor_IBCard_2_clicked()
 void MainWindow::on_pushButton_error_clicked()
 {
     update_flag_s2 = true;
+    on_pushButton_32_clicked();
+
 }
 
 void MainWindow::on_pushButton_temprature_clicked()
 {
     update_flag_s1 = true;
+    on_pushButton_32_clicked();
+
 }
 
 
@@ -3992,3 +4225,270 @@ void MainWindow::ftpStopPutFile()
     speedWorker->_isStoped = true;
 }
 
+void MainWindow::on_pushButton_32_clicked()
+{
+    if(hider_increamter % 2 ==0)
+    {
+
+        ui.frame_allEvent->setVisible(true);
+
+        ui.frame_bottom->setVisible(true);
+
+        ui.pushButton_32->setStyleSheet("border-image: url(:/Resources/beautify/down_bar.png);");
+
+
+    }
+
+    else if(hider_increamter % 2 ==1)
+    {
+
+        ui.frame_allEvent->setVisible(false);
+
+        ui.frame_bottom->setVisible(false);
+
+        ui.pushButton_32->setStyleSheet("border-image: url(:/Resources/beautify/up_bar.png);");
+    }
+
+    hider_increamter++;
+}
+
+void MainWindow::on_pushButton_22_clicked()
+{
+    ui.pushButton_22->setStyleSheet("border-image: url(:/Resources/beautify/overview-frame-selected.png);");
+    ui.pushButton_23->setStyleSheet("border-image: url(:/Resources/beautify/job-frame.png);");
+    ui.pushButton_24->setStyleSheet("border-image: url(:/Resources/beautify/monitor-frame.png);");
+    ui.pushButton_25->setStyleSheet("border-image: url(:/Resources/beautify/manage_frame.png);");
+    ui.pushButton_26->setStyleSheet("border-image: url(:/Resources/beautify/passing-frame.png);");
+    ui.pushButton_27->setStyleSheet("border-image: url(:/Resources/beautify/terminal_frame.png);");
+    ui.pushButton_28->setStyleSheet("border-image: url(:/Resources/beautify/message-frame.png);");
+    ui.pushButton_31->setStyleSheet("border-image: url(:/Resources/beautify/device-frame.png);");
+
+    ui.stackedWidget->setCurrentIndex(0);
+    closeAllSubButton();
+    ui.label_title->setText("     总览 Overview");
+}
+
+void MainWindow::on_pushButton_23_clicked()
+{
+
+
+    ui.pushButton_22->setStyleSheet("border-image: url(:/Resources/beautify/overview_bg_unselected.png);");
+    ui.pushButton_23->setStyleSheet("border-image: url(:/Resources/beautify/job_bg_selected.png);");
+    ui.pushButton_24->setStyleSheet("border-image: url(:/Resources/beautify/monitor-frame.png);");
+    ui.pushButton_25->setStyleSheet("border-image: url(:/Resources/beautify/manage_frame.png);");
+    ui.pushButton_26->setStyleSheet("border-image: url(:/Resources/beautify/passing-frame.png);");
+    ui.pushButton_27->setStyleSheet("border-image: url(:/Resources/beautify/terminal_frame.png);");
+    ui.pushButton_28->setStyleSheet("border-image: url(:/Resources/beautify/message-frame.png);");
+    ui.pushButton_31->setStyleSheet("border-image: url(:/Resources/beautify/device-frame.png);");
+
+
+    ui.stackedWidget->setCurrentIndex(1);
+
+
+    ui.pushButton_job_kill->setVisible(true);
+    ui.pushButton_job_submit->setVisible(true);
+    ui.pushButton_job_file->setVisible(true);
+
+    ui.pushButton_monitor_node->setVisible(false);
+    ui.pushButton_monitor_jobs->setVisible(false);
+    ui.pushButton_control_shutdownpage->setVisible(false);
+    ui.pushButton_control_queuepage->setVisible(false);
+    ui.pushButton_control_userpage->setVisible(false);
+    ui.pushButton_control_computingtimepage->setVisible(false);
+    ui.pushButton_monitor_CPU->setVisible(false);
+    ui.pushButton_monitor_GPU_2->setVisible(false);
+    ui.pushButton_monitor_IBCard_2->setVisible(false);
+
+    ui.label_title->setText("     作业 Jobs");
+}
+
+void MainWindow::closeAllSubButton()
+{
+
+    ui.pushButton_job_kill->setVisible(false);
+    ui.pushButton_job_submit->setVisible(false);
+    ui.pushButton_job_file->setVisible(false);
+
+    ui.pushButton_monitor_node->setVisible(false);
+    ui.pushButton_monitor_jobs->setVisible(false);
+    ui.pushButton_control_shutdownpage->setVisible(false);
+    ui.pushButton_control_queuepage->setVisible(false);
+    ui.pushButton_control_userpage->setVisible(false);
+    ui.pushButton_control_computingtimepage->setVisible(false);
+    ui.pushButton_monitor_CPU->setVisible(false);
+    ui.pushButton_monitor_GPU_2->setVisible(false);
+    ui.pushButton_monitor_IBCard_2->setVisible(false);
+}
+
+void MainWindow::on_pushButton_24_clicked()
+{
+    ui.pushButton_22->setStyleSheet("border-image: url(:/Resources/beautify/overview_bg_unselected.png);");
+    ui.pushButton_23->setStyleSheet("border-image: url(:/Resources/beautify/job-frame.png);");
+    ui.pushButton_24->setStyleSheet("border-image: url(:/Resources/beautify/monitorbutton_selected.png);");
+    ui.pushButton_25->setStyleSheet("border-image: url(:/Resources/beautify/manage_frame.png);");
+    ui.pushButton_26->setStyleSheet("border-image: url(:/Resources/beautify/passing-frame.png);");
+    ui.pushButton_27->setStyleSheet("border-image: url(:/Resources/beautify/terminal_frame.png);");
+    ui.pushButton_28->setStyleSheet("border-image: url(:/Resources/beautify/message-frame.png);");
+    ui.pushButton_31->setStyleSheet("border-image: url(:/Resources/beautify/device-frame.png);");
+
+    ui.stackedWidget->setCurrentIndex(2);
+
+
+    ui.pushButton_job_kill->setVisible(false);
+    ui.pushButton_job_submit->setVisible(false);
+    ui.pushButton_job_file->setVisible(false);
+
+    ui.pushButton_monitor_node->setVisible(true);
+    ui.pushButton_monitor_jobs->setVisible(true);
+    ui.pushButton_control_shutdownpage->setVisible(false);
+    ui.pushButton_control_queuepage->setVisible(false);
+    ui.pushButton_control_userpage->setVisible(false);
+    ui.pushButton_control_computingtimepage->setVisible(false);
+    ui.pushButton_monitor_CPU->setVisible(false);
+    ui.pushButton_monitor_GPU_2->setVisible(false);
+    ui.pushButton_monitor_IBCard_2->setVisible(false);
+
+    ui.label_title->setText("     监控 Monitor");
+}
+
+void MainWindow::on_pushButton_25_clicked()
+{
+
+    ui.pushButton_22->setStyleSheet("border-image: url(:/Resources/beautify/overview_bg_unselected.png);");
+    ui.pushButton_23->setStyleSheet("border-image: url(:/Resources/beautify/job-frame.png);");
+    ui.pushButton_24->setStyleSheet("border-image: url(:/Resources/beautify/monitor-frame.png);");
+    ui.pushButton_25->setStyleSheet("border-image: url(:/Resources/beautify/manager_bg_selected.png);");
+    ui.pushButton_26->setStyleSheet("border-image: url(:/Resources/beautify/passing-frame.png);");
+    ui.pushButton_27->setStyleSheet("border-image: url(:/Resources/beautify/terminal_frame.png);");
+    ui.pushButton_28->setStyleSheet("border-image: url(:/Resources/beautify/message-frame.png);");
+    ui.pushButton_31->setStyleSheet("border-image: url(:/Resources/beautify/device-frame.png);");
+
+    ui.stackedWidget->setCurrentIndex(3);
+
+
+    ui.pushButton_job_kill->setVisible(false);
+    ui.pushButton_job_submit->setVisible(false);
+    ui.pushButton_job_file->setVisible(false);
+
+    ui.pushButton_monitor_node->setVisible(false);
+    ui.pushButton_monitor_jobs->setVisible(false);
+    ui.pushButton_control_shutdownpage->setVisible(true);
+    ui.pushButton_control_queuepage->setVisible(true);
+    ui.pushButton_control_userpage->setVisible(true);
+    ui.pushButton_control_computingtimepage->setVisible(true);
+    ui.pushButton_monitor_CPU->setVisible(false);
+    ui.pushButton_monitor_GPU_2->setVisible(false);
+    ui.pushButton_monitor_IBCard_2->setVisible(false);
+
+    ui.label_title->setText("     管理 Manager");
+}
+
+void MainWindow::on_pushButton_26_clicked()
+{
+
+    ui.pushButton_22->setStyleSheet("border-image: url(:/Resources/beautify/overview_bg_unselected.png);");
+    ui.pushButton_23->setStyleSheet("border-image: url(:/Resources/beautify/job-frame.png);");
+    ui.pushButton_24->setStyleSheet("border-image: url(:/Resources/beautify/monitor-frame.png);");
+    ui.pushButton_25->setStyleSheet("border-image: url(:/Resources/beautify/manage_frame.png);");
+    ui.pushButton_26->setStyleSheet("border-image: url(:/Resources/beautify/passing_bg_selected.png);");
+    ui.pushButton_27->setStyleSheet("border-image: url(:/Resources/beautify/terminal_frame.png);");
+    ui.pushButton_28->setStyleSheet("border-image: url(:/Resources/beautify/message-frame.png);");
+    ui.pushButton_31->setStyleSheet("border-image: url(:/Resources/beautify/device-frame.png);");
+
+
+    ui.stackedWidget->setCurrentIndex(4);
+    closeAllSubButton();
+
+    ui.label_title->setText("     传输 Transfer");
+}
+
+void MainWindow::on_pushButton_27_clicked()
+{
+
+    ui.pushButton_22->setStyleSheet("border-image: url(:/Resources/beautify/overview_bg_unselected.png);");
+    ui.pushButton_23->setStyleSheet("border-image: url(:/Resources/beautify/job-frame.png);");
+    ui.pushButton_24->setStyleSheet("border-image: url(:/Resources/beautify/monitor-frame.png);");
+    ui.pushButton_25->setStyleSheet("border-image: url(:/Resources/beautify/manage_frame.png);");
+    ui.pushButton_26->setStyleSheet("border-image: url(:/Resources/beautify/passing-frame.png);");
+    ui.pushButton_27->setStyleSheet("border-image: url(:/Resources/beautify/terminal_bg_selected.png);");
+    ui.pushButton_28->setStyleSheet("border-image: url(:/Resources/beautify/message-frame.png);");
+    ui.pushButton_31->setStyleSheet("border-image: url(:/Resources/beautify/device-frame.png);");
+    ui.stackedWidget->setCurrentIndex(5);
+    closeAllSubButton();
+
+    ui.label_title->setText("     终端 Terminal");
+}
+
+void MainWindow::on_pushButton_28_clicked()
+{
+
+    ui.pushButton_22->setStyleSheet("border-image: url(:/Resources/beautify/overview_bg_unselected.png);");
+    ui.pushButton_23->setStyleSheet("border-image: url(:/Resources/beautify/job-frame.png);");
+    ui.pushButton_24->setStyleSheet("border-image: url(:/Resources/beautify/monitor-frame.png);");
+    ui.pushButton_25->setStyleSheet("border-image: url(:/Resources/beautify/manage_frame.png);");
+    ui.pushButton_26->setStyleSheet("border-image: url(:/Resources/beautify/passing-frame.png);");
+    ui.pushButton_27->setStyleSheet("border-image: url(:/Resources/beautify/terminal_frame.png);");
+    ui.pushButton_28->setStyleSheet("border-image: url(:/Resources/beautify/message_bg_selected.png);");
+    ui.pushButton_31->setStyleSheet("border-image: url(:/Resources/beautify/device-frame.png);");
+
+    ui.stackedWidget->setCurrentIndex(6);
+    closeAllSubButton();
+
+    ui.label_title->setText("     消息 Message");
+}
+
+void MainWindow::on_pushButton_31_clicked()
+{
+
+
+    ui.pushButton_22->setStyleSheet("border-image: url(:/Resources/beautify/overview_bg_unselected.png);");
+    ui.pushButton_23->setStyleSheet("border-image: url(:/Resources/beautify/job-frame.png);");
+    ui.pushButton_24->setStyleSheet("border-image: url(:/Resources/beautify/monitor-frame.png);");
+    ui.pushButton_25->setStyleSheet("border-image: url(:/Resources/beautify/manage_frame.png);");
+    ui.pushButton_26->setStyleSheet("border-image: url(:/Resources/beautify/passing-frame.png);");
+    ui.pushButton_27->setStyleSheet("border-image: url(:/Resources/beautify/terminal_frame.png);");
+    ui.pushButton_28->setStyleSheet("border-image: url(:/Resources/beautify/message-frame.png);");
+    ui.pushButton_31->setStyleSheet("border-image: url(:/Resources/beautify/device_bg_selected.png);");
+    ui.stackedWidget->setCurrentIndex(7);
+
+
+    ui.pushButton_job_kill->setVisible(false);
+    ui.pushButton_job_submit->setVisible(false);
+    ui.pushButton_job_file->setVisible(false);
+
+    ui.pushButton_monitor_node->setVisible(false);
+    ui.pushButton_monitor_jobs->setVisible(false);
+    ui.pushButton_control_shutdownpage->setVisible(false);
+    ui.pushButton_control_queuepage->setVisible(false);
+    ui.pushButton_control_userpage->setVisible(false);
+    ui.pushButton_control_computingtimepage->setVisible(false);
+    ui.pushButton_monitor_CPU->setVisible(true);
+    ui.pushButton_monitor_GPU_2->setVisible(true);
+    ui.pushButton_monitor_IBCard_2->setVisible(true);
+
+    ui.label_title->setText("     设备 Device");
+}
+
+void MainWindow::on_pushButton_login_exit_clicked()
+{
+    qApp->quit();
+}
+
+void MainWindow::on_pushButton_18_clicked()
+{
+
+}
+
+void MainWindow::on_pushButton_disk_clicked()
+{
+    on_pushButton_32_clicked();
+}
+
+void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
+{
+    QList<QListWidgetItem*> items = ui.listWidget->selectedItems();
+    foreach(QListWidgetItem* each, items)
+    {
+        activated_gpunode = each->text();
+    }
+}

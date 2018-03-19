@@ -9,6 +9,9 @@ QMAKE_CXXFLAGS_RELEASE -= -O3
 QMAKE_CXXFLAGS_RELEASE -= -Os
 QMAKE_CXXFLAGS_RELEASE += -O0
 
+#QMAKE_CXXFLAGS += -Wno-unused-parameter
+#QMAKE_CXXFLAGS += -Wno-unused-variable
+
 #QMAKE_LFLAGS_RELEASE -= -O1
 
 CONFIG += c++11
@@ -194,6 +197,7 @@ SOURCES += \
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
+#DEFINES += QT_NO_WARNING_OUTPUT
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
